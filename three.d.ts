@@ -1,7 +1,7 @@
 /**
  * three.d.ts
  *
- * Original API (three.js) 
+ * based on three.js (http://mrdoob.github.com/three.js/) r53
  *
  * @author Kon / http://phyzkit.net/
  */
