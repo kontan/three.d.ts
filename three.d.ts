@@ -361,7 +361,7 @@ module THREE{
 		getDescendants(array?:Object3D[]):Object3D[];
 		updateMatrix():void;
 		updateMatrixWorld(force:bool):void;
-		//clone(object?Object3D):Object3D;
+		clone(object?:Object3D):Object3D;
 		//deallocate():void;
 
 		// static __m1:Matrix4;
@@ -584,7 +584,147 @@ module THREE{
 	}
 
 	// Lights //////////////////////////////////////////////////////////////////////////////////
+	export class Light extends Object3D{
+		constructor(hex:number);
+		color:Color;
+	}
+
+	export class AmbientLight extends Light{
+		constructor(hex:number);
+	}
+
+	export class RenderTarget{
+	}
+
+	export class DirectionalLight extends Light{
+		constructor(hex:number, intensity?:number);
+		position:Vector3;
+		target:Object3D;
+		intensity:number;
+		castShadow:bool;
+		onlyShadow:bool;
+		shadowCameraNear:number;
+		shadowCameraFar:number;
+		shadowCameraLeft:number;
+		shadowCameraRight:number;
+		shadowCameraTop:number;
+		shadowCameraBottom:number;
+		shadowCameraVisible:bool;
+		shadowBias:number;
+		shadowDarkness:number;
+		shadowMapWidth:number;
+		shadowMapHeight:number;
+		shadowCascad:bool;
+		shadowCascadeOffset:Vector3;
+		shadowCascadeCount:number;;
+		shadowCascadeBias:number[];
+		shadowCascadeWidth:number[];
+		shadowCascadeHeight:number[];
+		shadowCascadeNearZ:number[];
+		shadowCascadeFarZ:number[];
+		shadowCascadeArray:DirectionalLight[];
+		shadowMap:RenderTarget;
+		shadowMapSize:number;
+		shadowCamera:Camera;
+		shadowMatrix:Matrix4;
+	}
+
+	export class PointLight extends Light{
+		constructor(hex:number, intensity?:number, distance?:number);
+		position:Vector3;
+		intensity:number;
+		distance:number;
+	}
+
+	export class SpotLight extends Light{
+		constructor(hex:number, intensity?:number, distance?:number, angle?:number, exponent?:number);
+		position:Vector3;
+		target:Object3D;
+		intensity:number;
+		distance:number;
+		angle:number;
+		exponent:number;
+		castShadow:bool;
+		onlyShadow:bool;
+		shadowCameraNear:number;
+		shadowCameraFar:number;
+		shadowCameraFov:number;
+		shadowCameraVisible:bool;
+		shadowBias:number;
+		shadowDarkness:number;
+		shadowMapWidth:number;
+		shadowMapHeight:number;
+		shadowMap:RenderTarget;
+		shadowMapSize:Vector2;
+		shadowCamera:Camera;
+		shadowMatrix:Matrix4;
+	}
+
 	// Loaders //////////////////////////////////////////////////////////////////////////////////
+	
+	export class Loader{
+		constructor(showStatus?:bool);
+		showStatus:bool;
+		statusDomElement:HTMLElement;
+		onLoadStart:()=>void;
+		onLoadProgress:()=>void;
+		onLoadComplete:()=>void;
+		//crossOrigin:string;
+		//addStatusElement:()=>HTMLElement;
+		//updateProgress:(progress:{total:number;loaded:number;})=>void;
+		//extractUrlBase:(url:string)=>string;
+		//initMaterials:(materials:Material[], texturePath:string):Material[];
+		//needsTangents:(materials:Material[])=>bool;
+		//createMaterial:(m:Material, texturePath:string):bool;
+	}
+
+	interface Progress{
+		total:number;
+		loaded:number;
+	}
+
+	export class BinaryLoader extends Loader{
+		constructor(showStatus:bool);
+		load(url:string, callback:(geometry:Geometry,materials:Material[])=>void, texturePath?:string, binaryPath?:string):void;
+		//loadAjaxJSON(context, url, callback, texturePath, binaryPath, callbackProgress);
+		//loadAjaxBuffers(json:any, callback:(geometry:Geometry, materials:Material[])=>void, binaryPath:string, texturePath:string, callbackProgress:(progress:Progress)=>void);
+		//createBinModel(data:any, callback:(geometry:Geometry, materials:Material[])=>void, texturePath:string, jsonMaterials:any);
+	}
+
+	export class ImageLoader extends EventTarget{
+		// crossOrigin:string;
+		load(url:string, image?:HTMLImageElement):void;
+	}
+
+
+	export class JSONLoader extends Loader{
+		constructor(showStatus:bool);
+		//withCredentials:bool;
+		load(url:string, callback:(geometry:Geometry)=>void, texturePath?:string):void;
+		//loadAjaxJSON( context, url, callback:(geometry:Geometry,materials:Material[])=>void, texturePath, callbackProgress ) {
+		//createModel(json:any, callback:(geometry:Geometry,materials:Material[])=>void, texturePath?:string) ;
+	}
+
+	export class LoadingMonitor extends EventTarget{
+		constructor();
+		add(loader:Loader):void;
+	}
+
+	export class SceneLoader{
+		constructor();
+		onLoadStart:()=>void;
+		onLoadProgress:()=>void;
+		onLoadComplete:()=>void;
+		callbackSync:()=>void;
+		callbackProgress:()=>void;
+		load(url:string, callbackFinished:(scene:Scene)=>void):void;
+	}
+
+	export class TextureLoader extends EventTarget{
+		constructor();
+		load(url:string):void;
+	}
+
 	// Materials //////////////////////////////////////////////////////////////////////////////////
 	
 	export class Material{
@@ -623,6 +763,14 @@ module THREE{
 		clone():Fog;
 	}
 
+	export class FogExp2{
+		constructor(hex:number, density?:number);
+		name:string;
+		color:Color;
+		density:number;
+		clone():FogExp2;
+	}
+
 	export class Scene extends Object3D{
 		fog:Fog;
 		overrideMaterial:Material;
@@ -634,6 +782,14 @@ module THREE{
 	// Extras / Animation /////////////////////////////////////////////////////////////////////
 	// Extras / Cameras /////////////////////////////////////////////////////////////////////
 	// Extras / Core /////////////////////////////////////////////////////////////////////
+	
+	export class EventTarget{
+		constructor();
+		addEventListener(type:any, listener:(event:any)=>void);
+		dispatchEvent(event:any);
+		removeEventListener(type:any, listener:(event:any)=>void);
+	}
+
 	// Extras / Geomerties /////////////////////////////////////////////////////////////////////
 	// Extras / Helpers /////////////////////////////////////////////////////////////////////
 	// Extras / Modifiers /////////////////////////////////////////////////////////////////////
