@@ -87,7 +87,7 @@ Currently, about 50% of the classes are implemeted.
     * RenderableObject - completed
     * RenderableParticle - completed
     * RenderableVertex - completed
-*Scenes
+* Scenes
     * Fog - completed
     * FogExp2 - completed
     * Scene - completed
@@ -95,7 +95,7 @@ Currently, about 50% of the classes are implemeted.
 	* CompressedTexture - completed 
     * DataTexture - completed
     * Texture - completed
-*Extras
+* Extras
     * ColorUtils - completed
     * GeometryUtils
     * ImageUtils
