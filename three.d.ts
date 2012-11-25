@@ -609,6 +609,8 @@ module THREE{
 		position:Vector3;
 		target:Object3D;
 		intensity:number;
+
+		// shadow map
 		castShadow:bool;
 		onlyShadow:bool;
 		shadowCameraNear:number;
@@ -652,6 +654,8 @@ module THREE{
 		distance:number;
 		angle:number;
 		exponent:number;
+
+		// shadow map
 		castShadow:bool;
 		onlyShadow:bool;
 		shadowCameraNear:number;
@@ -708,7 +712,7 @@ module THREE{
 	export class JSONLoader extends Loader{
 		constructor(showStatus:bool);
 		//withCredentials:bool;
-		load(url:string, callback:(geometry:Geometry)=>void, texturePath?:string):void;
+		load(url:string, callback:(geometry:Geometry, materials:Material[])=>void, texturePath?:string):void;
 		//loadAjaxJSON( context, url, callback:(geometry:Geometry,materials:Material[])=>void, texturePath, callbackProgress ) {
 		//createModel(json:any, callback:(geometry:Geometry,materials:Material[])=>void, texturePath?:string) ;
 	}
@@ -757,6 +761,29 @@ module THREE{
 		needsUpdate:bool;
 	}
 
+	export class LineBasicMaterial extends Material{
+		constructor(parameters?:any);
+		color:Color;
+		linewidth:number;
+		linecap:string;
+		linejoin:string;
+		vertexColors:bool;
+		fog:bool;
+		clone():LineBasicMaterial;
+	}
+
+	export class LineDashedMaterial extends Material{
+		constructor(parameters?:any);
+		color:Color;
+		linewidth:number;
+		scale:number;
+		dashSize:number;
+		gapSize:number;
+		vertexColors:bool;
+		fog:bool;
+		clone():LineDashedMaterial;
+	}
+
 	export class MeshBasicMaterial extends Material{
 		constructor( parameters?:any );
 		color:Color;
@@ -778,6 +805,55 @@ module THREE{
 		morphTargets:bool;
 		clone():MeshBasicMaterial;
 	}
+
+	export class MeshDepthMaterial extends Material{
+		constructor(parameters?:any);
+		wireframe:bool;
+		wireframeLinewidth:number;
+		clone():MeshDepthMaterial;
+	} 
+
+	export class MeshFaceMaterial extends Material{
+		constructor(materials?:Material[]);
+		materials:Material[];
+		clone():MeshFaceMaterial;
+	}
+
+	export class MeshLambertMaterial extends Material{
+		constructor(parameters?:any);
+		color:Color;
+		ambient:Color;
+		emissive:Color;
+		wrapAround:bool;
+		wrapRGB:Vector3;
+		map:Texture;
+		lightMap:Texture;
+		specularMap:Texture;
+		envMap:Texture;
+		combine:number; //THREE.MultiplyOperation;
+		reflectivity:number;
+		refractionRatio:number;
+		fog:bool;
+		shading:number; // THREE.SmoothShading;
+		wireframe:bool;
+		wireframeLinewidth:number;
+		wireframeLinecap:string;
+		wireframeLinejoin:string;
+		vertexColors:number; // THREE.NoColors;
+		skinning:bool;
+		morphTargets:bool;
+		morphNormals:bool;
+		clone():MeshLambertMaterial;
+	}
+
+	export class MeshNormalMaterial extends Material{
+		constructor(parameters?:any);
+		shading:number; // THREE.FlatShading;
+		wireframe:bool;
+		wireframeLinewidth:number;
+		clone():MeshNormalMaterial;
+	}
+
 
 	export class MeshPhongMaterial extends Material{
 		constructor( parameters?:any );
@@ -812,6 +888,29 @@ module THREE{
 		morphTargets:bool;
 		morphNormals:bool;
 		clone():MeshPhongMaterial;
+	}
+
+	export class ParticleBasicMaterial extends Material{
+		constructor(parameters?:any);
+		color:Color;
+		map:Texture;
+		size:number;
+		sizeAttenuation:bool;
+		vertexColors:bool;
+		fog:bool;
+		clone():ParticleBasicMaterial;
+	}
+
+	export class ParticleCanvasMaterial extends Material{
+		constructor(parameters?:any);
+		color:Color;
+		program:(context:CanvasRenderingContext2D, color:Color)=>void;
+		clone():ParticleCanvasMaterial;
+	}
+
+	export class ParticleDOMMaterial extends Material{
+		constructor(element:HTMLElement);
+		clone():ParticleDOMMaterial;
 	}
 
 	export class ShaderMaterial extends Material{
@@ -944,12 +1043,31 @@ module THREE{
 
 	// Renderers //////////////////////////////////////////////////////////////////////////////////
 
-	interface Plugin{
+	interface Renderer{
+		render(scene:Scene, camera:Camera):void;
+	}
+
+	export class CanvasRenderer implements Renderer{
+		constructor(parameters?:any);
+		domElement:HTMLCanvasElement;
+		autoClear:bool;
+		sortObjects:bool;
+		sortElements:bool;
+		info:{ render: { vertices:number; faces:number; }; };
+		setSize(width:number, height:number):void;
+		setClearColor(color:Color, opacity?:number);
+		setClearColorHex(hex:number, opacity?:number);
+		getMaxAnisotropy():number;
+		clear():void;
+		render(scene:Scene, camera:Camera):void;
+	}
+
+	interface RendererPlugin{
 		init(renderer:WebGLRenderer);
 		render(scene:Scene,camera:Camera,currentWidth:number,currentHeight:number);
 	}
 
-	export class WebGLRenderer{
+	export class WebGLRenderer implements Renderer{
 		constructor(parameters?:any);
 		domElement:HTMLCanvasElement;
 		context:CanvasRenderingContext2D;
@@ -972,8 +1090,8 @@ module THREE{
 		maxMorphTargets:number;
 		maxMorphNormals:number;
 		autoScaleCubemaps:bool;
-		renderPluginsPre:Plugin[];
-		renderPluginsPost:Plugin[];
+		renderPluginsPre:RendererPlugin[];
+		renderPluginsPost:RendererPlugin[];
 		info: {
 			memory:{
 				programs:number;
@@ -998,8 +1116,8 @@ module THREE{
 		getClearColor():Color;
 		getClearAlpha():number;
 		clear(color?:Color, depth?:number, stencil?:number):void;
-		addPostPlugin(plugin:Plugin):void;
-		addPrePlugin(plugin:Plugin):void;
+		addPostPlugin(plugin:RendererPlugin):void;
+		addPrePlugin(plugin:RendererPlugin):void;
 		deallocateObject(object:any):void;
 		deallocateTexture(texture:Texture):void;
 		deallocateRenderTarget(renderTarget:RenderTarget):void;
@@ -1020,7 +1138,110 @@ module THREE{
 		setRenderTarget(renderTarget:RenderTarget):void;
 	}
 
+	interface WebGLRenderTargetOptions{
+		wrapS?:number; // THREE.ClampToEdgeWrapping
+		wrapT?:number; // THREE.ClampToEdgeWrapping;
+		magFilter?:number; // THREE.LinearFilter;
+		minFilter?:number; // THREE.LinearMipMapLinearFilter;
+		anisotropy?:number; // 1;
+		format?:number; // THREE.RGBAFormat;
+		type?:number; // THREE.UnsignedByteType;
+		depthBuffer?:bool; // true;
+		stencilBuffer?:bool; // true;
+	}
+
+	export class WebGLRenderTarget{ 
+		constructor(width:number, height:number, options?:WebGLRenderTargetOptions);
+		width:number;
+		height:number;
+		wrapS:number;
+		wrapT:number; 
+		magFilter:number;
+		minFilter:number;
+		anisotropy:number;
+		offset:Vector2;
+		repeat:Vector2;
+		format:number;
+		type:number;
+		depthBuffer:bool;
+		stencilBuffer:bool;
+		generateMipmaps:bool;
+		clone():WebGLRenderTarget;
+	}
+
+	export class WebGLRenderTargetCube extends WebGLRenderTarget{
+		constructor( width:number, height:number, options?:WebGLRenderTargetOptions);
+		activeCubeFace:number; // PX 0, NX 1, PY 2, NY 3, PZ 4, NZ 5
+	}
+
 	// Renderers / Renderables /////////////////////////////////////////////////////////////////////
+
+	export class RenderableFace3{
+		constructor();
+		v1:RenderableVertex;
+		v2:RenderableVertex;
+		v3:RenderableVertex;
+		centroidWorld:Vector3;
+		centroidScreen:Vector3;
+		normalWorld:Vector3;
+		vertexNormalsWorld:Vector3[];
+		vertexNormalsLength:number;
+		color:number;
+		material:Material;
+		uvs:UV[][];
+		z:number;
+	}
+
+	export class RenderableFace4{
+		constructor();
+		v1:RenderableVertex;
+		v2:RenderableVertex;
+		v3:RenderableVertex;
+		v4:RenderableVertex;
+		centroidWorld:Vector3;
+		centroidScreen:Vector3;
+		normalWorld:Vector3;
+		vertexNormalsWorld:Vector3[];
+		vertexNormalsLength:number;
+		color:number;
+		material:Material;
+		uvs:UV[][];
+		z:number;
+	}
+
+	export class RenderableLine{
+		constructor();
+		z:number;
+		v1:RenderableVertex;
+		v2:RenderableVertex;
+		material:Material;
+	}
+
+	export class RenderableObject{
+		constructor();
+		object:any;
+		z:number;
+	}
+
+	export class RenderableParticle{
+		constructor();
+		object:any;
+		x:number;
+		y:number;
+		z:number;
+		rotation:number;
+		scale:Vector2;
+		material:Material;
+	}
+
+	export class RenderableVertex{
+		constructor();
+		positionWorld:Vector3;
+		positionScreen:Vector4;
+		visible:bool;
+		copy(vertex:RenderableVertex):void;
+	}
+
 	// Scenes /////////////////////////////////////////////////////////////////////
 	
 	class AbstractFog{
@@ -1076,14 +1297,162 @@ module THREE{
 	var TextureIdCount:number;
 	var TextureLibrary:Texture[];
 
+
+	export class CompressedTexture extends Texture{
+		constructor( mipmaps, width:number, height:number, format?:number, type?:number, mapping?:()=>void, wrapS?:number, wrapT?:number, magFilter?:number, minFilter?:number);
+		mipmaps:ImageData[];
+		clone():CompressedTexture;
+	}
+
 	export class DataTexture extends Texture{
 		constructor(data:ImageData , width:number, height:number, format:number, type:number, mapping:number, wrapS:number, wrapT:number, magFilter:number, minFilter:number);
 		clone():DataTexture;
 	}
 
 	// Extras /////////////////////////////////////////////////////////////////////
+	export class ColorUtils{
+		adjustHSV(color:Color, h:number, s:number, v:number);
+	}
+
 	// Extras / Animation /////////////////////////////////////////////////////////////////////
+
+	interface KeyFrame{
+		pos:number[];
+		rot:number[];
+		scl:number[];
+		time:number;
+	}
+
+	interface KeyFrames{
+		keys:KeyFrame[];
+		parent:number;	
+	}
+
+	/// 
+	interface AnimationData{
+		JIT:number;
+		fps:number;
+		hierarchy:KeyFrames[];
+		length: number;
+		name: string;
+	}
+
+	export class Animation{
+		constructor(root:SkinnedMesh, name:string, interpolationType?:number);
+
+		interpolateCatmullRom(points:Vector3[], scale:number):Vector3[];
+		interpolate(p0:number, p1:number, p2:number, p3:number, t:number, t2:number, t3:number);
+
+		root:SkinnedMesh;
+		data:any;  //// ???? data = THREE.AnimationHandler.get( name );
+		hierarchy:Bone[];
+		currentTime:number;
+		timeScale:number;
+		isPlaying:bool;
+		isPaused:bool;
+		loop:bool;
+		interpolationType:number; // THREE.AnimationHandler.LINEAR;
+		points:Vector3[];
+		target:Vector3;
+		play(loop?:bool, startTimeMS?:number):void;
+		pause():void;
+		stop():void;;
+		update(deltaTimeMS:number):void;
+		
+		getNextKeyWith(type:string, h:number, key:number):KeyFrame;	// ????
+		getPrevKeyWith(type:string, h:number, key:number):KeyFrame;
+	}
+
+	export class AnimationHandler{
+		constructor();
+		update(deltaTimeMS:number):void;
+		addToUpdate(animation:Animation):void;
+		removeFromUpdate(animation:Animation):void;
+		add(data:AnimationData):void;
+		get(name:string):AnimationData;
+		parse(root:SkinnedMesh):Object3D[];
+	
+		static LINEAR:number;
+		static CATMULLROM:number;
+		static CATMULLROM_FORWARD:number;
+	}
+
+	export class AnimationMorphTarget{
+		constructor(root:Bone, data:any);
+		influence:number;
+		
+		root:Bone;
+		data:any;
+		hierarchy:KeyFrames[];
+		currentTime:number;
+		timeScale:number;
+		isPlaying:bool;
+		isPaused:bool;
+		loop:bool;
+		play(loop?:bool, startTimeMS?:number):void;
+		pause():void;
+		stop():void;
+		update(deltaTimeMS:number):void;
+	}
+
+	export class KeyFrameAnimation{
+		constructor(root:Mesh, data:any, JITCompile?:bool);
+		JITCompile:number;
+		
+		root:Mesh;
+		data:any;
+		hierarchy:KeyFrames[];
+		currentTime:number;
+		timeScale:number;
+		isPlaying:number;
+		isPaused:number;
+		loop:number;
+		play(loop?:number, startTimeMS?:number):void;
+		pause():void;
+		stop():void;
+		update(deltaTimeMS:number):void; 
+
+		getNextKeyWith(type:string, h:number, key:number):KeyFrame;	// ????
+		getPrevKeyWith(type:string, h:number, key:number):KeyFrame;
+	}
+
 	// Extras / Cameras /////////////////////////////////////////////////////////////////////
+
+	export class CombinedCamera extends Camera{
+		constructor(width:number, height:number, fov:number, near:number, far:number, orthoNear:number, orthoFar:number);
+		fov:number;
+		left:number;
+		right:number;
+		top:number;
+		bottom:number;
+		cameraO:OrthographicCamera;
+		cameraP:PerspectiveCamera;
+		zoom:number;
+		near:number;
+		far:number;
+		inPerspectiveMode:bool;
+		inOrthographicMode:bool;		
+		toPerspective():void;
+		toOrthographic():void;
+		setSize(width:number, height:number):void;
+		setFov(fov:number):void;
+		updateProjectionMatrix():void;
+		setLens(focalLength:number, frameHeight?:number):number;
+		setZoom(zoom:number):void;
+		toFrontView();
+		toBackView();
+		toLeftView();
+		toRightView();
+		toTopView();
+		toBottomView();
+	}
+
+	export class CubeCamera extends Object3D{
+		constructor(near, far, cubeResolution);
+		renderTarget:WebGLRenderTargetCube;
+		updateCubeMap(renderer:Renderer, scene:Scene):void;
+	}
+
 	// Extras / Core /////////////////////////////////////////////////////////////////////
 	
 	export class EventTarget{
@@ -1095,6 +1464,14 @@ module THREE{
 
 	// Extras / Geomerties /////////////////////////////////////////////////////////////////////
 	
+	export class PlaneGeometry extends Geometry{
+		constructor( width:number, height:number, widthSegments?:number, heightSegments?:number );
+		width:number;
+		height:number;
+		widthSegments:number;
+		heightSegments:number;
+	}
+
 	export class SphereGeometry extends Geometry{
 		constructor(radius:number, widthSegments?:number, heightSegments?:number, phiStart?:number, phiLength?:number, thetaStart?:number, thetaLength?:number);
 		radius:number;

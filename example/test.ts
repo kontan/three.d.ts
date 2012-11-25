@@ -1,52 +1,69 @@
 /// <reference path="jquery.d.ts" />
 /// <reference path="../three.d.ts" />
 $(()=>{
-	var WIDTH = 400, HEIGHT = 300;
-	var VIEW_ANGLE = 45, ASPECT = WIDTH / HEIGHT, NEAR = 0.1, FAR = 10000;
+	// renderer
 	var renderer = new THREE.WebGLRenderer({
-		clearColor: 0x000000ff,
-		clearAlpha: 1.0,
-		lights: true
+		clearColor: 0x00000030,
+		clearAlpha: 1.0
 	});
-	var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	var scene = new THREE.Scene();
-	scene.add(camera);
-	camera.position.z = 300;
+	var WIDTH = 400, HEIGHT = 300;
+	renderer.shadowMapEnabled = true;
+	renderer.shadowMapSoft = true;
 	renderer.setSize(WIDTH, HEIGHT);
 
-	var sphereMaterial = new THREE.MeshPhongMaterial({
+	// scene
+	var scene = new THREE.Scene();
 
-		color: 0x00ff00
-	});
+	// camera
+	var VIEW_ANGLE = 45, ASPECT = WIDTH / HEIGHT, NEAR = 0.1, FAR = 10000;
+	var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+	camera.position.z = 400;
+	camera.position.y = 400;
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
 
+	// sphere
 	var radius = 50, segments = 16, rings = 16;
 	var sphere = new THREE.Mesh(
-		new THREE.SphereGeometry(
-			radius,
-			segments,
-			rings
-		),
-		sphereMaterial
+		new THREE.SphereGeometry(radius, segments, rings),
+		new THREE.MeshPhongMaterial({ color: 0x00ff00 })
 	);
+	sphere.castShadow = true;
+	sphere.receiveShadow  = true;
 	scene.add(sphere);
 
-	var directionalLight = new THREE.DirectionalLight( 0x606060, 0.5 ); 
-	directionalLight.position.set( 0, 1, 0); 
-	scene.add( directionalLight );
+	// plane
+	var plane = new THREE.Mesh(
+		new THREE.PlaneGeometry(400, 400),
+		new THREE.MeshPhongMaterial({
+			color: 0x00ff00
+		})
+	);
+	plane.position.y = -100;
+	plane.rotation.x = -Math.PI/2;
+	plane.castShadow = true;
+	plane.receiveShadow  = true;
+	scene.add(plane);
 
-	// create a point light
-var pointLight =
-  new THREE.PointLight(0xf0f0f0);
+	// spot light
+	var spotLight = new THREE.SpotLight(0xffffff);
+	spotLight.position.set(-10, 200, 0);
+	spotLight.castShadow = true;  
+	spotLight.shadowDarkness = 0.5;
+	spotLight.shadowMapWidth = 1024; 
+	spotLight.shadowMapHeight = 1024;  
+	spotLight.shadowCameraNear = 50; 
+	spotLight.shadowCameraFar = 400; 
+	spotLight.shadowCameraFov = 30;
+	spotLight.shadowCameraVisible = true;
+	scene.add(spotLight);
 
-// set its position
-pointLight.position.x = 10;
-pointLight.position.y = 50;
-pointLight.position.z = 130;
+	$('#container').append(renderer.domElement);
 
-// add to the scene
-scene.add(pointLight);
-
-	var container:HTMLElement = document.getElementById('container');
-	container.appendChild(renderer.domElement);
-  	renderer.render(scene, camera);
+	var theta = 0;
+	setInterval(()=>{
+		sphere.position.x = 40 * Math.sin(theta);
+		theta += 0.05;
+		renderer.render(scene, camera);
+	}, 15);
 });
