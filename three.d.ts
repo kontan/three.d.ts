@@ -467,29 +467,9 @@ module THREE{
 		clone():UV;
 	}
 
-	export class Vector4{
-		constructor(x?:number, y?:number, z?:number, w?:number);
-		set(x:number, y:number, z:number, w:number):Vector4;
-		copy(v:Vector4):Vector4;
-		add(a:Vector4, b:Vector4):Vector4;
-		addSelf(v:Vector4):Vector4;
-		sub(a:Vector4, b:Vector4):Vector4;
-		subSelf(v:Vector4):Vector4;
-		multiplyScalar(s:number):Vector4;
-		divideScalar(s:number):Vector4;
-		negate():Vector4;
-		dot(v:Vector4);
-		lengthSq():number;
-		length():number;
-		lengthManhattan():number;
-		normalize():Vector4;
-		setLength(l:number):Vector4;
-		lerpSelf(v:Vector4, alpha:number);
-		clone():Vector4;
-	}
-
-
 	export class Vector2{
+		x:number;
+		y:number;
 		constructor(x?:number, y?:number);
 		set(x:number, y:number):void;
 		copy(v:Vector2):Vector2;
@@ -513,6 +493,9 @@ module THREE{
 	}
 
 	export class Vector3{
+		x:number;
+		y:number;
+		z:number;
 		constructor(x?:number, y?:number, z?:number);
 		set(x:number, y:number, z:number):Vector3;
 		setX(x:number):Vector3;
@@ -548,6 +531,31 @@ module THREE{
 		getScaleFromMatrix(m:Matrix4):Vector3;
 		equals(v:Vector3):bool;
 		clone():Vector3;
+	}
+
+	export class Vector4{
+		x:number;
+		y:number;
+		z:number;
+		w:number;
+		constructor(x?:number, y?:number, z?:number, w?:number);
+		set(x:number, y:number, z:number, w:number):Vector4;
+		copy(v:Vector4):Vector4;
+		add(a:Vector4, b:Vector4):Vector4;
+		addSelf(v:Vector4):Vector4;
+		sub(a:Vector4, b:Vector4):Vector4;
+		subSelf(v:Vector4):Vector4;
+		multiplyScalar(s:number):Vector4;
+		divideScalar(s:number):Vector4;
+		negate():Vector4;
+		dot(v:Vector4);
+		lengthSq():number;
+		length():number;
+		lengthManhattan():number;
+		normalize():Vector4;
+		setLength(l:number):Vector4;
+		lerpSelf(v:Vector4, alpha:number);
+		clone():Vector4;
 	}
 
 	// Cameras ////////////////////////////////////////////////////////////////////////////////////////
@@ -749,13 +757,276 @@ module THREE{
 		needsUpdate:bool;
 	}
 
+	export class MeshBasicMaterial extends Material{
+		constructor( parameters?:any );
+		color:Color;
+		map:Texture;
+		lightMap:Texture;
+		specularMap:Texture;
+		envMap:Texture; // TextureCube ?;
+		combine:number; //THREE.MultiplyOperation;
+		reflectivity:number;
+		refractionRatio:number;
+		fog:bool;
+		shading:number; //THREE.SmoothShading;
+		wireframe:bool;
+		wireframeLinewidth:number;
+		wireframeLinecap:string;
+		wireframeLinejoin:string;
+		vertexColors:number; // THREE.NoColors;
+		skinning:bool;
+		morphTargets:bool;
+		clone():MeshBasicMaterial;
+	}
+
+	export class MeshPhongMaterial extends Material{
+		constructor( parameters?:any );
+		color:Color; // diffuse
+		ambient:Color;
+		emissive:Color;
+		specular:Color;
+		shininess:number;
+		metal:bool;
+		perPixel:bool;
+		wrapAround:bool;
+		wrapRGB:Vector3;
+		map:Texture;
+		lightMap:Texture;
+		bumpMap:Texture;
+		bumpScale:number;
+		normalMap:Texture;
+		normalScale:Vector2;
+		specularMap:Texture;
+		envMap:Texture;
+		combine:number; // THREE.MultiplyOperation;
+		reflectivity:number;
+		refractionRatio:number;
+		fog:bool;
+		shading:number; // THREE.SmoothShading;
+		wireframe:bool;
+		wireframeLinewidth:number;
+		wireframeLinecap:string;
+		wireframeLinejoin:string;
+		vertexColors:number; // THREE.NoColors;
+		skinning:bool;
+		morphTargets:bool;
+		morphNormals:bool;
+		clone():MeshPhongMaterial;
+	}
+
+	export class ShaderMaterial extends Material{
+		constructor( parameters:any);
+		fragmentShader:string;
+		vertexShader:string;
+		uniforms:{[paramName:string]:{type:string;value:number;};};
+		defines:{[label:string]:any;};
+		attributes:{[name:string]:any;};
+		shading:number; // THREE.SmoothShading;
+		wireframe:bool;
+		wireframeLinewidth:number;
+		fog:bool;
+		lights:bool;
+		vertexColors:number; // THREE.NoColors; 
+		skinning:bool;
+		morphTargets:bool;
+		morphNormals:bool;
+		clone():ShaderMaterial;
+	}
+
 	// Objects //////////////////////////////////////////////////////////////////////////////////
+	
+	export class Bone extends Object3D{
+		constructor(belongsToSkin:SkinnedMesh);
+		skin:SkinnedMesh;
+		skinMatrix:Matrix4;
+		update(parentSkinMatrix?:Matrix4, forceUpdate?:bool):void;
+	}
+
+	export class Line extends Object3D{
+		constructor(geometry?:Geometry, material?:Material, type?:number);
+		geometry:Geometry;
+		material:Material;
+		type:number;
+		clone(object?:Line):Line;
+	}
+
+	export class LOD extends Object3D{
+		constructor();
+		LODs:Object3D[];
+		addLevel(object3D:Object3D, visibleAtDistance?:number);
+		update(camera:Camera);
+		clone():LOD;
+	}
+
+	export class Mesh extends Object3D{
+		constructor(geometry?:Geometry, material?:Material);
+		geometry:Geometry;
+		material:Material;
+		morphTargetBase:number;
+		morphTargetForcedOrder:number;
+		morphTargetInfluences:number[];
+		morphTargetDictionary:{[key:string]:number;};
+		getMorphTargetIndexByName(name:string):number;
+		clone(object?:Mesh):Mesh;
+	}
+
+	export class MorphAnimMesh extends Mesh{
+		constructor(geometry:Geometry, material:Material);
+		duration:number; // milliseconds
+		mirroredLoop:bool;
+		time:number;
+		lastKeyframe:number;
+		currentKeyframe:number;
+		direction:number;
+		directionBackwards:bool;
+		setFrameRange(start:number, end:number):void;
+		setDirectionForward():void;
+		setDirectionBackward():void;
+		parseAnimations():void;
+		setAnimationLabel(label:string, start:number, end:number):void;
+		playAnimation(label:string, fps:number):void;
+		updateAnimation(delta:number):void;
+		clone(object?:MorphAnimMesh):MorphAnimMesh;
+	}
+
+	export class Particle extends Object3D{
+		constructor(material:Material);
+		clone( object?:Particle ):Particle;
+	}
+
+	export class ParticleSystem extends Object3D{
+		constructor( geometry?:Geometry, material?:Material );
+		geometry:Geometry;
+		material:Material;
+		sortParticles:bool;
+		clone(object?:ParticleSystem ):ParticleSystem;
+	}
+
+	export class Ribbon extends Object3D{
+		constructor( geometry:Geometry, material:Material );
+		geometry:Geometry;
+		material:Material;
+		clone( object?:Ribbon ):Ribbon;
+	}
+
+	export class SkinnedMesh extends Mesh{
+		constructor(geometry?:Geometry, material?:Material, useVertexTexture?:bool);
+		useVertexTexture:bool;
+		identityMatrix:Matrix4;
+		bones:Bone[];
+		boneMatrices:Float32Array;
+		boneTextureWidth:number;
+		boneTextureHeight:number;
+		boneTexture:DataTexture;
+		addBone(bone?:Bone):Bone;
+		updateMatrixWorld(force?:bool):void;
+		pose():void;
+		clone(object?:SkinnedMesh):SkinnedMesh;
+		static offsetMatrix:Matrix4;
+	}
+
+	export class Sprite extends Object3D{
+		constructor(parameters?:any);
+		updateMatrix():void;
+		clone(object?:Sprite):Sprite;
+	}
+	export class SpriteAlignment{
+		static topLeft:Vector2;
+		static topCenter:Vector2;
+		static topRight:Vector2;
+		static centerLeft:Vector2;
+		static center:Vector2;
+		static centerRight:Vector2;
+		static bottomLeft:Vector2;
+		static bottomCenter:Vector2;
+		static bottomRight:Vector2;
+	}
+
 	// Renderers //////////////////////////////////////////////////////////////////////////////////
-	// Renderers //////////////////////////////////////////////////////////////////////////////////
+
+	interface Plugin{
+		init(renderer:WebGLRenderer);
+		render(scene:Scene,camera:Camera,currentWidth:number,currentHeight:number);
+	}
+
+	export class WebGLRenderer{
+		constructor(parameters?:any);
+		domElement:HTMLCanvasElement;
+		context:CanvasRenderingContext2D;
+		autoClear:bool;
+		autoClearColor:bool;
+		autoClearDepth:bool;
+		autoClearStencil:bool;
+		sortObjects:bool;
+		autoUpdateObjects:bool;
+		autoUpdateScene:bool;
+		gammaInput:bool;
+		gammaOutput:bool;
+		physicallyBasedShading:bool;
+		shadowMapEnabled:bool;
+		shadowMapAutoUpdate:bool;
+		shadowMapSoft:bool;
+		shadowMapCullFrontFaces:bool;
+		shadowMapDebug:bool;
+		shadowMapCascade:bool;
+		maxMorphTargets:number;
+		maxMorphNormals:number;
+		autoScaleCubemaps:bool;
+		renderPluginsPre:Plugin[];
+		renderPluginsPost:Plugin[];
+		info: {
+			memory:{
+				programs:number;
+				geometries:number;
+				textures:number;
+			};
+			render:{
+				calls:number;
+				vertices:number;
+				faces:number;
+				points:number;
+			};
+		};
+		getContext():CanvasRenderingContext2D;
+		supportsVertexTextures():bool;
+		setSize(width:number, height:number):void;
+		setViewport(x:number, y:number, width:number, height:number):void;
+		setScissor(x:number, y:number, width:number, height:number):void;
+		enableScissorTest(enable:bool):void;
+		setClearColorHex( hex:number, alpha:number):void;
+		setClearColor(color:Color, alpha:number):void;
+		getClearColor():Color;
+		getClearAlpha():number;
+		clear(color?:Color, depth?:number, stencil?:number):void;
+		addPostPlugin(plugin:Plugin):void;
+		addPrePlugin(plugin:Plugin):void;
+		deallocateObject(object:any):void;
+		deallocateTexture(texture:Texture):void;
+		deallocateRenderTarget(renderTarget:RenderTarget):void;
+		updateShadowMap(scene:Scene, camera:Camera):void;
+		renderBufferImmediate(object, program, shading):void;
+		renderBufferDirect(camera, lights, fog, material, geometryGroup, object):void;
+		renderBuffer(camera, lights, fog, material, geometryGroup, object ):void;
+		render(scene:Scene, camera:Camera, renderTarget?:RenderTarget, forceClear?:bool):void;
+		renderImmediateObject( camera, lights, fog, material, object ):void;
+		initWebGLObjects(scene:Scene):void;
+		initMaterial( material, lights, fog, object ):void;
+		setFaceCulling( cullFace, frontFace ):void;
+		setObjectFaces( object ):void;
+		setDepthTest( depthTest ):void;
+		setDepthWrite( depthWrite ):void;
+		setBlending( blending, blendEquation, blendSrc, blendDst ):void;
+		setTexture(texture:Texture, slot ):void;
+		setRenderTarget(renderTarget:RenderTarget):void;
+	}
+
 	// Renderers / Renderables /////////////////////////////////////////////////////////////////////
 	// Scenes /////////////////////////////////////////////////////////////////////
 	
-	export class Fog{
+	class AbstractFog{
+	}
+
+	export class Fog extends AbstractFog{
 		hex:number;
 		near:number;
 		far:number;
@@ -763,7 +1034,7 @@ module THREE{
 		clone():Fog;
 	}
 
-	export class FogExp2{
+	export class FogExp2 extends AbstractFog{
 		constructor(hex:number, density?:number);
 		name:string;
 		color:Color;
@@ -772,12 +1043,44 @@ module THREE{
 	}
 
 	export class Scene extends Object3D{
-		fog:Fog;
+		fog:AbstractFog;
 		overrideMaterial:Material;
 		matrixAutoUpdate:bool;
 	}
 
 	// Textures /////////////////////////////////////////////////////////////////////
+	
+	export class Texture{
+		constructor( image, mapping?:()=>void, wrapS?:number, wrapT?:number, magFilter?:number, minFilter?:number, format?:number, type?:number, anisotropy?:number);
+		id:number;
+		name:string;
+		image:any; // HTMLImageElement or ImageData ;
+		mapping:()=>void;
+		wrapS:number;
+		wrapT:number;
+		magFilter:number;
+		minFilter:number;
+		anisotropy:number;
+		format:number;
+		type:number;
+		offset:Vector2;
+		repeatVector2:Vector2;
+		generateMipmaps:bool;
+		premultiplyAlpha:bool;
+		flipY:bool;
+		needsUpdate:bool;
+		onUpdate:any;
+		clone():Texture;
+		deallocate();
+	}
+	var TextureIdCount:number;
+	var TextureLibrary:Texture[];
+
+	export class DataTexture extends Texture{
+		constructor(data:ImageData , width:number, height:number, format:number, type:number, mapping:number, wrapS:number, wrapT:number, magFilter:number, minFilter:number);
+		clone():DataTexture;
+	}
+
 	// Extras /////////////////////////////////////////////////////////////////////
 	// Extras / Animation /////////////////////////////////////////////////////////////////////
 	// Extras / Cameras /////////////////////////////////////////////////////////////////////
@@ -791,6 +1094,18 @@ module THREE{
 	}
 
 	// Extras / Geomerties /////////////////////////////////////////////////////////////////////
+	
+	export class SphereGeometry extends Geometry{
+		constructor(radius:number, widthSegments?:number, heightSegments?:number, phiStart?:number, phiLength?:number, thetaStart?:number, thetaLength?:number);
+		radius:number;
+		widthSegments:number;
+		heightSegments:number;
+		phiStart:number;
+		phiLength:number;
+		thetaStart:number;
+		thetaLength:number;
+	}
+
 	// Extras / Helpers /////////////////////////////////////////////////////////////////////
 	// Extras / Modifiers /////////////////////////////////////////////////////////////////////
 	// Extras / Objects /////////////////////////////////////////////////////////////////////
