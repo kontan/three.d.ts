@@ -113,6 +113,26 @@ module THREE{
 	*/
 
 	// Core ///////////////////////////////////////////////////////////////////////////////////////////////
+
+	export class BufferGeometry{ 
+		constructor();
+		id:number;
+		attributes:{[name:string]:any;};
+		dynamic:bool;
+		boundingBox:BoundingBox3D;
+		boundingSphere:BoundingSphere;
+		hasTangents:bool;
+		morphTargets:any[];
+		applyMatrix(matrix:Matrix4):void;
+		verticesNeedUpdate:bool;
+		computeBoundingBox():void;
+		computeBoundingSphere():void;
+		computeVertexNormals():void;
+		normalizeNormals():void;
+		computeTangents():void;
+		eallocate():void;
+	}
+
 	export class Clock{
 		autoStart:bool;
 		startTime:number;
@@ -152,6 +172,13 @@ module THREE{
 		getHSV(hsv?:HSV):HSV;
 		lerpSelf(color:Color, alpha:number):Color;
 		clone():Color;
+	}
+
+	export class EventTarget{
+		constructor();
+		addEventListener(type:any, listener:(event:any)=>void);
+		dispatchEvent(event:any);
+		removeEventListener(type:any, listener:(event:any)=>void);
 	}
 
 	export class Face{
@@ -206,7 +233,7 @@ module THREE{
 		color:Color[];
 	}
 
-	export interface BoundingBox{ 
+	export interface BoundingBox3D{ 
 		min:Vector3;
 		max:Vector3;
 	}
@@ -229,7 +256,7 @@ module THREE{
 		morphColors:MorphColor[];
 		skinWeights:number[];
 		skinIndices:number[];
-		boundingBox:BoundingBox;
+		boundingBox:BoundingBox3D;
 		boundingSphere:BoundingSphere;
 		hasTangents:bool;
 		dynamic:bool;
@@ -324,6 +351,7 @@ module THREE{
 	export class Object3D{
 		id:number;
 		name:string;
+		properties:any;
 		parent:Object3D;
 		children:Object3D[];
 		position:Vector3;
@@ -942,7 +970,9 @@ module THREE{
 	}
 
 	export class Line extends Object3D{
-		constructor(geometry?:Geometry, material?:Material, type?:number);
+		constructor(geometry?:Geometry, material?:LineDashedMaterial, type?:number);
+		constructor(geometry?:Geometry, material?:LineBasicMaterial, type?:number);
+		constructor(geometry?:Geometry, material?:ShaderMaterial, type?:number);
 		geometry:Geometry;
 		material:Material;
 		type:number;
@@ -958,7 +988,13 @@ module THREE{
 	}
 
 	export class Mesh extends Object3D{
-		constructor(geometry?:Geometry, material?:Material);
+		constructor(geometry?:Geometry, material?:MeshBasicMaterial);
+		constructor(geometry?:Geometry, material?:MeshDepthMaterial);
+		constructor(geometry?:Geometry, material?:MeshFaceMaterial);
+		constructor(geometry?:Geometry, material?:MeshLambertMaterial);
+		constructor(geometry?:Geometry, material?:MeshNormalMaterial);
+		constructor(geometry?:Geometry, material?:MeshPhongMaterial);
+		constructor(geometry?:Geometry, material?:ShaderMaterial);
 		geometry:Geometry;
 		material:Material;
 		morphTargetBase:number;
@@ -994,7 +1030,10 @@ module THREE{
 	}
 
 	export class ParticleSystem extends Object3D{
-		constructor( geometry?:Geometry, material?:Material );
+		constructor(geometry:Geometry, material?:ParticleBasicMaterial);
+		constructor(geometry:Geometry, material?:ParticleCanvasMaterial);
+		constructor(geometry:Geometry, material?:ParticleDOMMaterial);
+		constructor(geometry:Geometry, material?:ShaderMaterial);
 		geometry:Geometry;
 		material:Material;
 		sortParticles:bool;
@@ -1002,14 +1041,17 @@ module THREE{
 	}
 
 	export class Ribbon extends Object3D{
-		constructor( geometry:Geometry, material:Material );
+		constructor(geometry:Geometry, material:Material );
 		geometry:Geometry;
 		material:Material;
 		clone( object?:Ribbon ):Ribbon;
 	}
 
 	export class SkinnedMesh extends Mesh{
-		constructor(geometry?:Geometry, material?:Material, useVertexTexture?:bool);
+		constructor(geometry:Geometry, material?:ParticleBasicMaterial,  useVertexTexture?:bool);
+		constructor(geometry:Geometry, material?:ParticleCanvasMaterial, useVertexTexture?:bool);
+		constructor(geometry:Geometry, material?:ParticleDOMMaterial,    useVertexTexture?:bool);
+		constructor(geometry:Geometry, material?:ShaderMaterial,         useVertexTexture?:bool);
 		useVertexTexture:bool;
 		identityMatrix:Matrix4;
 		bones:Bone[];
@@ -1454,22 +1496,228 @@ module THREE{
 	}
 
 	// Extras / Core /////////////////////////////////////////////////////////////////////
-	
-	export class EventTarget{
+
+	export class Curve{
 		constructor();
-		addEventListener(type:any, listener:(event:any)=>void);
-		dispatchEvent(event:any);
-		removeEventListener(type:any, listener:(event:any)=>void);
+		getPoint(t:number):Vector2;
+		getPointAt(u:number):Vector2;
+		getPoints(divisions?:number):Vector2[];
+		getSpacedPoints(divisions?:number):Vector2[];
+		getLength():number;
+		getLengths(divisions?:number):number[];
+		needsUpdate:bool;
+		updateArcLengths():void;
+		getUtoTmapping(u:number, distance:number):number;
+		getNormalVector(t:number):Vector2;
+		getTangent(t:number):Vector2;
+		getTangentAt(u:number):Vector2;
+
+		static Utils:{
+			tangentQuadraticBezier(t:number, p0:number, p1:number, p2:number):number;
+			tangentCubicBezier(t:number, p0:number, p1:number, p2:number, p3:number):number;
+			tangentSpline(t:number, p0:number, p1:number, p2:number, p3:number):number;
+			interpolate(p0:number, p1:number, p2:number, p3:number, t:number):number;
+		};
+
+		static create(constructorFunc:Function, getPointFunc:Function):Function;
 	}
+
+	export class LineCurve extends Curve{
+		constructor(v1:Vector2, v2:Vector2);
+	}
+	export class QuadraticBezierCurve extends Curve{
+		constructor(v0:Vector2, v1:Vector2, v2:Vector2);
+	}
+	export class CubicBezierCurve extends Curve{
+		constructor(v0:number, v1:number, v2:number, v3:number);
+	}
+	export class SplineCurve extends Curve{
+		constructor(points?:Vector2[]);
+	}
+	export class EllipseCurve extends Curve{
+		constructor(aX:number, aY:number, xRadius:number, yRadius:number, aStartAngle:number, aEndAngle:number, aClockwise:bool);
+		aX:number;
+		aY:number;
+		xRadius:number;
+		yRadius:number;
+		aStartAngle:number;
+		aEndAngle:number;
+		aClockwise:bool;
+	}
+	export class ArcCurve extends EllipseCurve{
+		constructor(aX:number, aY:number, aRadius:number, aStartAngle:number, aEndAngle:number, aClockwise:bool);
+	}	
+
+	
+	// **HACK** Non-existent class in three.js
+	// abstruct class
+	export class Curve3D{
+		constructor();
+		getPoint(t:number):Vector3;
+		getPointAt(u:number):Vector3;
+		getPoints(divisions?:number):Vector3[];
+		getSpacedPoints(divisions?:number):Vector3[];
+		getLength():number;
+		getLengths(divisions?:number):number[];
+		needsUpdate:bool;
+		updateArcLengths():void;
+		getUtoTmapping(u:number, distance:number):number;
+		getNormalVector(t:number):Vector3;
+		getTangent(t:number):Vector3;
+		getTangentAt(u:number):Vector3;
+	}
+	export class LineCurve3 extends Curve3D{
+		constructor(v1:Vector3, v2:Vector3);
+	}
+	export class QuadraticBezierCurve3 extends Curve3D{
+		constructor(v0:Vector3, v1:Vector3, v2:Vector3);
+	}
+	export class CubicBezierCurve3 extends Curve3D{
+		constructor(v0:Vector3, v1:Vector3, v2:Vector3, v3:Vector3);
+	}
+	export class SplineCurve3 extends Curve3D{
+		constructor(points?:Vector3[]);
+		points:Vector3[];
+	}
+	export class ClosedSplineCurve3 extends Curve3D{
+		constructor(points?:Vector3[]);
+		points:Vector3[];
+	}
+
+	interface BoundingBox{
+		minX:number; 
+		minY:number; 
+		maxX:number; 
+		maxY:number; 
+		centroid: any; /* Vector3 or Vector2 */ 
+	}
+
+	export class CurvePath extends Curve{
+		constructor();
+		curves:Curve[];
+		bends:Path[];
+		autoClose:bool;
+		add(curve:Curve):void;
+		checkConnection():bool;
+		closePath():void;
+		getBoundingBox():BoundingBox;
+		createPointsGeometry(divisions:number):Geometry;
+		createSpacedPointsGeometry(divisions:number):Geometry;
+		createGeometry(points:Vector2[]):Geometry;
+		addWrapPath(bendpath:Path):void;
+		getTransformedPoints(segments:number, bends?:Path):Vector2[];
+		getTransformedSpacedPoints(segments:number, bends?:Path[]):Vector2[];
+		getWrapPoints( oldPts:Vector2[], path:Path) :Vector2[];
+	}
+
+	export var PathActions:{
+		MOVE_TO:string;
+		LINE_TO:string;
+		QUADRATIC_CURVE_TO:string; // Bezier quadratic curve
+		BEZIER_CURVE_TO:string; 		// Bezier cubic curve
+		CSPLINE_THRU:string;				// Catmull-rom spline
+		ARC:string;								// Circle
+		ELLIPSE:string;
+	};
+
+	export class Path extends CurvePath{
+		constructor(points?:Vector2);
+		actions:string[];
+		fromPoints(vectors:Vector2[]):void;
+		moveTo(x:number, y:number):void;
+		lineTo(x:number, y:number):void;
+		quadraticCurveTo(aCPx:number, aCPy:number, aX:number, aY:number):void;
+		bezierCurveTo(aCP1x:number, aCP1y:number, aCP2x:number, aCP2y:number, aX:number, aY:number):void;
+		splineThru(pts:Vector2[]):void;
+		arc(aX:number, aY:number, aRadius:number, aStartAngle:number, aEndAngle:number, aClockwise:bool):void;
+	 	absarc(aX:number, aY:number, aRadius:number, aStartAngle:number, aEndAngle:number, aClockwise:bool):void;
+		ellipse(aX:number, aY:number, xRadius:number, yRadius:number, aStartAngle:number, aEndAngle:number, aClockwise:bool):void;
+ 		absellipse(aX:number, aY:number, xRadius:number, yRadius:number, aStartAngle:number, aEndAngle:number, aClockwise:bool):void;
+		toShapes():Shape[];
+	}
+
+	export class Gyroscope extends Object3D{
+		constructor();
+		updateMatrixWorld(force?:bool):void;
+		translationWorld:Vector3;
+		translationObject:Vector3;
+		rotationWorld:Quaternion;
+		rotationObject:Quaternion;
+		scaleWorld:Vector3;
+		scaleObject:Vector3;
+	}
+
+	export class Shape extends Path{
+		constructor();
+		holes:Vector2[][];
+		extrude(options?:any):ExtrudeGeometry;
+		makeGeometry(options?:any):ShapeGeometry;
+		getPointsHoles(divisions:number):Vector2[][];
+		getSpacedPointsHoles(divisions:number):Vector2[][];
+		extractAllPoints(divisions:number):{
+			shape: Vector2[];
+			holes: Vector2[][];
+		};
+		useSpacedPoints:bool;
+		extractPoints(divisions:number):Vector2[];
+		extractAllSpacedPoints(divisions:Vector2):{
+			shape: Vector2[];
+			holes: Vector2[][];
+		};
+	
+		static Utils:{
+			removeHoles(contour:Vector2[], holes:Vector2[][]):{
+				shape:Shape; 		/* shape with no holes */
+				isolatedPts: Vector2[]; /* isolated faces */
+				allpoints: Vector2[];
+			};
+			triangulateShape(contour:Vector2[], holes:Vector2[][]);
+			isClockWise(pts):bool;
+			b2p0(t:number, p:number):number;
+			b2p1(t:number, p:number):number;
+			b2p2(t:number, p:number):number;
+			b2(t:number, p0:number, p1:number, p2:number):number;
+			b3p0(t:number, p:number):number;
+			b3p1(t:number, p:number):number;
+			b3p2(t:number, p:number):number;
+			b3p3(t:number, p:number):number;
+			b3(t:number, p0:number, p1:number, p2:number, p3:number):number;
+		};
+	}
+
+
 
 	// Extras / Geomerties /////////////////////////////////////////////////////////////////////
 	
+	export class ExtrudeGeometry extends Geometry{
+		constructor(shape?:Shape, options?:any);
+		constructor(shapes?:Shape[], options?:any);
+		shapebb:BoundingBox;
+		addShapeList(shapes:Shape[], options?:any):void;
+		addShape(shape:Shape, options?:any):void;
+		static WorldUVGenerator:{
+			generateTopUV(geometry:Geometry, extrudedShape, extrudeOptions, indexA:number, indexB:number, indexC:number):UV[];
+			generateBottomUV(geometry:Geometry, extrudedShape, extrudeOptions, indexA:number, indexB:number, indexC:number):UV[];
+			generateSideWallUV(geometry:Geometry, extrudedShape, wallContour, extrudeOptions,
+	                              indexA:number, indexB:number, indexC:number, indexD:number, stepIndex:number, stepsLength:number,
+	                              contourIndex1:number, contourIndex2:number):UV[];
+		};
+	}
+
 	export class PlaneGeometry extends Geometry{
 		constructor( width:number, height:number, widthSegments?:number, heightSegments?:number );
 		width:number;
 		height:number;
 		widthSegments:number;
 		heightSegments:number;
+	}
+
+	export class ShapeGeometry extends Geometry{
+		constructor(shape:Shape, options:any);
+		constructor(shapes:Shape[], options:any);
+		shapebb:BoundingBox;
+		addShapeList(shapes:Shape[], options:any):ShapeGeometry;
+		addShape(shape:Shape, options?:any):void;
 	}
 
 	export class SphereGeometry extends Geometry{
@@ -1483,10 +1731,193 @@ module THREE{
 		thetaLength:number;
 	}
 
+
+
 	// Extras / Helpers /////////////////////////////////////////////////////////////////////
+
+	export class AxisHelper extends Line{
+		constructor(size:number);
+	}
+
+	export class ArrowHelper extends Object3D{
+		constructor(dir:Vector3, origin?:Vector3, length?:number, hex?:number);
+		line:Line;
+		cone:Mesh;
+		setDirection(dir:Vector3):void;
+		setLength(length:number):void;
+		setColor(hex:number):void;
+	}
+
+	export class CameraHelper extends Line{
+		constructor(camera:Camera);
+		pointMap:{[id:string]:number[];};
+		camera:Camera;
+	}
+
+	export class DirectionalLightHelper extends Object3D{
+		constructor(light:Light, sphereSize:number, arrowLength:number);
+		light:Light;
+		direction:Vector3;
+		color:Color;
+		lightArrow:ArrowHelper;
+		lightSphere:Mesh;
+		lightRays:Line;
+		targetSphere:Mesh;
+		targetLine:Line;
+	}
+
+	export class HemisphereLightHelper extends Object3D{
+		constructor(light:Light, sphereSize:number, arrowLength:number, domeSize:number);
+		light:Light;
+		color:Color;
+		groundColor:Color;
+		lightSphere:Mesh;
+		lightArrow:ArrowHelper;
+		lightArrowGround:ArrowHelper;
+		target:Vector3;
+	}
+
+	export class PointLightHelper extends Object3D{
+		constructor(light:Light, sphereSize:number);
+		light:Light;
+		color:Color;
+		lightSphere:Mesh;
+		lightRays:Line;
+		lightDistance:Mesh;
+	}
+
+	export class SpotLightHelper extends Object3D{
+		constructor(light:Light, sphereSize:number, arrowLength:number);
+		light:Light;
+		direction:Vector3;
+		color:Color;
+		lightArrow:ArrowHelper;
+		lightSphere:Mesh;
+		lightCone:Mesh;
+		lightRays:Line;
+		gyroscope:Gyroscope;
+		targetSphere:Mesh;
+		targetLine:Line;
+	}
+
 	// Extras / Modifiers /////////////////////////////////////////////////////////////////////
+
+	export class SubdivisionModifier{
+		constructor(subdivisions?:number);
+		subdivisions:number;
+		useOldVertexColors:bool;
+		supportUVs:bool;
+		debug:bool;
+		modify(geometry:Geometry):void;
+		orderedKey(a:number, b:number):string;
+		computeEdgeFaces(geometry:Geometry):{[key:string]:number;};
+		smooth(oldGeometry:Geometry):void;
+	}
+
 	// Extras / Objects /////////////////////////////////////////////////////////////////////
-	// Extras / Renderers / Effects /////////////////////////////////////////////////////////////////////
+
+	export class ImmediateRenderObject extends Object3D{
+		constructor();
+		render(renderCallback):void;
+	}
+
+	export interface LensFlareProperty{
+		texture:Texture; 			// THREE.Texture
+		size:number; 				// size in pixels (-1 = use texture.width)
+		distance:number; 			// distance (0-1) from light source (0=at light source)
+		x:number; 
+		y:number; 
+		z:number;					// screen position (-1 => 1) z = 0 is ontop z = 1 is back
+		scale:number; 				// scale
+		rotation:number; 			// rotation
+		opacity:number;				// opacity
+		color:Color;				// color
+		blending:number;
+	}
+
+	export class LensFlare extends Object3D{
+		constructor(texture?:Texture, size?:number, distance?:number, blending?:number, color?:number);
+		lensFlares:LensFlareProperty[];
+		positionScreen:Vector3;
+		customUpdateCallback:()=>void;
+		add(texture?:Texture, size?:number, distance?:number, blending?:number, color?:number, opacity?:number);
+		updateLensFlares():void;
+	}
+
+	export interface MorphBlendMeshAnimation{
+		startFrame:number;
+		endFrame:number;
+		length:number;
+		fps:number;
+		duration:number;
+		lastFrame:number;
+		currentFrame:number;
+		active:bool;
+		time:number;
+		direction:number;
+		weight:number;
+		directionBackwards:bool;
+		mirroredLoop:bool;
+	}
+
+	export class MorphBlendMesh extends Mesh{
+		constructor(geometry:Geometry, material:Material);
+		animationsMap:{[name:string]:MorphBlendMeshAnimation;};
+		animationsList:MorphBlendMeshAnimation[];	
+		createAnimation(name:string, start:number, end:number, fps:number);
+		autoCreateAnimations(fps:number):void;
+		firstAnimation:string;
+		setAnimationDirectionForward(name:string):void;
+		setAnimationDirectionBackward(name:string):void;
+		setAnimationFPS(name:string, fps:number):void;
+		setAnimationDuration(name:string, duration:number):void;;
+		setAnimationWeight(name:string, weight:number):void;
+		setAnimationTime(name:string, time:number);
+		getAnimationTime(name:string):number;
+		getAnimationDuration(name:string):number;
+		playAnimation(name:string):void;
+		stopAnimation(name:string):void;
+		update(delta:number):void;
+	}
+
 	// Extras / Renderers / Plugins /////////////////////////////////////////////////////////////////////
+
+	export class DepthPassPlugin implements RendererPlugin{
+		constructor();
+		enabled:bool;
+		renderTarget:RenderTarget;
+		init(renderer:Renderer):void;
+		render(scene:Scene, camera:Camera):void;
+		update(scene:Scene, camera:Camera):void;
+	}
+
+	export class LensFlarePlugin implements RendererPlugin{
+		constructor();
+		init(renderer:Renderer):void;
+		render(scene:Scene, camera:Camera, viewportWidth:number, viewportHeight:number);
+	}
+
+	export class ShadowMapPlugin implements RendererPlugin{
+		constructor();
+		init(renderer:Renderer):void;
+		render(scene:Scene, camera:Camera):void;
+		update(scene:Scene, camera:Camera):void;
+	}
+
+	export class SpritePlugin implements RendererPlugin{
+		constructor();
+		init(renderer:Renderer):void;
+		render(scene:Scene, camera:Camera, viewportWidth:number, viewportHeight:number):void;
+	}
+
 	// Extras / Renderers / Shaders /////////////////////////////////////////////////////////////////////
+
+	export interface ShaderLibrary{
+		[name:string]:{
+			vertexShader: string;
+			fragmentShader: string;
+		};
+	}
+	export var ShaderFlares:ShaderLibrary;
+	export var ShaderSprite:ShaderLibrary;
 }

@@ -5,7 +5,7 @@ three.d.ts
 This porject is based on [three.js](http://mrdoob.github.com/three.js/) r53.
 
 It's a work in progress. 
-Currently, about 50% of the classes are implemeted.
+Currently, about 70% of the classes are implemeted.
 
 ## Status 
 
@@ -14,8 +14,10 @@ Currently, about 50% of the classes are implemeted.
     * OrthographicCamera - completed
     * PerspectiveCamera - completed
 * Core
+    * BufferGeometry - completed
     * Clock - completed
     * Color - completed
+    * EventTarget - completed
     * Face3 - completed
     * Face4 - completed
     * Frustum - completed
@@ -43,7 +45,6 @@ Currently, about 50% of the classes are implemeted.
 * Loaders
     * Loader - completed
     * BinaryLoader - completed
-    * GeometryLoader - completed
     * ImageLoader - completed
     * JSONLoader - completed
     * LoadingMonitor - completed
@@ -110,44 +111,50 @@ Currently, about 50% of the classes are implemeted.
     * CombinedCamera - completed
     * CubeCamera - completed
 * Extras / Core
-    * BufferGeometry
-    * Curve
-    * CurvePath
-    * EventTarget
-    * Gyroscope
-    * Path
-    * Shape
-    * TextPath
+    * Curve - completed
+    * CurvePath - completed
+    * Gyroscope - completed
+    * Path - completed
+    * Shape - completed
 * Extras / Geometries
+    * AsteriskGeometry
+    * CircleGeometry
+    * ConvexGeometry
     * CubeGeometry
     * CylinderGeometry
-    * ExtrudeGeometry
+    * ExtrudeGeometry - completed
     * IcosahedronGeometry
     * LatheGeometry
     * OctahedronGeometry
+    * ParametricGeometry
     * PlaneGeometry - completed
     * PolyhedronGeometry
+    * ShapeGeometry - completed
     * SphereGeometry - completed
     * TetrahedronGeometry
     * TextGeometry
     * TorusGeometry
     * TorusKnotGeometry
+    * TubeGeometry
 * Extras / Helpers
-    * AxisHelper
-    * CameraHelper
+    * AxisHelper - completed
+    * ArrowHelper - completed
+    * CameraHelper - completed
+    * DirectionalLightHelper - completed
+    * HemisphereLightHelper - completed
+    * PointLightHelper - completed
+    * SpotLightHelper - completed
 * Extras / Modifiers
-    * SubdivisionModifier
+    * SubdivisionModifier - completed
 * Extras / Objects
-    * LensFlare
-* Extras / Renderers / Effects
-    * AnaglyphEffect
-    * CrosseyedEffect
-    * ParallaxBarrierEffect
-    * StereoEffect
+    * ImmediateRenderObject - completed
+    * LensFlare - completed
+    * MorphBlendMesh - completed
 * Extras / Renderers / Plugins
-    * LensFlarePlugin
-    * ShadowMapPlugin
-    * SpritePlugin
+    * DepthPassPlugin - completed
+    * LensFlarePlugin - completed
+    * ShadowMapPlugin - completed
+    * SpritePlugin - completed
 * Extras / Shaders
-    * ShaderFlares
-    * ShaderSprite
+    * ShaderFlares - completed
+    * ShaderSprite - completed
