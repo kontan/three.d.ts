@@ -1,6 +1,7 @@
 /// <reference path="jquery.d.ts" />
 /// <reference path="../three.d.ts" />
 $(()=>{
+	
 	// renderer
 	var renderer = new THREE.WebGLRenderer({
 		clearColor: 0x00000030,

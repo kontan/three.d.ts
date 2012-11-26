@@ -8,6 +8,22 @@
 module THREE{
 	export var REVISION:string;
 
+	// **TODO**
+	// TypeScript has experimental enum construct but it creates new type.
+	// For example,
+	//
+	//    export enum Side{ FrontSide, BackSide, DoubleSide }
+	//
+	// will be compiled.
+	// Ideally, those enum values should be prefixed with enum type name, like
+	//
+	//     new MeshPhongMaterial().side = THREE.Side.FrontSide
+	//
+	// Unfortunately, three.js currently doesn't. 
+	// In JavaScript, THREE.Side.FontSide can coexist with THREE.FrontSide, 
+	// I think providing both identifiers is useful.
+
+	// side
 	export var FrontSide:number;
 	export var BackSide:number;
 	export var DoubleSide:number;
@@ -36,6 +52,7 @@ module THREE{
 	export var AddEquation:number;
 	export var SubtractEquation:number;
 	export var ReverseSubtractEquation:number;
+
 	// custom blending destination factors
 	export var ZeroFactor:number;
 	export var OneFactor:number;
@@ -134,12 +151,12 @@ module THREE{
 	}
 
 	export class Clock{
+		constructor(autoStart:bool);		
 		autoStart:bool;
 		startTime:number;
 		oldTime:number;
 		elapsedTime:number;
 		running:bool;
-		constructor(autoStart:bool);
 		start():void;
 		stop():void;
 		getElapsedTime():number;
@@ -176,15 +193,18 @@ module THREE{
 
 	export class EventTarget{
 		constructor();
-		addEventListener(type:any, listener:(event:any)=>void);
+		addEventListener(type:string, listener:(event:any)=>void);
 		dispatchEvent(event:any);
-		removeEventListener(type:any, listener:(event:any)=>void);
+		removeEventListener(type:string, listener:(event:any)=>void);
 	}
 
+	// **HACK**
+	// three.js has no Face class but some properties has array contains both of Face3 and Face4.
 	export class Face{
 	}
 
 	export class Face3 extends Face{
+		constructor(a:number, b:number, c:number, normal:Vector3, color:Color, materialIndex:number);		
 		a:number;
 		b:number;
 		c:number;
@@ -192,14 +212,14 @@ module THREE{
 		color:Color;
 		vertexNormals:Vector3[];
 		vertexColors:Color[];
-		vertexTangets:number[];	// *TODO* Is it a misspelling of "vertexTangents" ?
+		vertexTangents:number[];
 		materialIndex:number;
 		centroid:number;
-		constructor(a:number, b:number, c:number, normal:Vector3, color:Color, materialIndex:number);
 		clone():Face3;
 	}
 
 	export class Face4 extends Face{
+		constructor(a:number, b:number, c:number, d:number, normal:Vector3, color:Color, materialIndex:number);
 		a:number;
 		b:number;
 		c:number;
@@ -208,10 +228,9 @@ module THREE{
 		color:Color;
 		vertexNormals:Vector3[];
 		vertexColors:Color[];
-		vertexTangets:number[];	// *TODO* Is it a misspelling of "vertexTangents" ?
+		vertexTangents:number[];
 		materialIndex:number;
 		centroid:number;
-		constructor(a:number, b:number, c:number, d:number, normal:Vector3, color:Color, materialIndex:number);
 		clone():Face3;
 	}
 
@@ -271,10 +290,11 @@ module THREE{
 		computeBoundingSphere();
 		mergeVertices():number;
 		clone():Geometry;
-		//deallocate():void;
+		deallocate():void;
 	}
-	// var GeometryIdCount:number;
-	// var GeometryLibrary:Geometry[];
+	
+	var GeometryIdCount:number;
+	var GeometryLibrary:Geometry[];
 
 	export class Math{
 		clamp(x:number, a:number, b:number):number;
@@ -288,18 +308,18 @@ module THREE{
 	}
 
 	export class Matrix3{
-		elements:Float32Array;
 		constructor();
-		//multiplyVector3(v:Vector3):Vector3;
-		//multiplyVector3Array(a:number[]):number[];
-		//getInverse(matrix:Matrix3);
+		elements:Float32Array;
+		multiplyVector3(v:Vector3):Vector3;
+		multiplyVector3Array(a:number[]):number[];
+		getInverse(matrix:Matrix3);
 		transpose():Matrix3;
 		transposeIntoArray(r:number[]):number[];
 	}
 
 	export class Matrix4{
-		elements:Float32Array;
 		constructor(n11:number, n12:number, n13:number, n14:number, n21:number, n22:number, n23:number, n24:number, n31:number, n32:number, n33:number, n34:number, n41:number, n42:number, n43:number, n44:number);
+		elements:Float32Array;
 		set(n11:number, n12:number, n13:number, n14:number, n21:number, n22:number, n23:number, n24:number, n31:number, n32:number, n33:number, n34:number, n41:number, n42:number, n43:number, n44:number):Matrix4;
 		identity():Matrix4;
 		copy(m:Matrix4):Matrix4;
@@ -335,7 +355,7 @@ module THREE{
 		rotateZ(angle:number):Matrix4;
 		rotateByAxis(axis:Vector3, angle:number):Matrix4;
 		scale(v:Vector3):Matrix4;
-		// getMaxScaleOnAxis():number;
+		getMaxScaleOnAxis():number;
 		makeTranslation(x:number, y:number, z:number):Matrix4;
 		makeRotationX(theta:number):Matrix4;
 		makeRotationY(theta:number):Matrix4;
@@ -349,6 +369,7 @@ module THREE{
 	}
 
 	export class Object3D{
+		constructor();		
 		id:number;
 		name:string;
 		properties:any;
@@ -373,31 +394,28 @@ module THREE{
 		matrixAutoUpdate:bool;
 		matrixWorldNeedsUpdate:bool;
 		rotationAutoUpdate:bool;
-		constructor();
 		applyMatrix(matrix:Matrix4):void;
 		translate(distance:number, axis:Vector3):void;
 		translateX(distance:number);
 		translateY(distance:number);
 		translateZ(distance:number);
-		//localToWorld(vector:Vector3):Vector3;
-		//worldToLocal(vector:Vector3):Vector3;
+		localToWorld(vector:Vector3):Vector3;
+		worldToLocal(vector:Vector3):Vector3;
 		lookAt(vector:Vector3):void;
 		add(object:Object3D):void;
 		remove(object:Object3D):void;
-		//traverse(callback:(Object3D)=>any);
+		traverse(callback:(Object3D)=>any);
 		getChildByName(name:string, recursive:bool):Object3D;
 		getDescendants(array?:Object3D[]):Object3D[];
 		updateMatrix():void;
 		updateMatrixWorld(force:bool):void;
 		clone(object?:Object3D):Object3D;
-		//deallocate():void;
-
-		// static __m1:Matrix4;
-		// static defaultEulerOrder:string;
+		deallocate():void;
+		static defaultEulerOrder:string;
 	}
 
-	//var Object3DIdCount:number;
-	//var Object3DLibrary:Object3D[];
+	var Object3DIdCount:number;
+	var Object3DLibrary:Object3D[];
 
 	export class Projector{
 		constructor();
@@ -408,11 +426,11 @@ module THREE{
 	}
 
 	export class Quaternion{
+		constructor(x?:number, y?:number, z?:number, w?:number);
 		x:number;
 		y:number;
 		z:number;
 		w:number;
-		constructor(x?:number, y?:number, z?:number, w?:number);
 		set(x:number, y:number, z:number, w:number):Quaternion;
 		copy(q:Quaternion):Quaternion;
 		setFromEuler(v:Vector3, order:string):Quaternion;
@@ -438,13 +456,12 @@ module THREE{
 	}
 
 	export class Ray{
+		constructor(origin?:Vector3, direction?:Vector3, near?:number, far?:number);
 		origin:Vector3;
 		direction:Vector3;
 		near:number;
 		far:number;
-		constructor(origin?:Vector3, direction?:Vector3, near?:number, far?:number);
-		// setPrecision(value:number);
-		// precision:number;
+		precision:number;
 		set(origin:Vector3, direction:Vector3):void;
 		intersectObject(object:Object3D, recursive?:bool):Intersect[];
 		intersectObjects(objects:Object3D[], recursive?:bool):Intersect[];
@@ -488,7 +505,7 @@ module THREE{
 	}
 
 	export class UV{
-		constructor(u:number, v:number);
+		constructor(u?:number, v?:number);
 		set(u:number, v:number):UV;
 		copy(uv:UV):UV;
 		lerpSelf(uv:UV, alpha:number):UV;
@@ -496,9 +513,9 @@ module THREE{
 	}
 
 	export class Vector2{
+		constructor(x?:number, y?:number);		
 		x:number;
 		y:number;
-		constructor(x?:number, y?:number);
 		set(x:number, y:number):void;
 		copy(v:Vector2):Vector2;
 		add(a:number, b:number):Vector2;
@@ -521,10 +538,10 @@ module THREE{
 	}
 
 	export class Vector3{
+		constructor(x?:number, y?:number, z?:number);	
 		x:number;
 		y:number;
 		z:number;
-		constructor(x?:number, y?:number, z?:number);
 		set(x:number, y:number, z:number):Vector3;
 		setX(x:number):Vector3;
 		setY(y:number):Vector3;
@@ -562,11 +579,11 @@ module THREE{
 	}
 
 	export class Vector4{
+		constructor(x?:number, y?:number, z?:number, w?:number);		
 		x:number;
 		y:number;
 		z:number;
 		w:number;
-		constructor(x?:number, y?:number, z?:number, w?:number);
 		set(x:number, y:number, z:number, w:number):Vector4;
 		copy(v:Vector4):Vector4;
 		add(a:Vector4, b:Vector4):Vector4;
@@ -576,13 +593,13 @@ module THREE{
 		multiplyScalar(s:number):Vector4;
 		divideScalar(s:number):Vector4;
 		negate():Vector4;
-		dot(v:Vector4);
+		dot(v:Vector4):number;
 		lengthSq():number;
 		length():number;
 		lengthManhattan():number;
 		normalize():Vector4;
 		setLength(l:number):Vector4;
-		lerpSelf(v:Vector4, alpha:number);
+		lerpSelf(v:Vector4, alpha:number):Vector4;
 		clone():Vector4;
 	}
 
@@ -607,33 +624,31 @@ module THREE{
 	}
 
 	export class PerspectiveCamera extends Camera{
-		left:number;
-		right:number;
-		top:number;
-		bottom:number;
+		constructor(fov?:number, aspect?:number, near?:number, far?:number);
+		fov:number;
+		aspect:number;
 		near:number;
 		far:number;
-		constructor(fov?:number, aspect?:number, near?:number, far?:number);
-		//setLens(focalLength:number, frameHeight?:number):void;
-		//setViewOffset(fullWidth:number, fullHeight:number, x:number, y:number, width:number, height:number):void;
+		setLens(focalLength:number, frameHeight?:number):void;
+		setViewOffset(fullWidth:number, fullHeight:number, x:number, y:number, width:number, height:number):void;
 		updateProjectionMatrix():void;
 	}
 
 	// Lights //////////////////////////////////////////////////////////////////////////////////
 	export class Light extends Object3D{
-		constructor(hex:number);
+		constructor(hex?:number);
 		color:Color;
 	}
 
 	export class AmbientLight extends Light{
-		constructor(hex:number);
+		constructor(hex?:number);
 	}
 
 	export class RenderTarget{
 	}
 
 	export class DirectionalLight extends Light{
-		constructor(hex:number, intensity?:number);
+		constructor(hex?:number, intensity?:number);
 		position:Vector3;
 		target:Object3D;
 		intensity:number;
@@ -668,14 +683,14 @@ module THREE{
 	}
 
 	export class PointLight extends Light{
-		constructor(hex:number, intensity?:number, distance?:number);
+		constructor(hex?:number, intensity?:number, distance?:number);
 		position:Vector3;
 		intensity:number;
 		distance:number;
 	}
 
 	export class SpotLight extends Light{
-		constructor(hex:number, intensity?:number, distance?:number, angle?:number, exponent?:number);
+		constructor(hex?:number, intensity?:number, distance?:number, angle?:number, exponent?:number);
 		position:Vector3;
 		target:Object3D;
 		intensity:number;
@@ -702,6 +717,11 @@ module THREE{
 
 	// Loaders //////////////////////////////////////////////////////////////////////////////////
 	
+	interface Progress{
+		total:number;
+		loaded:number;
+	}
+
 	export class Loader{
 		constructor(showStatus?:bool);
 		showStatus:bool;
@@ -709,40 +729,36 @@ module THREE{
 		onLoadStart:()=>void;
 		onLoadProgress:()=>void;
 		onLoadComplete:()=>void;
-		//crossOrigin:string;
-		//addStatusElement:()=>HTMLElement;
-		//updateProgress:(progress:{total:number;loaded:number;})=>void;
-		//extractUrlBase:(url:string)=>string;
-		//initMaterials:(materials:Material[], texturePath:string):Material[];
-		//needsTangents:(materials:Material[])=>bool;
-		//createMaterial:(m:Material, texturePath:string):bool;
-	}
-
-	interface Progress{
-		total:number;
-		loaded:number;
+		crossOrigin:string;
+		addStatusElement():HTMLElement;
+		updateProgress(progress:Progress):void;
+		extractUrlBase(url:string):string;
+		initMaterials(materials:Material[], texturePath:string):Material[];
+		needsTangents(materials:Material[]):bool;
+		createMaterial(m:Material, texturePath:string):bool;
 	}
 
 	export class BinaryLoader extends Loader{
 		constructor(showStatus:bool);
 		load(url:string, callback:(geometry:Geometry,materials:Material[])=>void, texturePath?:string, binaryPath?:string):void;
-		//loadAjaxJSON(context, url, callback, texturePath, binaryPath, callbackProgress);
-		//loadAjaxBuffers(json:any, callback:(geometry:Geometry, materials:Material[])=>void, binaryPath:string, texturePath:string, callbackProgress:(progress:Progress)=>void);
-		//createBinModel(data:any, callback:(geometry:Geometry, materials:Material[])=>void, texturePath:string, jsonMaterials:any);
+		loadAjaxJSON(context, url, callback, texturePath, binaryPath, callbackProgress);
+		loadAjaxBuffers(json:any, callback:(geometry:Geometry, materials:Material[])=>void, binaryPath:string, texturePath:string, callbackProgress:(progress:Progress)=>void);
+		createBinModel(data:any, callback:(geometry:Geometry, materials:Material[])=>void, texturePath:string, jsonMaterials:any);
 	}
 
 	export class ImageLoader extends EventTarget{
-		// crossOrigin:string;
+		constructor();
+		crossOrigin:string;
 		load(url:string, image?:HTMLImageElement):void;
 	}
 
 
 	export class JSONLoader extends Loader{
 		constructor(showStatus:bool);
-		//withCredentials:bool;
+		withCredentials:bool;
 		load(url:string, callback:(geometry:Geometry, materials:Material[])=>void, texturePath?:string):void;
-		//loadAjaxJSON( context, url, callback:(geometry:Geometry,materials:Material[])=>void, texturePath, callbackProgress ) {
-		//createModel(json:any, callback:(geometry:Geometry,materials:Material[])=>void, texturePath?:string) ;
+		loadAjaxJSON( context, url, callback:(geometry:Geometry,materials:Material[])=>void, texturePath, callbackProgress );
+		createModel(json:any, callback:(geometry:Geometry,materials:Material[])=>void, texturePath?:string) ;
 	}
 
 	export class LoadingMonitor extends EventTarget{
@@ -813,12 +829,12 @@ module THREE{
 	}
 
 	export class MeshBasicMaterial extends Material{
-		constructor( parameters?:any );
+		constructor(parameters?:any);
 		color:Color;
 		map:Texture;
 		lightMap:Texture;
 		specularMap:Texture;
-		envMap:Texture; // TextureCube ?;
+		envMap:Texture;
 		combine:number; //THREE.MultiplyOperation;
 		reflectivity:number;
 		refractionRatio:number;
@@ -1006,7 +1022,13 @@ module THREE{
 	}
 
 	export class MorphAnimMesh extends Mesh{
-		constructor(geometry:Geometry, material:Material);
+		constructor(geometry?:Geometry, material?:MeshBasicMaterial);
+		constructor(geometry?:Geometry, material?:MeshDepthMaterial);
+		constructor(geometry?:Geometry, material?:MeshFaceMaterial);
+		constructor(geometry?:Geometry, material?:MeshLambertMaterial);
+		constructor(geometry?:Geometry, material?:MeshNormalMaterial);
+		constructor(geometry?:Geometry, material?:MeshPhongMaterial);
+		constructor(geometry?:Geometry, material?:ShaderMaterial);
 		duration:number; // milliseconds
 		mirroredLoop:bool;
 		time:number;
@@ -1044,7 +1066,7 @@ module THREE{
 		constructor(geometry:Geometry, material:Material );
 		geometry:Geometry;
 		material:Material;
-		clone( object?:Ribbon ):Ribbon;
+		clone(object?:Ribbon):Ribbon;
 	}
 
 	export class SkinnedMesh extends Mesh{
@@ -1192,7 +1214,7 @@ module THREE{
 		stencilBuffer?:bool; // true;
 	}
 
-	export class WebGLRenderTarget{ 
+	export class WebGLRenderTarget extends RenderTarget{ 
 		constructor(width:number, height:number, options?:WebGLRenderTargetOptions);
 		width:number;
 		height:number;
@@ -1212,7 +1234,7 @@ module THREE{
 	}
 
 	export class WebGLRenderTargetCube extends WebGLRenderTarget{
-		constructor( width:number, height:number, options?:WebGLRenderTargetOptions);
+		constructor(width:number, height:number, options?:WebGLRenderTargetOptions);
 		activeCubeFace:number; // PX 0, NX 1, PY 2, NY 3, PZ 4, NZ 5
 	}
 
