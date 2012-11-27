@@ -1,36 +1,48 @@
 /**
- * three.d.ts
+ * three.d.ts (https://github.com/kontan/three.d.ts)
  *
  * based on three.js (http://mrdoob.github.com/three.js/) r53
  *
- * @author Kon / http://phyzkit.net/
+ * @author Kon - http://phyzkit.net/
  */
 
 
-// When you use three.d.ts with other WebGL ambient source file,
+// When you use three.d.ts with other ambient source file for WebGL,
 // remove below definition for WebGLRenderingContext.
 interface WebGLRenderingContext {}
 
 module THREE{
 	export var REVISION:string;
 
-	// **TODO**
-	// TypeScript has experimental enum construct but it creates new type.
-	// For example,
+	// **HACK**   pseudo enum hack
+	// TypeScript has experimental enum construct but it creates new type.For example,
 	//
 	//    export enum Side{ FrontSide, BackSide, DoubleSide }
 	//
 	// will be compiled successfully.
-	// Ideally, those enum values should be prefixed with enum type name, like
+	// Ideally, those three.js constant values should be prefixed with the enum type name:
 	//
-	//     new MeshPhongMaterial().side = THREE.Side.FrontSide
+	//     new THREE.MeshPhongMaterial().side = THREE.Side.FrontSide;
 	//
 	// Unfortunately, three.js currently doesn't. 
-	// In JavaScript, THREE.Side.FontSide can coexist with THREE.FrontSide, 
-	// I think providing both identifiers is useful.
+	// Therefore, at the following constant value section, those enum type are defined as class.
+	// In three.d.ts, you can write a enum value as follows:
+	//
+	//     new THREE.MeshPhongMaterial().side = THREE.FrontSide;
+	//
+	// But the following code will cause a type error on compile time:
+	//
+	//     new THREE.MeshPhongMaterial().side = THREE.FlatShading;
+	//
+	// In three.js, there are no the classes. You must not instantiate an object of the classes. 
+	// For example, you can compile the following code without compile time error.
+	//
+	//     new THREE.MeshPhongMaterial().side = new THREE.Side();
+	//
+	// However, it will cause a runtime type error.
 	// 
-	// At the following constant value section, those enum value sets are defined as class.
-	// In three.js, there are not the classes. You must not instantiate an object of the classes.
+	// I think it is not defect of three.js but rather TypeScript should have more flexible enum definition syntax
+	// for existing JavaScript source codes.
 
 	// side
 	export class Side {} 
