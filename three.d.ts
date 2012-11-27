@@ -41,8 +41,8 @@ module THREE{
 	//
 	// However, it will cause a runtime type error.
 	// 
-	// I think it is not defect of three.js but rather TypeScript should have more flexible enum definition syntax
-	// for existing JavaScript source codes.
+	// I think it is not defect of three.js.
+	// Rather, TypeScript should have more flexible enum definition syntax for existing JavaScript source codes.
 
 	// side
 	export class Side {} 
@@ -231,13 +231,13 @@ module THREE{
 
 	export class EventTarget{
 		constructor();
-		addEventListener(type:string, listener:(event:any)=>void);
+		addEventListener(type:string, listener:(event:any)=>void):void;
 		dispatchEvent(event:any);
-		removeEventListener(type:string, listener:(event:any)=>void);
+		removeEventListener(type:string, listener:(event:any)=>void):void;
 	}
 
 	// **HACK**
-	// three.js has no Face class but some properties has array contains both of Face3 and Face4.
+	// three.js has no Face class but some properties have array contains both of Face3 and Face4.
 	export class Face{
 	}
 
@@ -325,7 +325,7 @@ module THREE{
 		computeTangents():void;;
 		computeLineDistances():void;
 		computeBoundingBox():void;
-		computeBoundingSphere();
+		computeBoundingSphere():void;
 		mergeVertices():number;
 		clone():Geometry;
 		deallocate():void;
@@ -350,7 +350,7 @@ module THREE{
 		elements:Float32Array;
 		multiplyVector3(v:Vector3):Vector3;
 		multiplyVector3Array(a:number[]):number[];
-		getInverse(matrix:Matrix3);
+		getInverse(matrix:Matrix3):Matrix3;
 		transpose():Matrix3;
 		transposeIntoArray(r:number[]):number[];
 	}
@@ -383,7 +383,7 @@ module THREE{
 		getInverse(m:Matrix4):Matrix4;
 		setRotationFromEuler(v:Vector3, order:string):Matrix4;
 		setRotationFromQuaternion(q:Quaternion):Matrix4;
-		compose(translation:Vector3, rotation:Quaternion, scale:Vector3);
+		compose(translation:Vector3, rotation:Quaternion, scale:Vector3):Matrix4;
 		decompose(translation:Vector3, rotation:Quaternion, scale:Vector3):any[];
 		extractPosition(m:Matrix4):Matrix4;
 		extractRotation(m:Matrix4):Matrix4;
@@ -434,15 +434,15 @@ module THREE{
 		rotationAutoUpdate:bool;
 		applyMatrix(matrix:Matrix4):void;
 		translate(distance:number, axis:Vector3):void;
-		translateX(distance:number);
-		translateY(distance:number);
-		translateZ(distance:number);
+		translateX(distance:number):void;
+		translateY(distance:number):void;
+		translateZ(distance:number):void;
 		localToWorld(vector:Vector3):Vector3;
 		worldToLocal(vector:Vector3):Vector3;
 		lookAt(vector:Vector3):void;
 		add(object:Object3D):void;
 		remove(object:Object3D):void;
-		traverse(callback:(Object3D)=>any);
+		traverse(callback:(object:Object3D)=>any):void;
 		getChildByName(name:string, recursive:bool):Object3D;
 		getDescendants(array?:Object3D[]):Object3D[];
 		updateMatrix():void;
@@ -540,7 +540,7 @@ module THREE{
 	export class Spline{
 		constructor(points:SplineControlPoint[]);
 		points:SplineControlPoint[];
-		initFromArray(a:number[][]);
+		initFromArray(a:number[][]):void;
 		getPoint(k:number):SplineControlPoint;
 		getControlPointsArray():number[][];
 		getLength(nSubDivisions?:number):{ chunks: number[];total:number;};
@@ -575,9 +575,9 @@ module THREE{
 		distanceTo(v:Vector2):number;
 		distanceToSquared(v:Vector2):number;
 		setLength(l:number):Vector2;
-		lerpSelf(v:Vector2, alpha:number);
+		lerpSelf(v:Vector2, alpha:number):Vector2;
 		equals(v:Vector2):bool;
-		clone:Vector2;
+		clone():Vector2;
 	}
 
 	export class Vector3{
@@ -791,9 +791,9 @@ module THREE{
 	export class BinaryLoader extends Loader{
 		constructor(showStatus:bool);
 		load(url:string, callback:(geometry:Geometry,materials:Material[])=>void, texturePath?:string, binaryPath?:string):void;
-		loadAjaxJSON(context, url, callback, texturePath, binaryPath, callbackProgress);
-		loadAjaxBuffers(json:any, callback:(geometry:Geometry, materials:Material[])=>void, binaryPath:string, texturePath:string, callbackProgress:(progress:Progress)=>void);
-		createBinModel(data:any, callback:(geometry:Geometry, materials:Material[])=>void, texturePath:string, jsonMaterials:any);
+		loadAjaxJSON(context, url, callback, texturePath, binaryPath, callbackProgress):void;
+		loadAjaxBuffers(json:any, callback:(geometry:Geometry, materials:Material[])=>void, binaryPath:string, texturePath?:string, callbackProgress?:(progress:Progress)=>void):void;
+		createBinModel(data:any, callback:(geometry:Geometry, materials:Material[])=>void, texturePath:string, jsonMaterials:any):void;
 	}
 
 	export class ImageLoader extends EventTarget{
@@ -807,8 +807,8 @@ module THREE{
 		constructor(showStatus:bool);
 		withCredentials:bool;
 		load(url:string, callback:(geometry:Geometry, materials:Material[])=>void, texturePath?:string):void;
-		loadAjaxJSON( context, url, callback:(geometry:Geometry,materials:Material[])=>void, texturePath, callbackProgress );
-		createModel(json:any, callback:(geometry:Geometry,materials:Material[])=>void, texturePath?:string) ;
+		loadAjaxJSON( context, url, callback:(geometry:Geometry,materials:Material[])=>void, texturePath?:string, callbackProgress?:(progress:Progress)=>void):void;
+		createModel(json:any, callback:(geometry:Geometry,materials:Material[])=>void, texturePath?:string):void;
 	}
 
 	export class LoadingMonitor extends EventTarget{
@@ -1204,8 +1204,8 @@ module THREE{
 	export class LOD extends Object3D{
 		constructor();
 		LODs:Object3D[];
-		addLevel(object3D:Object3D, visibleAtDistance?:number);
-		update(camera:Camera);
+		addLevel(object3D:Object3D, visibleAtDistance?:number):void;
+		update(camera:Camera):void;
 		clone():LOD;
 	}
 
@@ -1325,16 +1325,16 @@ module THREE{
 		sortElements:bool;
 		info:{ render: { vertices:number; faces:number; }; };
 		setSize(width:number, height:number):void;
-		setClearColor(color:Color, opacity?:number);
-		setClearColorHex(hex:number, opacity?:number);
+		setClearColor(color:Color, opacity?:number):void;
+		setClearColorHex(hex:number, opacity?:number):void;
 		getMaxAnisotropy():number;
 		clear():void;
 		render(scene:Scene, camera:Camera):void;
 	}
 
 	export interface RendererPlugin{
-		init(renderer:WebGLRenderer);
-		render(scene:Scene,camera:Camera,currentWidth:number,currentHeight:number);
+		init(renderer:WebGLRenderer):void;
+		render(scene:Scene,camera:Camera,currentWidth:number,currentHeight:number):void;
 	}
 
 	export interface WebGLRendererParameters{
@@ -1413,7 +1413,7 @@ module THREE{
 		initWebGLObjects(scene:Scene):void;
 		initMaterial(material:Material, lights:Light[], fog:Fog, object:Object3D):void;
 		setFaceCulling(cullFace:string, frontFace:string):void;
-		setMaterialFaces(material:Material);
+		setMaterialFaces(material:Material):void;
 		setDepthTest(depthTest:bool):void;
 		setDepthWrite(depthWrite:bool):void;
 		setBlending(blending:Blending, blendEquation:BlendingEquation, blendSrc:BlendingSrcFactor, blendDst:BlendingDstFactor):void;
@@ -1585,7 +1585,7 @@ module THREE{
 		needsUpdate:bool;
 		onUpdate:any;
 		clone():Texture;
-		deallocate();
+		deallocate():void;
 	}
 	var TextureIdCount:number;
 	var TextureLibrary:Texture[];
@@ -1604,7 +1604,7 @@ module THREE{
 
 	// Extras /////////////////////////////////////////////////////////////////////
 	export class ColorUtils{
-		adjustHSV(color:Color, h:number, s:number, v:number);
+		adjustHSV(color:Color, h:number, s:number, v:number):void;
 	}
 
 	export interface TypefaceData{
@@ -1632,9 +1632,9 @@ module THREE{
 	}
 
 	export var GeometryUtils:{
-		merge(geometry1:Geometry, object2:Mesh);
-		merge(geometry1:Geometry, object2:Geometry);
-		removeMaterials(geometry:Geometry, materialIndexArray:number[]);
+		merge(geometry1:Geometry, object2:Mesh):void;
+		merge(geometry1:Geometry, object2:Geometry):void;
+		removeMaterials(geometry:Geometry, materialIndexArray:number[]):void;
 		randomPointInTriangle(vectorA:Vector3, vectorB:Vector3, vectorC:Vector3):Vector3;
 		randomPointInFace(face:Face, geometry:Geometry, useCachedAreas:bool):Vector3;
 		randomPointsInGeometry(geometry:Geometry, n:number):Vector3;
@@ -1643,7 +1643,7 @@ module THREE{
 		normalizeUVs(geometry:Geometry):void;
 		triangulateQuads(geometry:Geometry):void;
 		explode(geometry:Geometry):void;
-		tessellate(geometry:Geometry, maxEdgeLength:number);
+		tessellate(geometry:Geometry, maxEdgeLength:number):void;
 	}
 
 	export var ImageUtils:{
@@ -1992,7 +1992,7 @@ module THREE{
 				isolatedPts: Vector2[]; /* isolated faces */
 				allpoints: Vector2[];
 			};
-			triangulateShape(contour:Vector2[], holes:Vector2[][]);
+			triangulateShape(contour:Vector2[], holes:Vector2[][]):Vector2[];
 			isClockWise(pts):bool;
 			b2p0(t:number, p:number):number;
 			b2p1(t:number, p:number):number;
@@ -2144,7 +2144,7 @@ module THREE{
 		tangents:Vector3[];
 		normals:Vector3[];
 		binormals:Vector3[];
-		FrenetFrames(path, segments, closed);
+		FrenetFrames(path, segments, closed):void;
 	}
 
 	// Extras / Helpers /////////////////////////////////////////////////////////////////////
@@ -2254,7 +2254,7 @@ module THREE{
 		lensFlares:LensFlareProperty[];
 		positionScreen:Vector3;
 		customUpdateCallback:()=>void;
-		add(texture?:Texture, size?:number, distance?:number, blending?:Blending, color?:number, opacity?:number);
+		add(texture?:Texture, size?:number, distance?:number, blending?:Blending, color?:number, opacity?:number):void;
 		updateLensFlares():void;
 	}
 
@@ -2278,7 +2278,7 @@ module THREE{
 		constructor(geometry:Geometry, material:Material);
 		animationsMap:{[name:string]:MorphBlendMeshAnimation;};
 		animationsList:MorphBlendMeshAnimation[];	
-		createAnimation(name:string, start:number, end:number, fps:number);
+		createAnimation(name:string, start:number, end:number, fps:number):void;
 		autoCreateAnimations(fps:number):void;
 		firstAnimation:string;
 		setAnimationDirectionForward(name:string):void;
@@ -2286,7 +2286,7 @@ module THREE{
 		setAnimationFPS(name:string, fps:number):void;
 		setAnimationDuration(name:string, duration:number):void;;
 		setAnimationWeight(name:string, weight:number):void;
-		setAnimationTime(name:string, time:number);
+		setAnimationTime(name:string, time:number):void;
 		getAnimationTime(name:string):number;
 		getAnimationDuration(name:string):number;
 		playAnimation(name:string):void;
@@ -2308,7 +2308,7 @@ module THREE{
 	export class LensFlarePlugin implements RendererPlugin{
 		constructor();
 		init(renderer:Renderer):void;
-		render(scene:Scene, camera:Camera, viewportWidth:number, viewportHeight:number);
+		render(scene:Scene, camera:Camera, viewportWidth:number, viewportHeight:number):void;
 	}
 
 	export class ShadowMapPlugin implements RendererPlugin{
