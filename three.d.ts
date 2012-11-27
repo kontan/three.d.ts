@@ -184,7 +184,7 @@ module THREE{
 		computeVertexNormals():void;
 		normalizeNormals():void;
 		computeTangents():void;
-		eallocate():void;
+		deallocate():void;
 	}
 
 	export class Clock{
