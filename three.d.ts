@@ -207,6 +207,7 @@ module THREE{
 	}
 
 	export class Color{
+		constructor(hex?:string);
 		constructor(hex?:number);
 		r:number;
 		g:number;
@@ -1647,10 +1648,10 @@ module THREE{
 
 	export var ImageUtils:{
 		crossOrigin:string;
-		loadTexture          (url:string, mapping:Mapping, onLoad:(texture:Texture)=>void, onError:(message:string)=>void):Texture;
-		loadCompressedTexture(url:string, mapping:Mapping, onLoad:(texture:Texture)=>void, onError:(message:string)=>void):Texture;
-		loadTextureCube          (array:string[], mapping:Mapping, onLoad:()=>void, onError:(message:string)=>void):Texture;
-		loadCompressedTextureCube(array:string[], mapping:Mapping, onLoad:()=>void, onError:(message:string)=>void):Texture;
+		loadTexture          (url:string, mapping?:Mapping, onLoad?:(texture:Texture)=>void, onError?:(message:string)=>void):Texture;
+		loadCompressedTexture(url:string, mapping?:Mapping, onLoad?:(texture:Texture)=>void, onError?:(message:string)=>void):Texture;
+		loadTextureCube          (array:string[], mapping?:Mapping, onLoad?:()=>void, onError?:(message:string)=>void):Texture;
+		loadCompressedTextureCube(array:string[], mapping?:Mapping, onLoad?:()=>void, onError?:(message:string)=>void):Texture;
 		parseDDS(buffer:ArrayBuffer, loadMipmaps:bool):{ mipmaps: { data:Uint8Array; width:number; height:number; }[]; width:number; height:number; format:number; mipmapCount:number; };
 		getNormalMap(image:HTMLImageElement, depth?:number):HTMLCanvasElement;
 		generateDataTexture(width:number, height:number, color:Color):DataTexture;

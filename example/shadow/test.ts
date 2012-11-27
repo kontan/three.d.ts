@@ -1,4 +1,4 @@
-/// <reference path="jquery.d.ts" />
+/// <reference path="../jquery.d.ts" />
 /// <reference path="../../three.d.ts" />
 $(()=>{
 	// renderer
@@ -60,10 +60,14 @@ $(()=>{
 
 	$('#container').append(renderer.domElement);
 
+
 	var theta = 0;
-	setInterval(()=>{
+	function mainloop(){
 		sphere.position.x = 40 * Math.sin(theta);
 		theta += 0.05;
 		renderer.render(scene, camera);
-	}, 15);
+
+		requestAnimationFrame(mainloop);
+	}
+	mainloop();
 });
