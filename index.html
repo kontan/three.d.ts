@@ -95,17 +95,17 @@ $(()=>{
   scene.add(plane);
 
   // directional light
-  var directionalLight:THREE.SpotLight = new THREE.SpotLight(0xffffff);
-  directionalLight.position.set(-10, 600, 0);
-  directionalLight.castShadow = true;  
-  directionalLight.shadowDarkness = 0.5;
-  directionalLight.shadowMapWidth = 1024; 
-  directionalLight.shadowMapHeight = 1024;  
-  directionalLight.shadowCameraFov = 60;
-  directionalLight.shadowCameraNear = 50; 
-  directionalLight.shadowCameraFar = 1000; 
-  //directionalLight.shadowCameraVisible = true;
-  scene.add(directionalLight);
+  var spotLight:THREE.SpotLight = new THREE.SpotLight(0xffffff);
+  spotLight.position.set(-10, 600, 0);
+  spotLight.castShadow = true;  
+  spotLight.shadowDarkness = 0.5;
+  spotLight.shadowMapWidth = 1024; 
+  spotLight.shadowMapHeight = 1024;  
+  spotLight.shadowCameraFov = 60;
+  spotLight.shadowCameraNear = 50; 
+  spotLight.shadowCameraFar = 1000; 
+  //spotLight.shadowCameraVisible = true;
+  scene.add(spotLight);
 
   // Sun
   var pointLight:THREE.PointLight = new THREE.PointLight(0xffffff);
