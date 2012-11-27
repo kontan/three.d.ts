@@ -29,6 +29,9 @@ Most definition of the classes were completed. It needs checking, brushing up an
 
 Enjoy three.js!
 
+### Demo
+
+[http://kontan.github.com/three.d.ts](http://kontan.github.com/three.d.ts)
 
 ### TODO
 
