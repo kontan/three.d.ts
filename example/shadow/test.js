@@ -1,4 +1,7 @@
 $(function () {
+    new THREE.LineBasicMaterial({
+        colour: 16711680
+    });
     var renderer = new THREE.WebGLRenderer({
         clearColor: 48,
         clearAlpha: 1

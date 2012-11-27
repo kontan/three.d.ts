@@ -855,6 +855,19 @@ module THREE{
 		needsUpdate:bool;
 	}
 
+	// **Hack** type safety trick
+	// 
+	// the constructor of LineBasicMaterial take a parameter as key/value dictionary. 
+	// three.d.ts provides type safety for those parameters. 
+	// For example, the following code causes compile time type error:
+	//
+	//     new THREE.LineBasicMaterial({ color:"red" });
+	//
+	// However, this trick is helpless for typo. The below code has a type "colour"
+	// but the compiler will compile it with no errors.
+	//
+	//     new THREE.LineBasicMaterial({ colour:0xff0000 });
+	//
 	export interface LineBasicMaterialParameters{
 		color?:number;
  		opacity?:number;

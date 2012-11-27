@@ -1,6 +1,10 @@
 /// <reference path="../jquery.d.ts" />
 /// <reference path="../../three.d.ts" />
 $(()=>{
+
+
+	new THREE.LineBasicMaterial({ colour:0xff0000 });
+
 	// renderer
 	var renderer:THREE.WebGLRenderer = new THREE.WebGLRenderer({
 		clearColor: 0x00000030,
