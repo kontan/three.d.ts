@@ -5,6 +5,10 @@
  *
  * @author Kon / http://phyzkit.net/
  */
+
+
+interface WebGLRenderingContext {}
+
 module THREE{
 	export var REVISION:string;
 
@@ -24,102 +28,119 @@ module THREE{
 	// I think providing both identifiers is useful.
 
 	// side
-	export var FrontSide:number;
-	export var BackSide:number;
-	export var DoubleSide:number;
+	export class Side {} 
+	export var FrontSide :Side;
+	export var BackSide  :Side;
+	export var DoubleSide:Side;
 
 	// shading
-	export var NoShading:number;
-	export var FlatShading:number;
-	export var SmoothShading:number;
+	export class Shading {}
+	export var NoShading    :Shading;
+	export var FlatShading  :Shading;
+	export var SmoothShading:Shading;
 
 	// colors
-	export var NoColors:number;
-	export var FaceColors:number;
-	export var VertexColors:number;
+	export class Colors {}
+	export var NoColors    :Colors;
+	export var FaceColors  :Colors;
+	export var VertexColors:Colors;
 
 	// blending modes
-	export var NoBlending:number;
-	export var NormalBlending:number;
-	export var AdditiveBlending:number;
-	export var SubtractiveBlending:number;
-	export var MultiplyBlending:number;
-	export var CustomBlending:number;
+	export class Blending {}
+	export var NoBlending         :Blending;
+	export var NormalBlending     :Blending;
+	export var AdditiveBlending   :Blending;
+	export var SubtractiveBlending:Blending;
+	export var MultiplyBlending   :Blending;
+	export var CustomBlending     :Blending;
 
 	// custom blending equations
 	// (numbers start from 100 not to clash with other
 	//  mappings to OpenGL constants defined in Texture.js)
-	export var AddEquation:number;
-	export var SubtractEquation:number;
-	export var ReverseSubtractEquation:number;
+	export class BlendingEquation {}
+	export var AddEquation:BlendingEquation;
+	export var SubtractEquation:BlendingEquation;
+	export var ReverseSubtractEquation:BlendingEquation;
 
 	// custom blending destination factors
-	export var ZeroFactor:number;
-	export var OneFactor:number;
-	export var SrcColorFactor:number;
-	export var OneMinusSrcColorFactor:number;
-	export var SrcAlphaFactor:number;
-	export var OneMinusSrcAlphaFactor:number;
-	export var DstAlphaFactor:number;
-	export var OneMinusDstAlphaFactor:number;
+	export class BlendingDstFactor {}
+	export var ZeroFactor            :BlendingDstFactor;
+	export var OneFactor             :BlendingDstFactor;
+	export var SrcColorFactor        :BlendingDstFactor;
+	export var OneMinusSrcColorFactor:BlendingDstFactor;
+	export var SrcAlphaFactor        :BlendingDstFactor;
+	export var OneMinusSrcAlphaFactor:BlendingDstFactor;
+	export var DstAlphaFactor        :BlendingDstFactor;
+	export var OneMinusDstAlphaFactor:BlendingDstFactor;
 
 	// custom blending source factors
-	export var DstColorFactor:number;
-	export var OneMinusDstColorFactor:number;
-	export var SrcAlphaSaturateFactor:number;
+	export class BlendingSrcFactor {}
+	export var DstColorFactor        :BlendingSrcFactor;
+	export var OneMinusDstColorFactor:BlendingSrcFactor;
+	export var SrcAlphaSaturateFactor:BlendingSrcFactor;
 
 	// TEXTURE CONSTANTS
-	export var MultiplyOperation:number;
-	export var MixOperation:number;
-	export var AddOperation:number;
+	export class Combine {}
+	export var MultiplyOperation:Combine;
+	export var MixOperation     :Combine;
+	export var AddOperation     :Combine;
 	
 	// Mapping modes
-	export var UVMapping:()=>void;
-	export var CubeReflectionMapping:()=>void;
-	export var CubeRefractionMapping:()=>void;
-	export var SphericalReflectionMapping:()=>void;
-	export var SphericalRefractionMapping:()=>void;
+	// **HACK**
+	// Mapping is enum. Don't instantiate object of Mapping
+	export class Mapping {}
+	export var UVMapping                 :Mapping;
+	export var CubeReflectionMapping     :Mapping;
+	export var CubeRefractionMapping     :Mapping;
+	export var SphericalReflectionMapping:Mapping;
+	export var SphericalRefractionMapping:Mapping;
 
 	// Wrapping modes
-	export var RepeatWrapping:number;
-	export var ClampToEdgeWrapping:number;
-	export var MirroredRepeatWrapping:number;
+	export class Wrapping {}
+	export var RepeatWrapping        :Wrapping;
+	export var ClampToEdgeWrapping   :Wrapping;
+	export var MirroredRepeatWrapping:Wrapping;
 
 	// Filters
-	export var NearestFilter:number;
-	export var NearestMipMapNearestFilter:number;
-	export var NearestMipMapLinearFilter:number;
-	export var LinearFilter:number;
-	export var LinearMipMapNearestFilter:number;
-	export var LinearMipMapLinearFilter:number;
+	export class TextureFilter {}
+	export var NearestFilter             :TextureFilter;
+	export var NearestMipMapNearestFilter:TextureFilter;
+	export var NearestMipMapLinearFilter :TextureFilter;
+	export var LinearFilter              :TextureFilter;
+	export var LinearMipMapNearestFilter :TextureFilter;
+	export var LinearMipMapLinearFilter  :TextureFilter;
 
 	// Data types
-	export var UnsignedByteType:number;
-	export var ByteType:number;
-	export var ShortType:number;
-	export var UnsignedShortType:number;
-	export var IntType:number;
-	export var UnsignedIntType:number;
-	export var FloatType:number;
+	export class TextureDataType {}
+	export var UnsignedByteType :TextureDataType;
+	export var ByteType         :TextureDataType;
+	export var ShortType        :TextureDataType;
+	export var UnsignedShortType:TextureDataType;
+	export var IntType          :TextureDataType;
+	export var UnsignedIntType  :TextureDataType;
+	export var FloatType        :TextureDataType;
 
 	// Pixel types
+	export class PixelType {}
 	//	export var UnsignedByteType:number;
-	export var UnsignedShort4444Type:number;
-	export var UnsignedShort5551Type:number;
-	export var UnsignedShort565Type:number;
+	export var UnsignedShort4444Type:PixelType;
+	export var UnsignedShort5551Type:PixelType;
+	export var UnsignedShort565Type :PixelType;
 
 	// Pixel formats
-	export var AlphaFormat:number;
-	export var RGBFormat:number;
-	export var RGBAFormat:number;
-	export var LuminanceFormat:number;
-	export var LuminanceAlphaFormat:number;
+	export class PixelFormat {}
+	export var AlphaFormat         :PixelFormat;
+	export var RGBFormat           :PixelFormat;
+	export var RGBAFormat          :PixelFormat;
+	export var LuminanceFormat     :PixelFormat;
+	export var LuminanceAlphaFormat:PixelFormat;
 
 	// Compressed texture formats
-	export var RGB_S3TC_DXT1_Format:number;
-	export var RGBA_S3TC_DXT1_Format:number;
-	export var RGBA_S3TC_DXT3_Format:number;
-	export var RGBA_S3TC_DXT5_Format:number;
+	export class CompressedPixelFormat {}
+	export var RGB_S3TC_DXT1_Format :CompressedPixelFormat;
+	export var RGBA_S3TC_DXT1_Format:CompressedPixelFormat;
+	export var RGBA_S3TC_DXT3_Format:CompressedPixelFormat;
+	export var RGBA_S3TC_DXT5_Format:CompressedPixelFormat;
 
 	/*
 	// Potential future PVRTC compressed texture formats
@@ -682,6 +703,13 @@ module THREE{
 		shadowMatrix:Matrix4;
 	}
 
+	export class HemisphereLight extends Light{
+		constructor(skyColorHex?:number, groundColorHex?:number, intensity?:number);
+		groundColor:Color;
+		position:Vector3;
+		intensity:number;
+	}
+
 	export class PointLight extends Light{
 		constructor(hex?:number, intensity?:number, distance?:number);
 		position:Vector3;
@@ -789,10 +817,10 @@ module THREE{
 		name:string;
 		opacity:number;
 		transparent:bool;
-		blending:number; // Blending
-		blendSrc:number;
-		blendDst:number;
-		blendEquation:number;
+		blending:Blending;
+		blendSrc:BlendingDstFactor;
+		blendDst:BlendingSrcFactor;
+		blendEquation:BlendingEquation;
 		depthTest:bool;
 		depthWrite:bool;
 		polygonOffset:bool;
@@ -801,12 +829,24 @@ module THREE{
 		alphaTest:number;
 		overdraw:bool;
 		visible:bool;
-		side:number; // THREE.FrontSide, THREE.BackSide, THREE.DoubleSide
+		side:Side;
 		needsUpdate:bool;
 	}
 
+	export interface LineBasicMaterialParameters{
+		color?:number;
+ 		opacity?:number;
+ 		blending?:Blending;
+		depthTest?:bool;
+		linewidth?:number;
+		linecap?:string;
+ 		linejoin?:string;
+ 		vertexColors?:bool;
+ 		fog?:bool;
+ 	}
+
 	export class LineBasicMaterial extends Material{
-		constructor(parameters?:any);
+		constructor(parameters?:LineBasicMaterialParameters);
 		color:Color;
 		linewidth:number;
 		linecap:string;
@@ -816,8 +856,21 @@ module THREE{
 		clone():LineBasicMaterial;
 	}
 
+	export interface LineDashedMaterialParameters{
+		color?:number;
+ 		opacity?:number;
+		blending?:Blending;
+ 		depthTest?:bool;
+		linewidth?:number;
+		scale?:number;
+ 		dashSize?:number;
+		gapSize?:number;
+		vertexColors?:number;
+		fog?:bool;
+	}
+
 	export class LineDashedMaterial extends Material{
-		constructor(parameters?:any);
+		constructor(parameters?:LineDashedMaterialParameters);
 		color:Color;
 		linewidth:number;
 		scale:number;
@@ -828,30 +881,59 @@ module THREE{
 		clone():LineDashedMaterial;
 	}
 
+	export interface MeshBasicMaterialParameters{
+		color?:number;
+		opacity?:number;
+		map?:Texture;
+		lightMap?:Texture;
+		specularMap?:Texture;
+		envMap?:Texture;
+		combine?:Combine;
+		reflectivity?:number;
+		refractionRatio?:number;
+		shading?:Shading;
+		blending?:Blending;
+		depthTest?:bool;
+		wireframe?:bool;
+		wireframeLinewidth?:number;
+		vertexColors?:Colors;
+		skinning?:bool;
+		morphTargets?:bool;
+		fog?:bool;
+	}
+
 	export class MeshBasicMaterial extends Material{
-		constructor(parameters?:any);
+		constructor(parameters?:MeshBasicMaterialParameters);
 		color:Color;
 		map:Texture;
 		lightMap:Texture;
 		specularMap:Texture;
 		envMap:Texture;
-		combine:number; //THREE.MultiplyOperation;
+		combine:Combine;
 		reflectivity:number;
 		refractionRatio:number;
 		fog:bool;
-		shading:number; //THREE.SmoothShading;
+		shading:Shading;
 		wireframe:bool;
 		wireframeLinewidth:number;
 		wireframeLinecap:string;
 		wireframeLinejoin:string;
-		vertexColors:number; // THREE.NoColors;
+		vertexColors:Colors;
 		skinning:bool;
 		morphTargets:bool;
 		clone():MeshBasicMaterial;
 	}
 
+	export interface MeshDepthMaterialParameters{			
+		opacity?:number;
+		blending?:Blending;
+		depthTest?:bool;
+		wireframe?:bool;
+	 	wireframeLinewidth?:number;
+	}
+
 	export class MeshDepthMaterial extends Material{
-		constructor(parameters?:any);
+		constructor(parameters?:MeshDepthMaterialParameters);
 		wireframe:bool;
 		wireframeLinewidth:number;
 		clone():MeshDepthMaterial;
@@ -863,8 +945,32 @@ module THREE{
 		clone():MeshFaceMaterial;
 	}
 
+	export interface MeshLambertMaterialParameters{
+		color?:number;
+		ambient?:number;
+		emissive?:number;
+		opacity?:number;
+		map?:Texture;
+		lightMap?:Texture;
+		specularMap?:Texture;
+		envMap?:Texture;
+		combine?:Combine;
+		reflectivity?:number;
+		refractionRatio?:number;
+		shading?:Shading;
+		blending?:Blending;
+		depthTest:bool;
+		wireframe:bool;
+		wireframeLinewidth:number;
+		vertexColors:Colors;
+		skinning:bool;
+		morphTargets:bool;
+		morphNormals:bool;
+		fog:bool;
+	}
+
 	export class MeshLambertMaterial extends Material{
-		constructor(parameters?:any);
+		constructor(parameters?:MeshLambertMaterialParameters);
 		color:Color;
 		ambient:Color;
 		emissive:Color;
@@ -874,33 +980,71 @@ module THREE{
 		lightMap:Texture;
 		specularMap:Texture;
 		envMap:Texture;
-		combine:number; //THREE.MultiplyOperation;
+		combine:Combine;
 		reflectivity:number;
 		refractionRatio:number;
 		fog:bool;
-		shading:number; // THREE.SmoothShading;
+		shading:Shading;
 		wireframe:bool;
 		wireframeLinewidth:number;
 		wireframeLinecap:string;
 		wireframeLinejoin:string;
-		vertexColors:number; // THREE.NoColors;
+		vertexColors:Colors;
 		skinning:bool;
 		morphTargets:bool;
 		morphNormals:bool;
 		clone():MeshLambertMaterial;
 	}
 
+	export interface MeshNormalMaterialParameters{
+		opacity?:number;
+		shading?:Shading;
+		blending?:Blending;
+		depthTest?:bool;
+		wireframe?:bool;
+		wireframeLinewidth?:number;
+	}
+
 	export class MeshNormalMaterial extends Material{
-		constructor(parameters?:any);
-		shading:number; // THREE.FlatShading;
+		constructor(parameters?:MeshNormalMaterialParameters);
+		shading:Shading;
 		wireframe:bool;
 		wireframeLinewidth:number;
 		clone():MeshNormalMaterial;
 	}
 
+	export interface MeshPhongMaterialParameters{
+		color?:number;
+		ambient?:number;
+		emissive?:number;
+		specular?:number;
+		shininess?:number;
+		opacity?:number;
+		map?:Texture;
+		lightMap?:Texture;
+		bumpMap?:Texture;
+		bumpScale?:number;
+		normalMap?:Texture;
+		normalScale?:Vector2;
+		specularMap?:Texture;
+		envMap?:Texture;
+		combine?:Combine;
+		reflectivity?:number;
+		refractionRatio?:number;
+		shading?:Shading;
+		blending?:Blending;
+		depthTest?:bool;
+		wireframe?:bool;
+		wireframeLinewidth?:number;
+		vertexColors?:Colors;
+		skinning?:bool;
+		morphTargets?:bool;
+		morphNormals?:bool;
+		fog?:bool;
+	}
 
 	export class MeshPhongMaterial extends Material{
-		constructor( parameters?:any );
+		constructor(parameters?:MeshPhongMaterialParameters);
 		color:Color; // diffuse
 		ambient:Color;
 		emissive:Color;
@@ -918,24 +1062,35 @@ module THREE{
 		normalScale:Vector2;
 		specularMap:Texture;
 		envMap:Texture;
-		combine:number; // THREE.MultiplyOperation;
+		combine:Combine;
 		reflectivity:number;
 		refractionRatio:number;
 		fog:bool;
-		shading:number; // THREE.SmoothShading;
+		shading:Shading;
 		wireframe:bool;
 		wireframeLinewidth:number;
 		wireframeLinecap:string;
 		wireframeLinejoin:string;
-		vertexColors:number; // THREE.NoColors;
+		vertexColors:Colors;
 		skinning:bool;
 		morphTargets:bool;
 		morphNormals:bool;
 		clone():MeshPhongMaterial;
 	}
 
+	export interface ParticleBasicMaterialParameters{
+		color?:number;
+		opacity?:number;
+		map?:Texture;
+		size?:number;
+		blending?:Blending;
+		depthTest?:bool;
+		vertexColors?:bool;
+		fog?:bool;
+	}
+
 	export class ParticleBasicMaterial extends Material{
-		constructor(parameters?:any);
+		constructor(parameters?:ParticleBasicMaterialParameters);
 		color:Color;
 		map:Texture;
 		size:number;
@@ -945,8 +1100,15 @@ module THREE{
 		clone():ParticleBasicMaterial;
 	}
 
+	export interface ParticleCanvasMaterialParameters{
+		color?:number;
+		program?:(context:CanvasRenderingContext2D, color:Color)=>void;
+		opacity?:number;
+ 		blending?:Blending;
+ 	}
+
 	export class ParticleCanvasMaterial extends Material{
-		constructor(parameters?:any);
+		constructor(parameters?:ParticleCanvasMaterialParameters);
 		color:Color;
 		program:(context:CanvasRenderingContext2D, color:Color)=>void;
 		clone():ParticleCanvasMaterial;
@@ -957,19 +1119,41 @@ module THREE{
 		clone():ParticleDOMMaterial;
 	}
 
+	export interface Uniforms{
+		[name:string]:{type:string;value:any;};
+	}
+
+	export interface ShaderMaterialParameters{
+		fragmentShader?:string;
+		vertexShader?:string;
+		uniforms?:Uniforms;
+		defines?:{[label:string]:string;};
+		shading?:Shading;
+		blending?:Blending;
+		depthTest?:bool;
+		wireframe?:bool;
+		wireframeLinewidth?:number;
+		lights?:bool;
+		vertexColors?:Colors;
+		skinning?:bool;
+		morphTargets?:bool;
+		morphNormals?:bool;
+		fog?:bool;
+	}
+
 	export class ShaderMaterial extends Material{
-		constructor( parameters:any);
+		constructor(parameters?:ShaderMaterialParameters);
 		fragmentShader:string;
 		vertexShader:string;
-		uniforms:{[paramName:string]:{type:string;value:number;};};
+		uniforms:Uniforms;
 		defines:{[label:string]:any;};
 		attributes:{[name:string]:any;};
-		shading:number; // THREE.SmoothShading;
+		shading:Shading;
 		wireframe:bool;
 		wireframeLinewidth:number;
 		fog:bool;
 		lights:bool;
-		vertexColors:number; // THREE.NoColors; 
+		vertexColors:Colors;
 		skinning:bool;
 		morphTargets:bool;
 		morphNormals:bool;
@@ -1131,10 +1315,22 @@ module THREE{
 		render(scene:Scene,camera:Camera,currentWidth:number,currentHeight:number);
 	}
 
+	interface WebGLRendererParameters{
+		canvas?:HTMLCanvasElement;
+		precision?:string;
+		alpha?:bool;
+		premultipliedAlpha?:bool;
+		antialias?:bool;
+		stencil?:bool;
+		preserveDrawingBuffer?:bool;
+		clearColor?:number;
+		clearAlpha?:number;
+	}
+
 	export class WebGLRenderer implements Renderer{
-		constructor(parameters?:any);
+		constructor(parameters?:WebGLRendererParameters);
 		domElement:HTMLCanvasElement;
-		context:CanvasRenderingContext2D;
+		context:WebGLRenderingContext;
 		autoClear:bool;
 		autoClearColor:bool;
 		autoClearDepth:bool;
@@ -1169,47 +1365,48 @@ module THREE{
 				points:number;
 			};
 		};
-		getContext():CanvasRenderingContext2D;
+		getContext():WebGLRenderingContext;
 		supportsVertexTextures():bool;
+		getMaxAnisotropy():number;
 		setSize(width:number, height:number):void;
-		setViewport(x:number, y:number, width:number, height:number):void;
+		setViewport(x?:number, y?:number, width?:number, height?:number):void;
 		setScissor(x:number, y:number, width:number, height:number):void;
 		enableScissorTest(enable:bool):void;
-		setClearColorHex( hex:number, alpha:number):void;
+		setClearColorHex(hex:number, alpha:number):void;
 		setClearColor(color:Color, alpha:number):void;
 		getClearColor():Color;
 		getClearAlpha():number;
-		clear(color?:Color, depth?:number, stencil?:number):void;
+		clear(color?:bool, depth?:bool, stencil?:bool):void;
 		addPostPlugin(plugin:RendererPlugin):void;
 		addPrePlugin(plugin:RendererPlugin):void;
-		deallocateObject(object:any):void;
+		deallocateObject(object:Object3D):void;
 		deallocateTexture(texture:Texture):void;
 		deallocateRenderTarget(renderTarget:RenderTarget):void;
 		updateShadowMap(scene:Scene, camera:Camera):void;
-		renderBufferImmediate(object, program, shading):void;
-		renderBufferDirect(camera, lights, fog, material, geometryGroup, object):void;
-		renderBuffer(camera, lights, fog, material, geometryGroup, object ):void;
+		renderBufferImmediate(object:Object3D, program:Object, material:Material):void;
+		renderBufferDirect(camera:Camera, lights:Light[], fog:Fog, material:Material, geometryGroup:any, object:Object3D):void;
+		renderBuffer      (camera:Camera, lights:Light[], fog:Fog, material:Material, geometryGroup:any, object:Object3D):void;
 		render(scene:Scene, camera:Camera, renderTarget?:RenderTarget, forceClear?:bool):void;
-		renderImmediateObject( camera, lights, fog, material, object ):void;
+		renderImmediateObject(camera:Camera, lights:Light[], fog:Fog, material:Material, object:Object3D):void;
 		initWebGLObjects(scene:Scene):void;
-		initMaterial( material, lights, fog, object ):void;
-		setFaceCulling( cullFace, frontFace ):void;
-		setObjectFaces( object ):void;
-		setDepthTest( depthTest ):void;
-		setDepthWrite( depthWrite ):void;
-		setBlending( blending, blendEquation, blendSrc, blendDst ):void;
+		initMaterial(material:Material, lights:Light[], fog:Fog, object:Object3D):void;
+		setFaceCulling(cullFace:string, frontFace:string):void;
+		setMaterialFaces(material:Material);
+		setDepthTest(depthTest:bool):void;
+		setDepthWrite(depthWrite:bool):void;
+		setBlending(blending:Blending, blendEquation:BlendingEquation, blendSrc:BlendingSrcFactor, blendDst:BlendingDstFactor):void;
 		setTexture(texture:Texture, slot ):void;
 		setRenderTarget(renderTarget:RenderTarget):void;
 	}
 
 	interface WebGLRenderTargetOptions{
-		wrapS?:number; // THREE.ClampToEdgeWrapping
-		wrapT?:number; // THREE.ClampToEdgeWrapping;
-		magFilter?:number; // THREE.LinearFilter;
-		minFilter?:number; // THREE.LinearMipMapLinearFilter;
+		wrapS?:Wrapping;
+		wrapT?:Wrapping;
+		magFilter?:TextureFilter;
+		minFilter?:TextureFilter;
 		anisotropy?:number; // 1;
 		format?:number; // THREE.RGBAFormat;
-		type?:number; // THREE.UnsignedByteType;
+		type?:TextureDataType; // THREE.UnsignedByteType;
 		depthBuffer?:bool; // true;
 		stencilBuffer?:bool; // true;
 	}
@@ -1218,10 +1415,10 @@ module THREE{
 		constructor(width:number, height:number, options?:WebGLRenderTargetOptions);
 		width:number;
 		height:number;
-		wrapS:number;
-		wrapT:number; 
-		magFilter:number;
-		minFilter:number;
+		wrapS:Wrapping;
+		wrapT:Wrapping; 
+		magFilter:TextureFilter;
+		minFilter:TextureFilter;
 		anisotropy:number;
 		offset:Vector2;
 		repeat:Vector2;
@@ -1336,18 +1533,28 @@ module THREE{
 	// Textures /////////////////////////////////////////////////////////////////////
 	
 	export class Texture{
-		constructor( image, mapping?:()=>void, wrapS?:number, wrapT?:number, magFilter?:number, minFilter?:number, format?:number, type?:number, anisotropy?:number);
+		constructor( 
+			image:HTMLImageElement, 
+			mapping?:Mapping, 
+			wrapS?:Wrapping, 
+			wrapT?:Wrapping, 
+			magFilter?:TextureFilter, 
+			minFilter?:TextureFilter, 
+			format?:PixelFormat, 
+			type?:TextureDataType, 
+			anisotropy?:number
+		);
 		id:number;
 		name:string;
 		image:any; // HTMLImageElement or ImageData ;
-		mapping:()=>void;
-		wrapS:number;
-		wrapT:number;
-		magFilter:number;
-		minFilter:number;
+		mapping:Mapping;
+		wrapS:Wrapping;
+		wrapT:Wrapping;
+		magFilter:TextureFilter;
+		minFilter:TextureFilter;
 		anisotropy:number;
-		format:number;
-		type:number;
+		format:PixelFormat;
+		type:TextureDataType;
 		offset:Vector2;
 		repeatVector2:Vector2;
 		generateMipmaps:bool;
@@ -1363,13 +1570,13 @@ module THREE{
 
 
 	export class CompressedTexture extends Texture{
-		constructor( mipmaps, width:number, height:number, format?:number, type?:number, mapping?:()=>void, wrapS?:number, wrapT?:number, magFilter?:number, minFilter?:number);
+		constructor(mipmaps:ImageData[], width:number, height:number, format?:PixelFormat, type?:TextureDataType, mapping?:Mapping, wrapS?:Wrapping, wrapT?:Wrapping, magFilter?:TextureFilter, minFilter?:TextureFilter);
 		mipmaps:ImageData[];
 		clone():CompressedTexture;
 	}
 
 	export class DataTexture extends Texture{
-		constructor(data:ImageData , width:number, height:number, format:number, type:number, mapping:number, wrapS:number, wrapT:number, magFilter:number, minFilter:number);
+		constructor(data:ImageData , width:number, height:number, format:PixelFormat, type:TextureDataType, mapping:Mapping, wrapS:Wrapping, wrapT:Wrapping, magFilter:TextureFilter, minFilter:TextureFilter);
 		clone():DataTexture;
 	}
 
@@ -1377,6 +1584,72 @@ module THREE{
 	export class ColorUtils{
 		adjustHSV(color:Color, h:number, s:number, v:number);
 	}
+
+	interface TypefaceData{
+		familyName:string;
+		cssFontWeight:string;
+		cssFontStyle:string;
+	}
+
+	export var FontUtils:{
+		faces:{[weight:string]:{[style:string]:Face;};};
+		face:string;
+		weight:string;
+		style:string;
+		size:number;
+		divisions:number;
+		getFace():Face;
+		loadFace(data:TypefaceData):TypefaceData;
+		drawText(text:string):{ paths:Path[]; offset:number; };
+		extractGlyphPoints(c:string, face:Face, scale:number, offset:number, path:Path):{offset:number; path:Path;};
+		generateShapes(text:string, parameters?:{size?:number;curveSegments?:number;font?:string;weight?:string;style?:string;}):Shape[];
+		Triangulate:{
+			(contour:Vector2[], indices:bool):Vector2[];
+			area(contour:Vector2[]):number;
+		};
+	}
+
+	export var GeometryUtils:{
+		merge(geometry1:Geometry, object2:Mesh);
+		merge(geometry1:Geometry, object2:Geometry);
+		removeMaterials(geometry:Geometry, materialIndexArray:number[]);
+		randomPointInTriangle(vectorA:Vector3, vectorB:Vector3, vectorC:Vector3):Vector3;
+		randomPointInFace(face:Face, geometry:Geometry, useCachedAreas:bool):Vector3;
+		randomPointsInGeometry(geometry:Geometry, n:number):Vector3;
+		triangleArea(vectorA:Vector3, vectorB:Vector3, vectorC:Vector3):number;
+		center(geometry:Geometry):Vector3;
+		normalizeUVs(geometry:Geometry):void;
+		triangulateQuads(geometry:Geometry):void;
+		explode(geometry:Geometry):void;
+		tessellate(geometry:Geometry, maxEdgeLength:number);
+	}
+
+	export var ImageUtils:{
+		crossOrigin:string;
+		loadTexture          (url:string, mapping:Mapping, onLoad:(texture:Texture)=>void, onError:(message:string)=>void):Texture;
+		loadCompressedTexture(url:string, mapping:Mapping, onLoad:(texture:Texture)=>void, onError:(message:string)=>void):Texture;
+		loadTextureCube          (array:string[], mapping:Mapping, onLoad:()=>void, onError:(message:string)=>void):Texture;
+		loadCompressedTextureCube(array:string[], mapping:Mapping, onLoad:()=>void, onError:(message:string)=>void):Texture;
+		parseDDS(buffer:ArrayBuffer, loadMipmaps:bool):{ mipmaps: { data:Uint8Array; width:number; height:number; }[]; width:number; height:number; format:number; mipmapCount:number; };
+		getNormalMap(image:HTMLImageElement, depth?:number):HTMLCanvasElement;
+		generateDataTexture(width:number, height:number, color:Color):DataTexture;
+	};
+
+	export var SceneUtils : {
+		createMultiMaterialObject(geometry:Geometry, materials:Material[]):Object3D;
+		detach(child:Object3D, parent:Object3D, scene:Scene):void;
+		attach(child:Object3D, scene:Scene, parent:Object3D):void;
+	};
+
+	export var ShaderUtils : {
+		lib: {
+			[name:string]:{
+				uniforms:Uniforms;
+				fragmentShader:string;
+				vertexShader:string;
+			};
+		};
+	};
 
 	// Extras / Animation /////////////////////////////////////////////////////////////////////
 
@@ -1408,14 +1681,14 @@ module THREE{
 		interpolate(p0:number, p1:number, p2:number, p3:number, t:number, t2:number, t3:number);
 
 		root:SkinnedMesh;
-		data:any;  //// ???? data = THREE.AnimationHandler.get( name );
+		data:AnimationData;
 		hierarchy:Bone[];
 		currentTime:number;
 		timeScale:number;
 		isPlaying:bool;
 		isPaused:bool;
 		loop:bool;
-		interpolationType:number; // THREE.AnimationHandler.LINEAR;
+		interpolationType:AnimationInterpolation;
 		points:Vector3[];
 		target:Vector3;
 		play(loop?:bool, startTimeMS?:number):void;
@@ -1427,6 +1700,8 @@ module THREE{
 		getPrevKeyWith(type:string, h:number, key:number):KeyFrame;
 	}
 
+	export class AnimationInterpolation {}
+
 	export class AnimationHandler{
 		constructor();
 		update(deltaTimeMS:number):void;
@@ -1436,9 +1711,10 @@ module THREE{
 		get(name:string):AnimationData;
 		parse(root:SkinnedMesh):Object3D[];
 	
-		static LINEAR:number;
-		static CATMULLROM:number;
-		static CATMULLROM_FORWARD:number;
+		// **HACK** enum values of AnimationInterpolation
+		static LINEAR            :AnimationInterpolation;
+		static CATMULLROM        :AnimationInterpolation;
+		static CATMULLROM_FORWARD:AnimationInterpolation;
 	}
 
 	export class AnimationMorphTarget{
@@ -1632,28 +1908,30 @@ module THREE{
 		getWrapPoints( oldPts:Vector2[], path:Path) :Vector2[];
 	}
 
-	export var PathActions:{
-		MOVE_TO:string;
-		LINE_TO:string;
-		QUADRATIC_CURVE_TO:string; // Bezier quadratic curve
-		BEZIER_CURVE_TO:string; 		// Bezier cubic curve
-		CSPLINE_THRU:string;				// Catmull-rom spline
-		ARC:string;								// Circle
-		ELLIPSE:string;
-	};
+	// **TODO**
+	// TypeScript's enum construction is experimental feature
+	export enum PathActions{
+		MOVE_TO,
+		LINE_TO,
+		QUADRATIC_CURVE_TO, // Bezier quadratic curve
+		BEZIER_CURVE_TO, 	// Bezier cubic curve
+		CSPLINE_THRU,		// Catmull-rom spline
+		ARC,				// Circle
+		ELLIPSE,
+	}
 
 	export class Path extends CurvePath{
 		constructor(points?:Vector2);
-		actions:string[];
+		actions:PathActions[];
 		fromPoints(vectors:Vector2[]):void;
 		moveTo(x:number, y:number):void;
 		lineTo(x:number, y:number):void;
 		quadraticCurveTo(aCPx:number, aCPy:number, aX:number, aY:number):void;
 		bezierCurveTo(aCP1x:number, aCP1y:number, aCP2x:number, aCP2y:number, aX:number, aY:number):void;
 		splineThru(pts:Vector2[]):void;
-		arc(aX:number, aY:number, aRadius:number, aStartAngle:number, aEndAngle:number, aClockwise:bool):void;
-	 	absarc(aX:number, aY:number, aRadius:number, aStartAngle:number, aEndAngle:number, aClockwise:bool):void;
-		ellipse(aX:number, aY:number, xRadius:number, yRadius:number, aStartAngle:number, aEndAngle:number, aClockwise:bool):void;
+		arc       (aX:number, aY:number, aRadius:number,                 aStartAngle:number, aEndAngle:number, aClockwise:bool):void;
+	 	absarc    (aX:number, aY:number, aRadius:number,                 aStartAngle:number, aEndAngle:number, aClockwise:bool):void;
+		ellipse   (aX:number, aY:number, xRadius:number, yRadius:number, aStartAngle:number, aEndAngle:number, aClockwise:bool):void;
  		absellipse(aX:number, aY:number, xRadius:number, yRadius:number, aStartAngle:number, aEndAngle:number, aClockwise:bool):void;
 		toShapes():Shape[];
 	}
@@ -1710,7 +1988,27 @@ module THREE{
 
 
 	// Extras / Geomerties /////////////////////////////////////////////////////////////////////
-	
+
+	export class AsteriskGeometry extends Geometry{
+		constructor(innerRadius:number, outerRadius:number);
+	}
+
+	export class CircleGeometry extends Geometry{
+		constructor(radius?:number, segments?:number, thetaStart?:number, thetaLength?:number);
+	}
+
+	export class ConvexGeometry extends Geometry{
+		constructor(vertices:Vector3);
+	}
+
+	export class CubeGeometry extends Geometry{
+		constructor(width:number, height:number, depth:number, widthSegments?:number, heightSegments?:number, depthSegments?:number);
+	}
+
+	export class CylinderGeometry extends Geometry{
+		constructor(radiusTop?:number, radiusBottom?:number, height?:number, radiusSegments?:number, heightSegments?:number, openEnded?:bool);
+	}
+
 	export class ExtrudeGeometry extends Geometry{
 		constructor(shape?:Shape, options?:any);
 		constructor(shapes?:Shape[], options?:any);
@@ -1726,12 +2024,32 @@ module THREE{
 		};
 	}
 
+	export class IcosahedronGeometry extends PolyhedronGeometry{
+		constructor(radius:number, detail:number);
+	}
+
+	export class LatheGeometry extends Geometry{
+		constructor(points:Vector3[], steps?:number, angle?:number);
+	}
+
+	export class OctahedronGeometry extends PolyhedronGeometry{
+		constructor(radius:number, detail:number);
+	}
+
+	export class ParametricGeometry extends Geometry{
+		constructor(func:(u:number,v:number)=>Vector3, slices:number, stacks:number, useTris?:bool);
+	}
+
 	export class PlaneGeometry extends Geometry{
 		constructor( width:number, height:number, widthSegments?:number, heightSegments?:number );
 		width:number;
 		height:number;
 		widthSegments:number;
 		heightSegments:number;
+	}
+
+	export class PolyhedronGeometry extends Geometry{
+		constructor(vertices:Vector3[], faces:Face[], radius?:number, detail?:number);
 	}
 
 	export class ShapeGeometry extends Geometry{
@@ -1753,7 +2071,60 @@ module THREE{
 		thetaLength:number;
 	}
 
+	export class TetrahedronGeometry extends PolyhedronGeometry{
+		constructor(radius?:number, detail?:number);
+	}
 
+	interface TextGeometryParameters{
+		size?:number;			// size of the text
+		height?:number; 		// thickness to extrude text
+		curveSegments?:number; 	// number of points on the curves
+		font?:string;			// font name
+ 		weight?:string;			// font weight (normal, bold)
+ 		style?:string;			// font style  (normal, italics)
+ 		bevelEnabled?:bool;		// turn on bevel
+ 		bevelThickness?:number; // how deep into text bevel goes
+ 		bevelSize?:number;		// how far from text outline is bevel
+ 	}
+
+	export class TextGeometry extends ExtrudeGeometry{
+		constructor(text:string, TextGeometryParameters?:TextGeometryParameters);
+	}
+
+	export class TorusGeometry extends Geometry{
+		constructor(radius?:number, tube?:number, radialSegments?:number, tubularSegments?:number, arc?:number);
+		radius:number;
+		tube:number;
+		radialSegments:number;
+		tubularSegments:number;
+		arc:number;
+	}
+
+	export class TorusKnotGeometry extends Geometry{
+		constructor(radius?:number, tube?:number, radialSegments?:number, tubularSegments?:number, p?:number, q?:number, heightScale?:number);
+		radius:number;
+		tube:number;
+		radialSegments:number;
+		tubularSegments:number;
+		p:number;
+		q:number;
+		heightScale:number;
+		grid:number[][];
+	}
+
+	export class TubeGeometry extends Geometry{ 
+		constructor(path:Path, segments?:number, radius?:number, radiusSegments?:number, closed?:bool, debug?:ArrowHelper[]);
+		path:Path;
+		segments:number;
+		radius:number;
+		radiusSegments:number;
+		closed:bool;
+		grid:number[][];
+		tangents:Vector3[];
+		normals:Vector3[];
+		binormals:Vector3[];
+		FrenetFrames(path, segments, closed);
+	}
 
 	// Extras / Helpers /////////////////////////////////////////////////////////////////////
 
@@ -1854,15 +2225,15 @@ module THREE{
 		rotation:number; 			// rotation
 		opacity:number;				// opacity
 		color:Color;				// color
-		blending:number;
+		blending:Blending;
 	}
 
 	export class LensFlare extends Object3D{
-		constructor(texture?:Texture, size?:number, distance?:number, blending?:number, color?:number);
+		constructor(texture?:Texture, size?:number, distance?:number, blending?:Blending, color?:number);
 		lensFlares:LensFlareProperty[];
 		positionScreen:Vector3;
 		customUpdateCallback:()=>void;
-		add(texture?:Texture, size?:number, distance?:number, blending?:number, color?:number, opacity?:number);
+		add(texture?:Texture, size?:number, distance?:number, blending?:Blending, color?:number, opacity?:number);
 		updateLensFlares():void;
 	}
 

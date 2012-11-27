@@ -4,8 +4,7 @@ three.d.ts
 
 This porject is based on [three.js](http://mrdoob.github.com/three.js/) r53.
 
-It's a work in progress. 
-Currently, about 70% of the classes are implemeted.
+Most definition of the classes were completed. It needs checking, brushing up and testing.
 
 ## Status 
 
@@ -39,7 +38,7 @@ Currently, about 70% of the classes are implemeted.
 	* Light - completed
     * AmbientLight - completed
     * DirectionalLight - completed
-    * HemisphereLight
+    * HemisphereLight - completed
     * PointLight - completed
     * SpotLight - completed
 * Loaders
@@ -98,10 +97,11 @@ Currently, about 70% of the classes are implemeted.
     * Texture - completed
 * Extras
     * ColorUtils - completed
-    * GeometryUtils
-    * ImageUtils
-    * SceneUtils
-    * ShaderUtils
+    * FontUtils - completed
+    * GeometryUtils - completed
+    * ImageUtils - completed
+    * SceneUtils - completed
+    * ShaderUtils - completed
 * Extras / Animation
     * Animation - work in progress
     * AnimationHandler - work in progress
@@ -117,25 +117,25 @@ Currently, about 70% of the classes are implemeted.
     * Path - completed
     * Shape - completed
 * Extras / Geometries
-    * AsteriskGeometry
-    * CircleGeometry
-    * ConvexGeometry
-    * CubeGeometry
-    * CylinderGeometry
+    * AsteriskGeometry - completed
+    * CircleGeometry - completed
+    * ConvexGeometry - completed
+    * CubeGeometry - completed
+    * CylinderGeometry - completed
     * ExtrudeGeometry - completed
-    * IcosahedronGeometry
-    * LatheGeometry
-    * OctahedronGeometry
-    * ParametricGeometry
+    * IcosahedronGeometry - completed
+    * LatheGeometry - completed
+    * OctahedronGeometry - completed
+    * ParametricGeometry - completed
     * PlaneGeometry - completed
     * PolyhedronGeometry
     * ShapeGeometry - completed
     * SphereGeometry - completed
-    * TetrahedronGeometry
-    * TextGeometry
-    * TorusGeometry
-    * TorusKnotGeometry
-    * TubeGeometry
+    * TetrahedronGeometry - completed
+    * TextGeometry - completed
+    * TorusGeometry - completed
+    * TorusKnotGeometry - completed
+    * TubeGeometry - completed
 * Extras / Helpers
     * AxisHelper - completed
     * ArrowHelper - completed
