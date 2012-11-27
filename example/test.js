@@ -48,3 +48,4 @@ $(function () {
         renderer.render(scene, camera);
     }, 15);
 });
+//@ sourceMappingURL=test.js.map

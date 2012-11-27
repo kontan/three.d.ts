@@ -7,6 +7,8 @@
  */
 
 
+// When you use three.d.ts with other WebGL ambient source file,
+// remove below definition for WebGLRenderingContext.
 interface WebGLRenderingContext {}
 
 module THREE{
@@ -18,7 +20,7 @@ module THREE{
 	//
 	//    export enum Side{ FrontSide, BackSide, DoubleSide }
 	//
-	// will be compiled.
+	// will be compiled successfully.
 	// Ideally, those enum values should be prefixed with enum type name, like
 	//
 	//     new MeshPhongMaterial().side = THREE.Side.FrontSide
@@ -26,6 +28,9 @@ module THREE{
 	// Unfortunately, three.js currently doesn't. 
 	// In JavaScript, THREE.Side.FontSide can coexist with THREE.FrontSide, 
 	// I think providing both identifiers is useful.
+	// 
+	// At the following constant value section, those enum value sets are defined as class.
+	// In three.js, there are not the classes. You must not instantiate an object of the classes.
 
 	// side
 	export class Side {} 
@@ -58,8 +63,8 @@ module THREE{
 	// (numbers start from 100 not to clash with other
 	//  mappings to OpenGL constants defined in Texture.js)
 	export class BlendingEquation {}
-	export var AddEquation:BlendingEquation;
-	export var SubtractEquation:BlendingEquation;
+	export var AddEquation            :BlendingEquation;
+	export var SubtractEquation       :BlendingEquation;
 	export var ReverseSubtractEquation:BlendingEquation;
 
 	// custom blending destination factors
@@ -86,8 +91,6 @@ module THREE{
 	export var AddOperation     :Combine;
 	
 	// Mapping modes
-	// **HACK**
-	// Mapping is enum. Don't instantiate object of Mapping
 	export class Mapping {}
 	export var UVMapping                 :Mapping;
 	export var CubeReflectionMapping     :Mapping;
@@ -142,13 +145,14 @@ module THREE{
 	export var RGBA_S3TC_DXT3_Format:CompressedPixelFormat;
 	export var RGBA_S3TC_DXT5_Format:CompressedPixelFormat;
 
-	/*
+	
 	// Potential future PVRTC compressed texture formats
-		export var RGB_PVRTC_4BPPV1_Format:number;
-		export var RGB_PVRTC_2BPPV1_Format:number;
-		export var RGBA_PVRTC_4BPPV1_Format:number;
-		export var RGBA_PVRTC_2BPPV1_Format:number;
-	*/
+	// export class CompressedTextureFormats {}
+	// export var RGB_PVRTC_4BPPV1_Format :CompressedTextureFormats;
+	// export var RGB_PVRTC_2BPPV1_Format :CompressedTextureFormats;
+	// export var RGBA_PVRTC_4BPPV1_Format:CompressedTextureFormats;
+	// export var RGBA_PVRTC_2BPPV1_Format:CompressedTextureFormats;
+
 
 	// Core ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -184,7 +188,7 @@ module THREE{
 		getDelta():number;
 	}
 
-	interface HSV{
+	export interface HSV{
 		h:number;
 		s:number;
 		v:number;
@@ -252,7 +256,7 @@ module THREE{
 		vertexTangents:number[];
 		materialIndex:number;
 		centroid:number;
-		clone():Face3;
+		clone():Face4;
 	}
 
 	export class Frustum{
@@ -303,7 +307,7 @@ module THREE{
 		applyMatrix(matrix:Matrix4):void;
 		computeCentroids():void;
 		computeFaceNormals():void;
-		computeVertexNormals(areaWeighted:bool);
+		computeVertexNormals(areaWeighted:bool):void;
 		computeMorphNormals():void;
 		computeTangents():void;;
 		computeLineDistances():void;
@@ -443,7 +447,12 @@ module THREE{
 		projectVector(vector:Vector3, camera:Camera):Vector3;
 		unprojectVector(vector:Vector3, camera:Camera):Vector3;
 		pickingRay(vector:Vector3, camera:Camera):Ray;
-		projectScene(scene:Scene, camera:Camera, sortObjects:bool, sortElements?:bool);
+		projectScene(scene:Scene, camera:Camera, sortObjects:bool, sortElements?:bool):{ 
+			objects:Object3D[]; 	// Mesh, Line or other object  
+			sprites:Object3D[];	// Sprite or Particle 
+			lights:Light[]; 
+			elements: Face[];	// Line, Particle, Face3 or Face4 
+		};
 	}
 
 	export class Quaternion{
@@ -469,7 +478,7 @@ module THREE{
 		static slerp(qa:Quaternion, qb:Quaternion, qm:Quaternion, t:number):Quaternion;
 	}
 
-	interface Intersect{ 
+	export interface Intersect{ 
 		distance:number; 
 		point:Vector3; 
 		face:Face;
@@ -509,7 +518,7 @@ module THREE{
 		isEmpty():bool;
 	}
 
-	interface SplineControlPoint{
+	export interface SplineControlPoint{
 		x:number;
 		y:number;
 		z:number;
@@ -745,7 +754,7 @@ module THREE{
 
 	// Loaders //////////////////////////////////////////////////////////////////////////////////
 	
-	interface Progress{
+	export interface Progress{
 		total:number;
 		loaded:number;
 	}
@@ -1291,7 +1300,7 @@ module THREE{
 
 	// Renderers //////////////////////////////////////////////////////////////////////////////////
 
-	interface Renderer{
+	export interface Renderer{
 		render(scene:Scene, camera:Camera):void;
 	}
 
@@ -1310,12 +1319,12 @@ module THREE{
 		render(scene:Scene, camera:Camera):void;
 	}
 
-	interface RendererPlugin{
+	export interface RendererPlugin{
 		init(renderer:WebGLRenderer);
 		render(scene:Scene,camera:Camera,currentWidth:number,currentHeight:number);
 	}
 
-	interface WebGLRendererParameters{
+	export interface WebGLRendererParameters{
 		canvas?:HTMLCanvasElement;
 		precision?:string;
 		alpha?:bool;
@@ -1399,7 +1408,7 @@ module THREE{
 		setRenderTarget(renderTarget:RenderTarget):void;
 	}
 
-	interface WebGLRenderTargetOptions{
+	export interface WebGLRenderTargetOptions{
 		wrapS?:Wrapping;
 		wrapT?:Wrapping;
 		magFilter?:TextureFilter;
@@ -1585,7 +1594,7 @@ module THREE{
 		adjustHSV(color:Color, h:number, s:number, v:number);
 	}
 
-	interface TypefaceData{
+	export interface TypefaceData{
 		familyName:string;
 		cssFontWeight:string;
 		cssFontStyle:string;
@@ -1653,20 +1662,19 @@ module THREE{
 
 	// Extras / Animation /////////////////////////////////////////////////////////////////////
 
-	interface KeyFrame{
+	export interface KeyFrame{
 		pos:number[];
 		rot:number[];
 		scl:number[];
 		time:number;
 	}
 
-	interface KeyFrames{
+	export interface KeyFrames{
 		keys:KeyFrame[];
 		parent:number;	
 	}
 
-	/// 
-	interface AnimationData{
+	export interface AnimationData{
 		JIT:number;
 		fps:number;
 		hierarchy:KeyFrames[];
@@ -1675,12 +1683,12 @@ module THREE{
 	}
 
 	export class Animation{
-		constructor(root:SkinnedMesh, name:string, interpolationType?:number);
+		constructor(root:Mesh, name:string, interpolationType?:AnimationInterpolation);
 
 		interpolateCatmullRom(points:Vector3[], scale:number):Vector3[];
-		interpolate(p0:number, p1:number, p2:number, p3:number, t:number, t2:number, t3:number);
+		interpolate(p0:number, p1:number, p2:number, p3:number, t:number, t2:number, t3:number):number;
 
-		root:SkinnedMesh;
+		root:Mesh;
 		data:AnimationData;
 		hierarchy:Bone[];
 		currentTime:number;
@@ -1779,16 +1787,16 @@ module THREE{
 		updateProjectionMatrix():void;
 		setLens(focalLength:number, frameHeight?:number):number;
 		setZoom(zoom:number):void;
-		toFrontView();
-		toBackView();
-		toLeftView();
-		toRightView();
-		toTopView();
-		toBottomView();
+		toFrontView():void;
+		toBackView():void;
+		toLeftView():void;
+		toRightView():void;
+		toTopView():void;
+		toBottomView():void;
 	}
 
 	export class CubeCamera extends Object3D{
-		constructor(near, far, cubeResolution);
+		constructor(near:number, far:number, cubeResolution:number);
 		renderTarget:WebGLRenderTargetCube;
 		updateCubeMap(renderer:Renderer, scene:Scene):void;
 	}
@@ -1882,7 +1890,7 @@ module THREE{
 		points:Vector3[];
 	}
 
-	interface BoundingBox{
+	export interface BoundingBox{
 		minX:number; 
 		minY:number; 
 		maxX:number; 
@@ -2075,7 +2083,7 @@ module THREE{
 		constructor(radius?:number, detail?:number);
 	}
 
-	interface TextGeometryParameters{
+	export interface TextGeometryParameters{
 		size?:number;			// size of the text
 		height?:number; 		// thickness to extrude text
 		curveSegments?:number; 	// number of points on the curves
