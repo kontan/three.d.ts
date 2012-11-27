@@ -1,22 +1,22 @@
-/// <reference path="jquery.d.ts" />
-/// <reference path="../three.d.ts" />
+/// <reference path="../jquery.d.ts" />
+/// <reference path="../../three.d.ts" />
 $(()=>{
 	// renderer
-	var renderer = new THREE.WebGLRenderer({
+	var renderer:THREE.WebGLRenderer = new THREE.WebGLRenderer({
 		clearColor: 0x00000030,
 		clearAlpha: 1.0
 	});
-	var WIDTH = 400, HEIGHT = 300;
+	var WIDTH:number = 400, HEIGHT:number = 300;
 	renderer.shadowMapEnabled = true;
 	renderer.shadowMapSoft = true;
 	renderer.setSize(WIDTH, HEIGHT);
 
 	// scene
-	var scene = new THREE.Scene();
+	var scene:THREE.Scene = new THREE.Scene();
 
 	// camera
-	var VIEW_ANGLE = 45, ASPECT = WIDTH / HEIGHT, NEAR = 0.1, FAR = 10000;
-	var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+	var VIEW_ANGLE:number = 45, ASPECT:number = WIDTH / HEIGHT, NEAR:number = 0.1, FAR:number = 10000;
+	var camera:THREE.PerspectiveCamera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 	camera.position.z = 400;
 	camera.position.y = 400;
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -33,7 +33,7 @@ $(()=>{
 	scene.add(sphere);
 
 	// plane
-	var plane = new THREE.Mesh(
+	var plane:THREE.Mesh = new THREE.Mesh(
 		new THREE.PlaneGeometry(400, 400),
 		new THREE.MeshPhongMaterial({
 			color: 0x00ff00
@@ -46,7 +46,7 @@ $(()=>{
 	scene.add(plane);
 
 	// spot light
-	var spotLight = new THREE.SpotLight(0xffffff);
+	var spotLight:THREE.SpotLight = new THREE.SpotLight(0xffffff);
 	spotLight.position.set(-10, 200, 0);
 	spotLight.castShadow = true;  
 	spotLight.shadowDarkness = 0.5;
@@ -60,10 +60,14 @@ $(()=>{
 
 	$('#container').append(renderer.domElement);
 
+
 	var theta = 0;
-	setInterval(()=>{
+	function mainloop(){
 		sphere.position.x = 40 * Math.sin(theta);
 		theta += 0.05;
 		renderer.render(scene, camera);
-	}, 15);
+
+		requestAnimationFrame(mainloop);
+	}
+	mainloop();
 });

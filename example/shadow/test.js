@@ -42,10 +42,12 @@ $(function () {
     scene.add(spotLight);
     $('#container').append(renderer.domElement);
     var theta = 0;
-    setInterval(function () {
+    function mainloop() {
         sphere.position.x = 40 * Math.sin(theta);
         theta += 0.05;
         renderer.render(scene, camera);
-    }, 15);
+        requestAnimationFrame(mainloop);
+    }
+    mainloop();
 });
 //@ sourceMappingURL=test.js.map
