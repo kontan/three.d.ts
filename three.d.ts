@@ -188,7 +188,7 @@ module THREE{
 	}
 
 	export class Clock{
-		constructor(autoStart:bool);		
+		constructor(autoStart?:bool);		
 		autoStart:bool;
 		startTime:number;
 		oldTime:number;
@@ -239,36 +239,36 @@ module THREE{
 	// **HACK**
 	// three.js has no Face class but some properties have array contains both of Face3 and Face4.
 	export class Face{
-	}
-
-	export class Face3 extends Face{
-		constructor(a:number, b:number, c:number, normal:Vector3, color:Color, materialIndex:number);		
-		a:number;
-		b:number;
-		c:number;
 		normal:Vector3;
 		color:Color;
 		vertexNormals:Vector3[];
 		vertexColors:Color[];
 		vertexTangents:number[];
 		materialIndex:number;
-		centroid:number;
+		centroid:number;	
+		clone():Face;	
+	}
+
+	export class Face3 extends Face{
+		constructor(a:number, b:number, c:number, normal?:Vector3,          color?:Color,          materialIndex?:number);
+		constructor(a:number, b:number, c:number, normal?:Vector3,          vertexColors?:Color[], materialIndex?:number);
+		constructor(a:number, b:number, c:number, vertexNormals?:Vector3[], color?:Color,          materialIndex?:number);
+		constructor(a:number, b:number, c:number, vertexNormals?:Vector3[], vertexColors?:Color[], materialIndex?:number);
+		a:number;
+		b:number;
+		c:number;
 		clone():Face3;
 	}
 
 	export class Face4 extends Face{
-		constructor(a:number, b:number, c:number, d:number, normal:Vector3, color:Color, materialIndex:number);
+		constructor(a:number, b:number, c:number, d:number, normal?:Vector3,          color?:Color,          materialIndex?:number);
+		constructor(a:number, b:number, c:number, d:number, normal?:Vector3,          vertexColors?:Color[], materialIndex?:number);
+		constructor(a:number, b:number, c:number, d:number, vertexNormals?:Vector3[], color?:Color,          materialIndex?:number);
+		constructor(a:number, b:number, c:number, d:number, vertexNormals?:Vector3[], vertexColors?:Color[], materialIndex?:number);
 		a:number;
 		b:number;
 		c:number;
 		d:number;
-		normal:Vector3;
-		color:Color;
-		vertexNormals:Vector3[];
-		vertexColors:Color[];
-		vertexTangents:number[];
-		materialIndex:number;
-		centroid:number;
 		clone():Face4;
 	}
 
@@ -320,7 +320,7 @@ module THREE{
 		applyMatrix(matrix:Matrix4):void;
 		computeCentroids():void;
 		computeFaceNormals():void;
-		computeVertexNormals(areaWeighted:bool):void;
+		computeVertexNormals(areaWeighted?:bool):void;
 		computeMorphNormals():void;
 		computeTangents():void;;
 		computeLineDistances():void;
@@ -356,7 +356,7 @@ module THREE{
 	}
 
 	export class Matrix4{
-		constructor(n11:number, n12:number, n13:number, n14:number, n21:number, n22:number, n23:number, n24:number, n31:number, n32:number, n33:number, n34:number, n41:number, n42:number, n43:number, n44:number);
+		constructor(n11?:number, n12?:number, n13?:number, n14?:number, n21?:number, n22?:number, n23?:number, n24?:number, n31?:number, n32?:number, n33?:number, n34?:number, n41?:number, n42?:number, n43?:number, n44?:number);
 		elements:Float32Array;
 		set(n11:number, n12:number, n13:number, n14:number, n21:number, n22:number, n23:number, n24:number, n31:number, n32:number, n33:number, n34:number, n41:number, n42:number, n43:number, n44:number):Matrix4;
 		identity():Matrix4;
@@ -485,7 +485,7 @@ module THREE{
 		normalize():Quaternion;
 		multiply(a:Quaternion, b:Quaternion):Quaternion;
 		multiplySelf(b:Quaternion):Quaternion;
-		multiplyVector3(vector:Vector3, dest:Vector3):Vector3;
+		multiplyVector3(vector:Vector3, dest?:Vector3):Vector3;
 		slerpSelf(qb:Quaternion, t:number):Quaternion;
 		clone():Quaternion;
 		static slerp(qa:Quaternion, qb:Quaternion, qm:Quaternion, t:number):Quaternion;
@@ -853,6 +853,7 @@ module THREE{
 		visible:bool;
 		side:Side;
 		needsUpdate:bool;
+		clone():Material;
 	}
 
 	// **Hack** type safety trick
@@ -981,27 +982,27 @@ module THREE{
 	}
 
 	export interface MeshLambertMaterialParameters{
-		color?:number;
-		ambient?:number;
-		emissive?:number;
-		opacity?:number;
-		map?:Texture;
-		lightMap?:Texture;
-		specularMap?:Texture;
-		envMap?:Texture;
-		combine?:Combine;
-		reflectivity?:number;
-		refractionRatio?:number;
-		shading?:Shading;
-		blending?:Blending;
-		depthTest:bool;
-		wireframe:bool;
-		wireframeLinewidth:number;
-		vertexColors:Colors;
-		skinning:bool;
-		morphTargets:bool;
-		morphNormals:bool;
-		fog:bool;
+		color             ?:number;
+		ambient           ?:number;
+		emissive          ?:number;
+		opacity           ?:number;
+		map               ?:Texture;
+		lightMap          ?:Texture;
+		specularMap       ?:Texture;
+		envMap            ?:Texture;
+		combine           ?:Combine;
+		reflectivity      ?:number;
+		refractionRatio   ?:number;
+		shading           ?:Shading;
+		blending          ?:Blending;
+		depthTest         ?:bool;
+		wireframe         ?:bool;
+		wireframeLinewidth?:number;
+		vertexColors      ?:Colors;
+		skinning          ?:bool;
+		morphTargets      ?:bool;
+		morphNormals      ?:bool;
+		fog               ?:bool;
 	}
 
 	export class MeshLambertMaterial extends Material{
@@ -1569,34 +1570,34 @@ module THREE{
 	
 	export class Texture{
 		constructor( 
-			image:HTMLImageElement, 
-			mapping?:Mapping, 
-			wrapS?:Wrapping, 
-			wrapT?:Wrapping, 
-			magFilter?:TextureFilter, 
-			minFilter?:TextureFilter, 
-			format?:PixelFormat, 
-			type?:TextureDataType, 
+			image      :HTMLImageElement, 
+			mapping   ?:Mapping, 
+			wrapS     ?:Wrapping, 
+			wrapT     ?:Wrapping, 
+			magFilter ?:TextureFilter, 
+			minFilter ?:TextureFilter, 
+			format    ?:PixelFormat, 
+			type      ?:TextureDataType, 
 			anisotropy?:number
 		);
-		id:number;
-		name:string;
-		image:any; // HTMLImageElement or ImageData ;
-		mapping:Mapping;
-		wrapS:Wrapping;
-		wrapT:Wrapping;
-		magFilter:TextureFilter;
-		minFilter:TextureFilter;
-		anisotropy:number;
-		format:PixelFormat;
-		type:TextureDataType;
-		offset:Vector2;
-		repeatVector2:Vector2;
-		generateMipmaps:bool;
+		id              :number;
+		name            :string;
+		image           :any; // HTMLImageElement or ImageData ;
+		mapping         :Mapping;
+		wrapS           :Wrapping;
+		wrapT           :Wrapping;
+		magFilter       :TextureFilter;
+		minFilter       :TextureFilter;
+		anisotropy      :number;
+		format          :PixelFormat;
+		type            :TextureDataType;
+		offset          :Vector2;
+		repeat          :Vector2;
+		generateMipmaps :bool;
 		premultiplyAlpha:bool;
-		flipY:bool;
-		needsUpdate:bool;
-		onUpdate:any;
+		flipY           :bool;
+		needsUpdate     :bool;
+		onUpdate        :any;
 		clone():Texture;
 		deallocate():void;
 	}
@@ -2348,3 +2349,6 @@ module THREE{
 	export var ShaderFlares:ShaderLibrary;
 	export var ShaderSprite:ShaderLibrary;
 }
+
+
+
