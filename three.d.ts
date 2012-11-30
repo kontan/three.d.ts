@@ -342,7 +342,7 @@ module THREE{
 	var GeometryIdCount:number;
 	var GeometryLibrary:Geometry[];
 
-	export class Math{
+	export var Math : {
 		clamp(x:number, a:number, b:number):number;
 		clampBottom(x:number, a:number):number;
 		mapLinear(x:number, a1:number, a2:number, b1:number, b2:number):number;
