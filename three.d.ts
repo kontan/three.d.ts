@@ -433,7 +433,7 @@ module THREE{
 		boundRadius:number;
 		boundRadiusScale:number;
 		renderDepth:number;
-		visible:number;
+		visible:bool;
 		castShadow:bool;
 		receiveShadow:bool;
 		frustumCulled:bool;
@@ -499,7 +499,7 @@ module THREE{
 		static slerp(qa:Quaternion, qb:Quaternion, qm:Quaternion, t:number):Quaternion;
 	}
 
-	export interface Intersect{ 
+	export interface Intersection{ 
 		distance:number; 
 		point:Vector3; 
 		face:Face;
@@ -514,8 +514,8 @@ module THREE{
 		far:number;
 		precision:number;
 		set(origin:Vector3, direction:Vector3):void;
-		intersectObject(object:Object3D, recursive?:bool):Intersect[];
-		intersectObjects(objects:Object3D[], recursive?:bool):Intersect[];
+		intersectObject(object:Object3D, recursive?:bool):Intersection[];
+		intersectObjects(objects:Object3D[], recursive?:bool):Intersection[];
 	}
 
 	export class Rectangle{
