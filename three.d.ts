@@ -43,6 +43,13 @@ module THREE{
 	// 
 	// I think it is not defect of three.js.
 	// Rather, TypeScript should have more flexible enum definition syntax for existing JavaScript source codes.
+	//
+	// If you want to cast from enum type into internal type,
+	// you can write as as follows:
+	//
+	// 		var n:number = <number><any>THREE.SmoothShading;	// cast enum into  number 
+	//
+	//      var smoothShading:Shading = <Shading><any>2; // cast number into enum
 
 	// side
 	export class Side {} 
@@ -864,6 +871,9 @@ module THREE{
 		clone():Material;
 	}
 
+	var MaterialLibrary:Material[];
+	var MaterialIdCount:number;
+
 	// **Hack** type safety trick
 	// 
 	// the constructor of LineBasicMaterial take a parameter as key/value dictionary. 
@@ -1625,7 +1635,7 @@ module THREE{
 	}
 
 	// Extras /////////////////////////////////////////////////////////////////////
-	export class ColorUtils{
+	export var ColorUtils:{
 		adjustHSV(color:Color, h:number, s:number, v:number):void;
 	}
 
@@ -1679,13 +1689,13 @@ module THREE{
 		generateDataTexture(width:number, height:number, color:Color):DataTexture;
 	};
 
-	export var SceneUtils : {
+	export var SceneUtils:{
 		createMultiMaterialObject(geometry:Geometry, materials:Material[]):Object3D;
 		detach(child:Object3D, parent:Object3D, scene:Scene):void;
 		attach(child:Object3D, scene:Scene, parent:Object3D):void;
 	};
 
-	export var ShaderUtils : {
+	export var ShaderUtils:{
 		lib: {
 			[name:string]:{
 				uniforms:Uniforms;
@@ -1948,7 +1958,7 @@ module THREE{
 		addWrapPath(bendpath:Path):void;
 		getTransformedPoints(segments:number, bends?:Path):Vector2[];
 		getTransformedSpacedPoints(segments:number, bends?:Path[]):Vector2[];
-		getWrapPoints( oldPts:Vector2[], path:Path) :Vector2[];
+		getWrapPoints(oldPts:Vector2[], path:Path) :Vector2[];
 	}
 
 	// **TODO**
@@ -2119,15 +2129,15 @@ module THREE{
 	}
 
 	export interface TextGeometryParameters{
-		size?:number;			// size of the text
-		height?:number; 		// thickness to extrude text
-		curveSegments?:number; 	// number of points on the curves
-		font?:string;			// font name
- 		weight?:string;			// font weight (normal, bold)
- 		style?:string;			// font style  (normal, italics)
- 		bevelEnabled?:bool;		// turn on bevel
- 		bevelThickness?:number; // how deep into text bevel goes
- 		bevelSize?:number;		// how far from text outline is bevel
+		size           ?:number; // size of the text
+		height         ?:number; // thickness to extrude text
+		curveSegments  ?:number; // number of points on the curves
+		font           ?:string; // font name
+ 		weight         ?:string; // font weight (normal, bold)
+ 		style          ?:string; // font style  (normal, italics)
+ 		bevelEnabled   ?:bool;   // turn on bevel
+ 		bevelThickness ?:number; // how deep into text bevel goes
+ 		bevelSize      ?:number; // how far from text outline is bevel
  	}
 
 	export class TextGeometry extends ExtrudeGeometry{
@@ -2136,36 +2146,36 @@ module THREE{
 
 	export class TorusGeometry extends Geometry{
 		constructor(radius?:number, tube?:number, radialSegments?:number, tubularSegments?:number, arc?:number);
-		radius:number;
-		tube:number;
-		radialSegments:number;
+		radius         :number;
+		tube           :number;
+		radialSegments :number;
 		tubularSegments:number;
-		arc:number;
+		arc            :number;
 	}
 
 	export class TorusKnotGeometry extends Geometry{
 		constructor(radius?:number, tube?:number, radialSegments?:number, tubularSegments?:number, p?:number, q?:number, heightScale?:number);
-		radius:number;
-		tube:number;
-		radialSegments:number;
+		radius         :number;
+		tube           :number;
+		radialSegments :number;
 		tubularSegments:number;
-		p:number;
-		q:number;
-		heightScale:number;
-		grid:number[][];
+		p              :number;
+		q              :number;
+		heightScale    :number;
+		grid           :number[][];
 	}
 
 	export class TubeGeometry extends Geometry{ 
 		constructor(path:Path, segments?:number, radius?:number, radiusSegments?:number, closed?:bool, debug?:ArrowHelper[]);
-		path:Path;
-		segments:number;
-		radius:number;
+		path          :Path;
+		segments      :number;
+		radius        :number;
 		radiusSegments:number;
-		closed:bool;
-		grid:number[][];
-		tangents:Vector3[];
-		normals:Vector3[];
-		binormals:Vector3[];
+		closed        :bool;
+		grid          :number[][];
+		tangents      :Vector3[];
+		normals       :Vector3[];
+		binormals     :Vector3[];
 		FrenetFrames(path, segments, closed):void;
 	}
 
@@ -2192,58 +2202,58 @@ module THREE{
 
 	export class DirectionalLightHelper extends Object3D{
 		constructor(light:Light, sphereSize:number, arrowLength:number);
-		light:Light;
-		direction:Vector3;
-		color:Color;
-		lightArrow:ArrowHelper;
-		lightSphere:Mesh;
-		lightRays:Line;
+		light       :Light;
+		direction   :Vector3;
+		color       :Color;
+		lightArrow  :ArrowHelper;
+		lightSphere :Mesh;
+		lightRays   :Line;
 		targetSphere:Mesh;
-		targetLine:Line;
+		targetLine  :Line;
 	}
 
 	export class HemisphereLightHelper extends Object3D{
 		constructor(light:Light, sphereSize:number, arrowLength:number, domeSize:number);
-		light:Light;
-		color:Color;
-		groundColor:Color;
-		lightSphere:Mesh;
-		lightArrow:ArrowHelper;
+		light           :Light;
+		color           :Color;
+		groundColor     :Color;
+		lightSphere     :Mesh;
+		lightArrow      :ArrowHelper;
 		lightArrowGround:ArrowHelper;
-		target:Vector3;
+		target          :Vector3;
 	}
 
 	export class PointLightHelper extends Object3D{
 		constructor(light:Light, sphereSize:number);
-		light:Light;
-		color:Color;
-		lightSphere:Mesh;
-		lightRays:Line;
+		light        :Light;
+		color        :Color;
+		lightSphere  :Mesh;
+		lightRays    :Line;
 		lightDistance:Mesh;
 	}
 
 	export class SpotLightHelper extends Object3D{
 		constructor(light:Light, sphereSize:number, arrowLength:number);
-		light:Light;
-		direction:Vector3;
-		color:Color;
-		lightArrow:ArrowHelper;
-		lightSphere:Mesh;
-		lightCone:Mesh;
-		lightRays:Line;
-		gyroscope:Gyroscope;
+		light       :Light;
+		direction   :Vector3;
+		color       :Color;
+		lightArrow  :ArrowHelper;
+		lightSphere :Mesh;
+		lightCone   :Mesh;
+		lightRays   :Line;
+		gyroscope   :Gyroscope;
 		targetSphere:Mesh;
-		targetLine:Line;
+		targetLine  :Line;
 	}
 
 	// Extras / Modifiers /////////////////////////////////////////////////////////////////////
 
 	export class SubdivisionModifier{
 		constructor(subdivisions?:number);
-		subdivisions:number;
+		subdivisions      :number;
 		useOldVertexColors:bool;
-		supportUVs:bool;
-		debug:bool;
+		supportUVs        :bool;
+		debug             :bool;
 		modify(geometry:Geometry):void;
 		orderedKey(a:number, b:number):string;
 		computeEdgeFaces(geometry:Geometry):{[key:string]:number;};
@@ -2258,16 +2268,16 @@ module THREE{
 	}
 
 	export interface LensFlareProperty{
-		texture:Texture; 			// THREE.Texture
-		size:number; 				// size in pixels (-1 = use texture.width)
+		texture :Texture; 			// THREE.Texture
+		size    :number; 			// size in pixels (-1 = use texture.width)
 		distance:number; 			// distance (0-1) from light source (0=at light source)
-		x:number; 
-		y:number; 
-		z:number;					// screen position (-1 => 1) z = 0 is ontop z = 1 is back
-		scale:number; 				// scale
+		x       :number; 
+		y       :number; 
+		z       :number;			// screen position (-1 => 1) z = 0 is ontop z = 1 is back
+		scale   :number; 			// scale
 		rotation:number; 			// rotation
-		opacity:number;				// opacity
-		color:Color;				// color
+		opacity :number;			// opacity
+		color   :Color;				// color
 		blending:Blending;
 	}
 
