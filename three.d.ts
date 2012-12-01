@@ -399,7 +399,7 @@ module THREE{
 		setRotationFromEuler(v:Vector3, order:string):Matrix4;
 		setRotationFromQuaternion(q:Quaternion):Matrix4;
 		compose(translation:Vector3, rotation:Quaternion, scale:Vector3):Matrix4;
-		decompose(translation:Vector3, rotation:Quaternion, scale:Vector3):any[];
+		decompose(translation?:Vector3, rotation?:Quaternion, scale?:Vector3):Object[]; // [THREE.Vector3, THREE.Quaternion, THREE.Vector3]
 		extractPosition(m:Matrix4):Matrix4;
 		extractRotation(m:Matrix4):Matrix4;
 		translate(v:Vector3):Matrix4;
@@ -570,7 +570,10 @@ module THREE{
 		clone():UV;
 	}
 
-	export class Vector2{
+	export class Vector{
+	}
+
+	export class Vector2 extends Vector{
 		constructor(x?:number, y?:number);		
 		x:number;
 		y:number;
@@ -595,7 +598,7 @@ module THREE{
 		clone():Vector2;
 	}
 
-	export class Vector3{
+	export class Vector3 extends Vector{
 		constructor(x?:number, y?:number, z?:number);	
 		x:number;
 		y:number;
@@ -1174,7 +1177,7 @@ module THREE{
 	}
 
 	export interface Uniforms{
-		[name:string]:{type:string;value:any;};
+		[name:string]:{type:string;value:Object;};
 	}
 
 	export interface ShaderMaterialParameters{
@@ -1200,8 +1203,8 @@ module THREE{
 		fragmentShader:string;
 		vertexShader:string;
 		uniforms:Uniforms;
-		defines:{[label:string]:any;};
-		attributes:{[name:string]:any;};
+		defines:{[label:string]:string;};
+		attributes:{[name:string]:Object;};
 		shading:Shading;
 		wireframe:bool;
 		wireframeLinewidth:number;
@@ -1326,8 +1329,23 @@ module THREE{
 		static offsetMatrix:Matrix4;
 	}
 
+	export interface SpriteParameters{
+		color               ?:Color;
+		map                 ?:Texture;
+		blending            ?:Blending;
+		blendSrc            ?:THREE.BlendingSrcFactor;
+		blendDst            ?:THREE.BlendingDstFactor;
+		blendEquation       ?:THREE.BlendingEquation;
+		useScreenCoordinates?:bool;
+		mergeWith3D         ?:bool;
+		affectedByDistance  ?:bool;
+		scaleByViewport     ?:number;
+		alignment           ?:THREE.Vector2;
+		fog                 ?:bool;
+	}
+
 	export class Sprite extends Object3D{
-		constructor(parameters?:any);
+		constructor(parameters?:SpriteParameters);
 		updateMatrix():void;
 		clone(object?:Sprite):Sprite;
 	}
@@ -1349,8 +1367,12 @@ module THREE{
 		render(scene:Scene, camera:Camera):void;
 	}
 
+	export interface CanvasRendererParameters{
+		canvas?: HTMLCanvasElement;
+	}
+
 	export class CanvasRenderer implements Renderer{
-		constructor(parameters?:any);
+		constructor(parameters?:CanvasRendererParameters);
 		domElement:HTMLCanvasElement;
 		autoClear:bool;
 		sortObjects:bool;
@@ -1534,13 +1556,13 @@ module THREE{
 
 	export class RenderableObject{
 		constructor();
-		object:any;
+		object:Object;
 		z:number;
 	}
 
 	export class RenderableParticle{
 		constructor();
-		object:any;
+		object:Object;
 		x:number;
 		y:number;
 		z:number;
@@ -1559,7 +1581,7 @@ module THREE{
 
 	// Scenes /////////////////////////////////////////////////////////////////////
 	
-	class AbstractFog{
+	export class AbstractFog{
 	}
 
 	export class Fog extends AbstractFog{
@@ -1600,7 +1622,7 @@ module THREE{
 		);
 		id              :number;
 		name            :string;
-		image           :any; // HTMLImageElement or ImageData ;
+		image           :Object; // HTMLImageElement or ImageData ;
 		mapping         :Mapping;
 		wrapS           :Wrapping;
 		wrapT           :Wrapping;
@@ -1615,7 +1637,7 @@ module THREE{
 		premultiplyAlpha:bool;
 		flipY           :bool;
 		needsUpdate     :bool;
-		onUpdate        :any;
+		onUpdate        :()=>void;
 		clone():Texture;
 		deallocate():void;
 	}
@@ -1775,7 +1797,7 @@ module THREE{
 		influence:number;
 		
 		root:Bone;
-		data:any;
+		data:Object;
 		hierarchy:KeyFrames[];
 		currentTime:number;
 		timeScale:number;
@@ -1793,7 +1815,7 @@ module THREE{
 		JITCompile:number;
 		
 		root:Mesh;
-		data:any;
+		data:Object;
 		hierarchy:KeyFrames[];
 		currentTime:number;
 		timeScale:number;
@@ -1940,7 +1962,7 @@ module THREE{
 		minY:number; 
 		maxX:number; 
 		maxY:number; 
-		centroid: any; /* Vector3 or Vector2 */ 
+		centroid: Vector; 
 	}
 
 	export class CurvePath extends Curve{

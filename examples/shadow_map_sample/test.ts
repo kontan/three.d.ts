@@ -1,4 +1,4 @@
-/// <reference path="../jquery.d.ts" />
+/// <reference path="../libs/jquery.d.ts" />
 /// <reference path="../../three.d.ts" />
 $(()=>{
 	// renderer
