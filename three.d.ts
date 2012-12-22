@@ -1488,7 +1488,7 @@ module THREE{
         renderImmediateObject(camera:Camera, lights:Light[], fog:Fog, material:Material, object:Object3D):void;
         initWebGLObjects(scene:Scene):void;
         initMaterial(material:Material, lights:Light[], fog:Fog, object:Object3D):void;
-        setFaceCulling(cullFace:string, frontFace:string):void;
+        setFaceCulling(cullFace?:string, frontFace?:string):void;
         setMaterialFaces(material:Material):void;
         setDepthTest(depthTest:bool):void;
         setDepthWrite(depthWrite:bool):void;
@@ -1626,6 +1626,7 @@ module THREE{
         fog:AbstractFog;
         overrideMaterial:Material;
         matrixAutoUpdate:bool;
+        constructor();
     }
 
     // Textures /////////////////////////////////////////////////////////////////////
