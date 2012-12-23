@@ -822,7 +822,7 @@ module THREE{
 
 
     export class JSONLoader extends Loader{
-        constructor(showStatus:bool);
+        constructor(showStatus?:bool);
         withCredentials:bool;
         load(url:string, callback:(geometry:Geometry, materials:Material[])=> void, texturePath?:string):void;
         loadAjaxJSON( context:JSONLoader, url:string, callback:(geometry:Geometry, materials:Material[])=> void, texturePath?:string, callbackProgress?:(progress:Progress)=> void):void;
@@ -1407,6 +1407,56 @@ module THREE{
         clear():void;
         render(scene:Scene, camera:Camera):void;
     }
+
+    export var ShaderChunk:{
+        [name:string]:string;
+        fog_pars_fragment:string;
+        fog_fragment:string;
+        envmap_pars_fragment:string;
+        envmap_fragment:string;
+        envmap_pars_vertex:string;
+        worldpos_vertex:string;
+        envmap_vertex:string;
+        map_particle_pars_fragment:string;
+        map_particle_fragment:string;
+        map_pars_vertex:string;
+        map_pars_fragment:string;
+        map_vertex:string;
+        map_fragment:string;
+        lightmap_pars_fragment:string;
+        lightmap_pars_vertex:string;
+        lightmap_fragment:string;
+        lightmap_vertex:string;
+        bumpmap_pars_fragment:string;
+        normalmap_pars_fragment:string;
+        specularmap_pars_fragment:string;
+        specularmap_fragment:string;
+        lights_lambert_pars_vertex:string;
+        lights_lambert_vertex:string;
+        lights_phong_pars_vertex:string;
+        lights_phong_vertex:string;
+        lights_phong_pars_fragment:string;
+        lights_phong_fragment:string;
+        color_pars_fragment:string;
+        color_fragment:string;
+        color_pars_vertex:string;
+        color_vertex:string;
+        skinning_pars_vertex:string;
+        skinbase_vertex:string;
+        skinning_vertex:string;
+        morphtarget_pars_vertex:string;
+        morphtarget_vertex:string;
+        default_vertex:string;
+        morphnormal_vertex:string;
+        skinnormal_vertex:string;
+        defaultnormal_vertex:string;
+        shadowmap_pars_fragment:string;
+        shadowmap_fragment:string;
+        shadowmap_pars_vertex:string;
+        shadowmap_vertex:string;
+        alphatest_fragment:string;
+        linear_to_gamma_fragment:string;
+    };
 
     export interface RendererPlugin{
         init(renderer:WebGLRenderer):void;
@@ -2420,6 +2470,39 @@ module THREE{
     }
     export var ShaderFlares:ShaderLibrary;
     export var ShaderSprite:ShaderLibrary;
+
+    export var UniformsUtils:{
+        merge(uniforms:Object[]):Uniforms;
+        merge(uniforms:Uniforms[]):Uniforms;
+        clone(uniforms_src:Object[][]):Object[][];
+    }
+
+    export var UniformsLib:{
+        common:Uniforms;
+        bump:Uniforms;
+        normalmap:Uniforms;
+        fog:Uniforms;
+        lights:Uniforms;
+        particle:Uniforms;
+        shadowmap:Uniforms;
+    };
+
+    export interface Shader{
+        uniforms:Uniforms;
+        vertexShader:string;
+        fragmentShader:string;  
+    }
+
+    export var ShaderLib:{
+        depth         :Shader;
+        normal        :Shader;
+        basic         :Shader;
+        lambert       :Shader;
+        phong         :Shader;
+        particle_basic:Shader;
+        dashed        :Shader;
+        depthRGBA     :Shader;
+    };
 }
 
 
