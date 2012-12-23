@@ -1,25 +1,19 @@
 function initialize(vertexShaderSource, pixelShaderSource, vertexShaderContourSource, pixelShaderContourSource) {
     vertexShaderSource = vertexShaderSource.replace("//[[shadowmap_pars_vertex]]", THREE.ShaderChunk.shadowmap_pars_vertex + "\n");
     vertexShaderSource = vertexShaderSource.replace("//[[shadowmap_vertex]]", THREE.ShaderChunk.shadowmap_vertex + "\n");
+    vertexShaderSource = vertexShaderSource.replace("//[[worldpos_vertex]]", THREE.ShaderChunk.worldpos_vertex + "\n");
+    vertexShaderSource = vertexShaderSource.replace("//[[default_vertex]]", THREE.ShaderChunk.default_vertex + "\n");
+    vertexShaderSource = vertexShaderSource.replace("//[[map_pars_vertex]]", THREE.ShaderChunk.map_pars_vertex + "\n");
+    vertexShaderSource = vertexShaderSource.replace("//[[map_vertex]]", THREE.ShaderChunk.map_vertex + "\n");
     pixelShaderSource = pixelShaderSource.replace("//[[shadowmap_pars_fragment]]", THREE.ShaderChunk.shadowmap_pars_fragment + "\n");
     pixelShaderSource = pixelShaderSource.replace("//[[shadowmap_fragment]]", THREE.ShaderChunk.shadowmap_fragment + "\n");
+    pixelShaderSource = pixelShaderSource.replace("//[[map_pars_fragment]]", THREE.ShaderChunk.map_pars_fragment + "\n");
+    pixelShaderSource = pixelShaderSource.replace("//[[map_fragment]]", THREE.ShaderChunk.map_fragment + "\n");
     function makeToon(viewportHeight, lightPos, mesh) {
         var uniforms = {
             color: {
                 type: "v3",
                 value: new THREE.Vector3(1, 1, 0)
-            },
-            shadowOpacity: {
-                type: "f",
-                value: 0.2
-            },
-            lightPosition: {
-                type: "v3",
-                value: lightPos.clone()
-            },
-            threshold: {
-                type: "f",
-                value: -0.5
             }
         };
         var material_solid = new THREE.ShaderMaterial({
@@ -77,6 +71,7 @@ function initialize(vertexShaderSource, pixelShaderSource, vertexShaderContourSo
     });
     renderer.shadowMapEnabled = true;
     renderer.shadowMapSoft = true;
+    renderer.shadowMapCullFrontFaces = false;
     renderer.setSize(WIDTH, HEIGHT);
     var scene = new THREE.Scene();
     var VIEW_ANGLE = 45, ASPECT = WIDTH / HEIGHT, NEAR = 0.1, FAR = 10000;
@@ -111,6 +106,9 @@ function initialize(vertexShaderSource, pixelShaderSource, vertexShaderContourSo
     directionalLight.shadowMapWidth = 1024;
     directionalLight.shadowMapHeight = 1024;
     directionalLight.shadowCameraVisible = true;
+    directionalLight.shadowCameraNear = 5;
+    directionalLight.shadowCameraFar = 1000;
+    directionalLight.shadowBias = -0.02;
     scene.add(directionalLight);
     $('#container').append(renderer.domElement);
     var theta = 0;
@@ -140,7 +138,8 @@ function initialize(vertexShaderSource, pixelShaderSource, vertexShaderContourSo
             if(dx != 0 || dy != 0 || dz != 0) {
                 buffalo.rotation.x += ((e.keyCode == 38 ? 1 : 0) - (e.keyCode == 40 ? 1 : 0)) * 0.1;
                 buffalo.rotation.y += ((e.keyCode == 37 ? 1 : 0) - (e.keyCode == 39 ? 1 : 0)) * 0.1;
-                buffalo.position.z += ((e.keyCode == 33 ? 1 : 0) - (e.keyCode == 34 ? 1 : 0)) * 10;
+                camera.position.z += ((e.keyCode == 33 ? 1 : 0) - (e.keyCode == 34 ? 1 : 0)) * 10;
+                camera.lookAt(new THREE.Vector3(0, 0, 0));
                 buffalo_contour.rotation = buffalo.rotation.clone();
                 buffalo_contour.position = buffalo.position.clone();
                 e.preventDefault();
@@ -169,4 +168,4 @@ $(function () {
         });
     });
 });
-//@ sourceMappingURL=test.js.map
+//@ sourceMappingURL=app.js.map
