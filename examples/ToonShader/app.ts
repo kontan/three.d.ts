@@ -1,6 +1,21 @@
 /// <reference path="../libs/jquery.d.ts" />
 /// <reference path="../../three.d.ts" />
 
+var viewReferencePoint = new THREE.Vector3(0, 60, 0);
+
+function replaceShaderSourcePlaceHolders(source:string):string{
+	source = source.replace("[[shadowmap_pars_vertex]]",   THREE.ShaderChunk.shadowmap_pars_vertex   + "\n");
+	source = source.replace("[[shadowmap_vertex]]",        THREE.ShaderChunk.shadowmap_vertex        + "\n");
+	source = source.replace("[[worldpos_vertex]]",         THREE.ShaderChunk.worldpos_vertex         + "\n");
+	source = source.replace("[[default_vertex]]",          THREE.ShaderChunk.default_vertex          + "\n");
+	source = source.replace("[[map_pars_vertex]]",         THREE.ShaderChunk.map_pars_vertex         + "\n");
+	source = source.replace("[[map_vertex]]",              THREE.ShaderChunk.map_vertex              + "\n");
+	source = source.replace("[[shadowmap_pars_fragment]]", THREE.ShaderChunk.shadowmap_pars_fragment + "\n");
+	source = source.replace("[[shadowmap_fragment]]",      THREE.ShaderChunk.shadowmap_fragment      + "\n");
+	source = source.replace("[[map_pars_fragment]]",       THREE.ShaderChunk.map_pars_fragment       + "\n");
+	source = source.replace("[[map_fragment]]",            THREE.ShaderChunk.map_fragment            + "\n");
+	return source;
+}
 
 
 function initialize(
@@ -10,36 +25,31 @@ function initialize(
 	pixelShaderContourSource:string
 ){
 	
-	vertexShaderSource = vertexShaderSource.replace("//[[shadowmap_pars_vertex]]",   THREE.ShaderChunk.shadowmap_pars_vertex   + "\n");
-	vertexShaderSource = vertexShaderSource.replace("//[[shadowmap_vertex]]",        THREE.ShaderChunk.shadowmap_vertex        + "\n");
-	vertexShaderSource = vertexShaderSource.replace("//[[worldpos_vertex]]",         THREE.ShaderChunk.worldpos_vertex         + "\n");
-	vertexShaderSource = vertexShaderSource.replace("//[[default_vertex]]",          THREE.ShaderChunk.default_vertex          + "\n");
-	vertexShaderSource = vertexShaderSource.replace("//[[map_pars_vertex]]",         THREE.ShaderChunk.map_pars_vertex         + "\n");
-	vertexShaderSource = vertexShaderSource.replace("//[[map_vertex]]",              THREE.ShaderChunk.map_vertex              + "\n");
+	vertexShaderSource = replaceShaderSourcePlaceHolders(vertexShaderSource);
+	pixelShaderSource  = replaceShaderSourcePlaceHolders(pixelShaderSource);
+	vertexShaderContourSource = replaceShaderSourcePlaceHolders(vertexShaderContourSource);
+	pixelShaderContourSource  = replaceShaderSourcePlaceHolders(pixelShaderContourSource);
 
-	pixelShaderSource  = pixelShaderSource .replace("//[[shadowmap_pars_fragment]]", THREE.ShaderChunk.shadowmap_pars_fragment + "\n");
-	pixelShaderSource  = pixelShaderSource .replace("//[[shadowmap_fragment]]",      THREE.ShaderChunk.shadowmap_fragment      + "\n");
-	pixelShaderSource  = pixelShaderSource .replace("//[[map_pars_fragment]]",       THREE.ShaderChunk.map_pars_fragment       + "\n");
-	pixelShaderSource  = pixelShaderSource .replace("//[[map_fragment]]",            THREE.ShaderChunk.map_fragment            + "\n");
-	
-
-	function makeToon(viewportHeight:number, lightPos:THREE.Vector3, mesh:THREE.Mesh):THREE.Mesh{
+	function makeToon(viewportHeight:number, lightPos:THREE.Vector3, mesh:THREE.Mesh, map:THREE.Texture):THREE.Mesh{
 
 
-		var uniforms:THREE.Uniforms = <THREE.Uniforms>{
-            color: { type:"v3", value:new THREE.Vector3(1, 1, 0) }
+		var toonShaderUniforms:THREE.Uniforms = <THREE.Uniforms>{
+            color: { type:"v3", value:new THREE.Vector3(1, 1, 0) },
+            map  : { type: "t", value: map }
         };
+
+        var _uniforms = THREE.UniformsUtils.merge([
+			THREE.UniformsLib[ "common" ],
+	        THREE.UniformsLib[ "shadowmap" ],
+	        toonShaderUniforms
+	    ]);
+
+
 
 		var material_solid = new THREE.ShaderMaterial({
 			vertexShader: vertexShaderSource,
 			fragmentShader: pixelShaderSource,
-
-
-			uniforms: THREE.UniformsUtils.merge([
-		        THREE.UniformsLib[ "shadowmap" ],
-		        uniforms
-		    ]),
-
+			uniforms: _uniforms,
 			blending: THREE.NormalBlending,
 	 		depthTest: true,
 	        wireframe: false,
@@ -49,13 +59,20 @@ function initialize(
 	        side: THREE.FrontSide
 		});
 
+		
+
 		mesh.material = material_solid;
+
+		mesh.material = new THREE.MeshBasicMaterial({ map: map });
+
+
 
 		var material_contour = new THREE.ShaderMaterial({
 			vertexShader: vertexShaderContourSource,
 			fragmentShader: pixelShaderContourSource,
 			uniforms: {
-				lineWidth: { type:"f", value:0.085 / HEIGHT },
+				//lineWidth: { type:"f", value:0.085 / HEIGHT },
+				lineWidth: { type:"f", value:0.002 },
 				lineColor: { type:"v3", value:new THREE.Vector3(0.4, 0.4, 0.4) }
 			},
 			defines: {},
@@ -92,7 +109,7 @@ function initialize(
 	});
 
 	renderer.shadowMapEnabled = true;
-	renderer.shadowMapSoft = true;
+	//renderer.shadowMapSoft = true;
 	renderer.shadowMapCullFrontFaces = false;
 	renderer.setSize(WIDTH, HEIGHT);
 
@@ -102,9 +119,9 @@ function initialize(
 	// camera
 	var VIEW_ANGLE:number = 45, ASPECT:number = WIDTH / HEIGHT, NEAR:number = 0.1, FAR:number = 10000;
 	var camera:THREE.PerspectiveCamera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	camera.position.z = 800;
-	camera.position.y = 120;
-	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	camera.position.z = 500;
+	camera.position.y = 200;
+	camera.lookAt(viewReferencePoint);
 	scene.add(camera);
 
 	// sphere
@@ -119,7 +136,10 @@ function initialize(
 	scene.add(sphere);
 
 	// sphere contour
-	var sphere_contour = makeToon(HEIGHT, lightPos, sphere);
+	var shereTexture = THREE.ImageUtils.loadTexture("m_world.jpg");
+	
+
+	var sphere_contour = makeToon(HEIGHT, lightPos, sphere, shereTexture);
 	sphere_contour.castShadow = true;
 	sphere_contour.receiveShadow  = true;	
 	scene.add(sphere_contour);
@@ -131,7 +151,7 @@ function initialize(
 			color: 0x00ff00
 		})
 	);
-	plane.position.y = -120;
+	plane.position.y = 0;
 	plane.rotation.x = -Math.PI/2;
 	plane.castShadow = true;
 	plane.receiveShadow  = true;
@@ -140,13 +160,17 @@ function initialize(
 	var directionalLight = new THREE.DirectionalLight(0xffffff);
 	directionalLight.position = lightPos.clone();
 	directionalLight.castShadow = true;
-	directionalLight.shadowDarkness = 0.5;
+	directionalLight.shadowDarkness = 0.3;
 	directionalLight.shadowMapWidth = 1024; 
 	directionalLight.shadowMapHeight = 1024;
 	directionalLight.shadowCameraVisible = true;	
+	directionalLight.shadowCameraLeft   = -200;
+    directionalLight.shadowCameraRight  =  200;
+    directionalLight.shadowCameraTop    =  200;
+    directionalLight.shadowCameraBottom = -200;
 	directionalLight.shadowCameraNear = 5;
 	directionalLight.shadowCameraFar = 1000;
-	directionalLight.shadowBias = -0.02;
+	directionalLight.shadowBias = -0.005;
 	scene.add(directionalLight);
 
 	$('#container').append(renderer.domElement);
@@ -164,13 +188,18 @@ function initialize(
 	mainloop();
 
 
+	//var modelDataURL = "suzanneHi.js";
+	//var modelDataURL = "monkey.js";
+	var modelDataURL = "youmu.js";
+	var youmuTexture = THREE.ImageUtils.loadTexture("youmu_tex.png");
+
 	var loader = new THREE.JSONLoader();
-	loader.load("suzanneHi.js", (geometry:THREE.Geometry, materials:THREE.Material[])=>{
+	loader.load(modelDataURL, (geometry:THREE.Geometry, materials:THREE.Material[])=>{
 		buffalo = new THREE.Mesh(geometry);
 		buffalo.castShadow = true;
 		buffalo.receiveShadow  = true;
 		scene.add(buffalo);
-		buffalo_contour = makeToon(HEIGHT, lightPos, buffalo);
+		buffalo_contour = makeToon(HEIGHT, lightPos, buffalo, youmuTexture);
 		scene.add(buffalo_contour);
 		buffalo_contour.castShadow = true;
 		buffalo_contour.receiveShadow  = true;
@@ -185,7 +214,7 @@ function initialize(
 				//buffalo.position.z += ((e.keyCode == 33 ? 1 : 0) - (e.keyCode == 34 ? 1 : 0)) * 10;
 				
 				camera.position.z += ((e.keyCode == 33 ? 1 : 0) - (e.keyCode == 34 ? 1 : 0)) * 10;
-				camera.lookAt(new THREE.Vector3(0, 0, 0));
+				camera.lookAt(viewReferencePoint);
 
 				buffalo_contour.rotation = buffalo.rotation.clone();
 				buffalo_contour.position = buffalo.position.clone();
@@ -206,6 +235,7 @@ $(()=>{
     var loadedFileCount:number = 0;
     shaderFiles.forEach((file, i)=>{
     	$.ajax(file, {
+    		contentType: "text/plain",
 			success: (data:string)=>{
 				sources[i] = data;
 				loadedFileCount++;
