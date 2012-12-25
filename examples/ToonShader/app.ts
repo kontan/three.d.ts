@@ -3,17 +3,12 @@
 
 var viewReferencePoint = new THREE.Vector3(0, 60, 0);
 
-function replaceShaderSourcePlaceHolders(source:string):string{
-	source = source.replace("[[shadowmap_pars_vertex]]",   THREE.ShaderChunk.shadowmap_pars_vertex   + "\n");
-	source = source.replace("[[shadowmap_vertex]]",        THREE.ShaderChunk.shadowmap_vertex        + "\n");
-	source = source.replace("[[worldpos_vertex]]",         THREE.ShaderChunk.worldpos_vertex         + "\n");
-	source = source.replace("[[default_vertex]]",          THREE.ShaderChunk.default_vertex          + "\n");
-	source = source.replace("[[map_pars_vertex]]",         THREE.ShaderChunk.map_pars_vertex         + "\n");
-	source = source.replace("[[map_vertex]]",              THREE.ShaderChunk.map_vertex              + "\n");
-	source = source.replace("[[shadowmap_pars_fragment]]", THREE.ShaderChunk.shadowmap_pars_fragment + "\n");
-	source = source.replace("[[shadowmap_fragment]]",      THREE.ShaderChunk.shadowmap_fragment      + "\n");
-	source = source.replace("[[map_pars_fragment]]",       THREE.ShaderChunk.map_pars_fragment       + "\n");
-	source = source.replace("[[map_fragment]]",            THREE.ShaderChunk.map_fragment            + "\n");
+function replaceShaderChunkPlaceHolders(source:string):string{
+	for(var key in THREE.ShaderChunk){
+		if(THREE.ShaderChunk.hasOwnProperty(key)){
+			source = source.replace("[[" + key + "]]",   THREE.ShaderChunk[key]);
+		}
+	}
 	return source;
 }
 
@@ -25,10 +20,10 @@ function initialize(
 	pixelShaderContourSource:string
 ){
 	
-	vertexShaderSource = replaceShaderSourcePlaceHolders(vertexShaderSource);
-	pixelShaderSource  = replaceShaderSourcePlaceHolders(pixelShaderSource);
-	vertexShaderContourSource = replaceShaderSourcePlaceHolders(vertexShaderContourSource);
-	pixelShaderContourSource  = replaceShaderSourcePlaceHolders(pixelShaderContourSource);
+	vertexShaderSource = replaceShaderChunkPlaceHolders(vertexShaderSource);
+	pixelShaderSource  = replaceShaderChunkPlaceHolders(pixelShaderSource);
+	vertexShaderContourSource = replaceShaderChunkPlaceHolders(vertexShaderContourSource);
+	pixelShaderContourSource  = replaceShaderChunkPlaceHolders(pixelShaderContourSource);
 
 	function makeToon(viewportHeight:number, lightPos:THREE.Vector3, mesh:THREE.Mesh, map:THREE.Texture):THREE.Mesh{
 
@@ -109,7 +104,7 @@ function initialize(
 	});
 
 	renderer.shadowMapEnabled = true;
-	//renderer.shadowMapSoft = true;
+	renderer.shadowMapSoft = true;
 	renderer.shadowMapCullFrontFaces = false;
 	renderer.setSize(WIDTH, HEIGHT);
 
@@ -130,7 +125,7 @@ function initialize(
 		new THREE.SphereGeometry(radius, segments, rings)
 	);
 	sphere.position.x = 100;
-	sphere.position.y = 100;
+	sphere.position.y = 200;
 	sphere.castShadow = true;
 	sphere.receiveShadow  = true;
 	scene.add(sphere);
@@ -148,7 +143,7 @@ function initialize(
 	var plane:THREE.Mesh = new THREE.Mesh(
 		new THREE.PlaneGeometry(1400, 1400),
 		new THREE.MeshPhongMaterial({
-			color: 0x00ff00
+			color: 0xccffcc
 		})
 	);
 	plane.position.y = 0;
@@ -169,7 +164,7 @@ function initialize(
     directionalLight.shadowCameraTop    =  200;
     directionalLight.shadowCameraBottom = -200;
 	directionalLight.shadowCameraNear = 5;
-	directionalLight.shadowCameraFar = 1000;
+	directionalLight.shadowCameraFar = 600;
 	directionalLight.shadowBias = -0.005;
 	scene.add(directionalLight);
 
