@@ -6,11 +6,108 @@
  * @author Kon - http://phyzkit.net/
  */
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// WebGL Interface (incomplete)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // When you use three.d.ts with other ambient source file for WebGL,
 // remove below definition for WebGLRenderingContext.
-interface WebGLRenderingContext {}
+interface WebGLRenderingContext {
+    getParameter(pname:GLenum):any;
+    ACTIVE_TEXTURE:GLenum; // unsigned long
+    ALIASED_LINE_WIDTH_RANGE:GLenum; //     Float32Array (with 2 elements)
+    ALIASED_POINT_SIZE_RANGE:GLenum; //     Float32Array (with 2 elements)
+    ALPHA_BITS:GLenum; //   long
+    ARRAY_BUFFER_BINDING:GLenum; //     WebGLBuffer
+    BLEND:GLenum; //    boolean
+    BLEND_COLOR:GLenum; //  Float32Array (with 4 values)
+    BLEND_DST_ALPHA:GLenum; //  unsigned long
+    BLEND_DST_RGB:GLenum; //    unsigned long
+    BLEND_EQUATION_ALPHA:GLenum; //     unsigned long
+    BLEND_EQUATION_RGB:GLenum; //   unsigned long
+    BLEND_SRC_ALPHA:GLenum; //  unsigned long
+    BLEND_SRC_RGB:GLenum; //    unsigned long
+    BLUE_BITS:GLenum; //    long
+    COLOR_CLEAR_VALUE:GLenum; //    Float32Array (with 4 values)
+    COLOR_WRITEMASK:GLenum; //  boolean[] (with 4 values)
+    COMPRESSED_TEXTURE_FORMATS:GLenum; //   null
+    CULL_FACE:GLenum; //    boolean
+    CULL_FACE_MODE:GLenum; //   unsigned long
+    CURRENT_PROGRAM:GLenum; //  WebGLProgram
+    DEPTH_BITS:GLenum; //   long
+    DEPTH_CLEAR_VALUE:GLenum; //    float
+    DEPTH_FUNC:GLenum; //   unsigned long
+    DEPTH_RANGE:GLenum; //  Float32Array (with 2 elements)
+    DEPTH_TEST:GLenum; //   boolean
+    DEPTH_WRITEMASK:GLenum; //  boolean
+    DITHER:GLenum; //   boolean
+    ELEMENT_ARRAY_BUFFER_BINDING:GLenum; //     WebGLBuffer
+    FRAMEBUFFER_BINDING:GLenum; //  WebGLFramebuffer
+    FRONT_FACE:GLenum; //   unsigned long
+    GENERATE_MIPMAP_HINT:GLenum; //     unsigned long
+    GREEN_BITS:GLenum; //   long
+    LINE_WIDTH:GLenum; //   float
+    MAX_COMBINED_TEXTURE_IMAGE_UNITS:GLenum; //     long
+    MAX_CUBE_MAP_TEXTURE_SIZE:GLenum; //    long
+    MAX_FRAGMENT_UNIFORM_VECTORS:GLenum; //     long
+    MAX_RENDERBUFFER_SIZE:GLenum; //    long
+    MAX_TEXTURE_IMAGE_UNITS:GLenum; //  long
+    MAX_TEXTURE_SIZE:GLenum; //     long
+    MAX_VARYING_VECTORS:GLenum; //  long
+    MAX_VERTEX_ATTRIBS:GLenum; //   long
+    MAX_VERTEX_TEXTURE_IMAGE_UNITS:GLenum; //   long
+    MAX_VERTEX_UNIFORM_VECTORS:GLenum; //   long
+    MAX_VIEWPORT_DIMS:GLenum; //    Int32Array (with 2 elements)
+    NUM_COMPRESSED_TEXTURE_FORMATS:GLenum; //   long
+    PACK_ALIGNMENT:GLenum; //   long
+    POLYGON_OFFSET_FACTOR:GLenum; //    float
+    POLYGON_OFFSET_FILL:GLenum; //  boolean
+    POLYGON_OFFSET_UNITS:GLenum; //     float
+    RED_BITS:GLenum; //     long
+    RENDERBUFFER_BINDING:GLenum; //     WebGLRenderbuffer
+    RENDERER:GLenum; //     DOMString
+    SAMPLE_BUFFERS:GLenum; //   long
+    SAMPLE_COVERAGE_INVERT:GLenum; //   boolean
+    SAMPLE_COVERAGE_VALUE:GLenum; //    float
+    SAMPLES:GLenum; //  long
+    SCISSOR_BOX:GLenum; //  Int32Array (with 4 elements)
+    SCISSOR_TEST:GLenum; //     boolean
+    SHADING_LANGUAGE_VERSION:GLenum; //     DOMString
+    STENCIL_BACK_FAIL:GLenum; //    unsigned long
+    STENCIL_BACK_FUNC:GLenum; //    unsigned long
+    STENCIL_BACK_PASS_DEPTH_FAIL:GLenum; //     unsigned long
+    STENCIL_BACK_PASS_DEPTH_PASS:GLenum; //     unsigned long
+    STENCIL_BACK_REF:GLenum; //     long
+    STENCIL_BACK_VALUE_MASK:GLenum; //  unsigned long
+    STENCIL_BACK_WRITEMASK:GLenum; //   unsigned long
+    STENCIL_BITS:GLenum; //     long
+    STENCIL_CLEAR_VALUE:GLenum; //  long
+    STENCIL_FAIL:GLenum; //     unsigned long
+    STENCIL_FUNC:GLenum; //     unsigned long
+    STENCIL_PASS_DEPTH_FAIL:GLenum; //  unsigned long
+    STENCIL_PASS_DEPTH_PASS:GLenum; //  unsigned long
+    STENCIL_REF:GLenum; //  long
+    STENCIL_TEST:GLenum; //     boolean
+    STENCIL_VALUE_MASK:GLenum; //   unsigned long
+    STENCIL_WRITEMASK:GLenum; //    unsigned long
+    SUBPIXEL_BITS:GLenum; //    long
+    TEXTURE_BINDING_2D:GLenum; //   WebGLTexture
+    TEXTURE_BINDING_CUBE_MAP:GLenum; //     WebGLTexture
+    UNPACK_ALIGNMENT:GLenum; //     int
+    UNPACK_COLORSPACE_CONVERSION_WEBGL:GLenum; //   unsigned long
+    UNPACK_FLIP_Y_WEBGL:GLenum; //  boolean
+    UNPACK_PREMULTIPLY_ALPHA_WEBGL:GLenum; //   boolean
+    VENDOR:GLenum; //   DOMString
+    VERSION:GLenum; //  DOMString
+    VIEWPORT:GLenum; //     Int32Array (with 4 elements)
+}
+enum GLenum{}
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+//        three.js interface
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 module THREE{
     export var REVISION:string;
 
@@ -25,7 +122,7 @@ module THREE{
     //     new THREE.MeshPhongMaterial().side = THREE.Side.FrontSide;
     //
     // Unfortunately, three.js currently doesn't. 
-    // Therefore, at the following constant value section, those enum type are defined as class.
+    // Therefore, at the following constant value section, those enum type are no members.
     // In three.d.ts, you can write a enum value as follows:
     //
     //     new THREE.MeshPhongMaterial().side = THREE.FrontSide;
@@ -34,43 +131,33 @@ module THREE{
     //
     //     new THREE.MeshPhongMaterial().side = THREE.FlatShading;
     //
-    // In three.js, there are no the classes. You must not instantiate an object of the classes. 
-    // For example, you can compile the following code without compile time error.
-    //
-    //     new THREE.MeshPhongMaterial().side = new THREE.Side();
-    //
-    // However, it will cause a runtime type error.
-    // 
-    // I think it is not defect of three.js.
-    // Rather, TypeScript should have more flexible enum definition syntax for existing JavaScript source codes.
-    //
     // If you want to cast from enum type into internal type,
     // you can write as as follows:
     //
-    //         var n:number = <number><any>THREE.SmoothShading;    // cast enum into  number 
+    //     var n:number = <number><any>THREE.SmoothShading;    // cast enum into  number 
     //
-    //      var smoothShading:Shading = <Shading><any>2; // cast number into enum
+    //     var smoothShading:Shading = <Shading><any>2; // cast number into enum
 
     // side
-    export class Side {} 
+    export enum Side {} 
     export var FrontSide :Side;
     export var BackSide  :Side;
     export var DoubleSide:Side;
 
     // shading
-    export class Shading {}
+    export enum Shading {}
     export var NoShading    :Shading;
     export var FlatShading  :Shading;
     export var SmoothShading:Shading;
 
     // colors
-    export class Colors {}
+    export enum Colors {}
     export var NoColors    :Colors;
     export var FaceColors  :Colors;
     export var VertexColors:Colors;
 
     // blending modes
-    export class Blending {}
+    export enum Blending {}
     export var NoBlending         :Blending;
     export var NormalBlending     :Blending;
     export var AdditiveBlending   :Blending;
@@ -81,13 +168,13 @@ module THREE{
     // custom blending equations
     // (numbers start from 100 not to clash with other
     //  mappings to OpenGL constants defined in Texture.js)
-    export class BlendingEquation {}
+    export enum BlendingEquation {}
     export var AddEquation            :BlendingEquation;
     export var SubtractEquation       :BlendingEquation;
     export var ReverseSubtractEquation:BlendingEquation;
 
     // custom blending destination factors
-    export class BlendingDstFactor {}
+    export enum BlendingDstFactor {}
     export var ZeroFactor            :BlendingDstFactor;
     export var OneFactor             :BlendingDstFactor;
     export var SrcColorFactor        :BlendingDstFactor;
@@ -98,19 +185,19 @@ module THREE{
     export var OneMinusDstAlphaFactor:BlendingDstFactor;
 
     // custom blending source factors
-    export class BlendingSrcFactor {}
+    export enum BlendingSrcFactor {}
     export var DstColorFactor        :BlendingSrcFactor;
     export var OneMinusDstColorFactor:BlendingSrcFactor;
     export var SrcAlphaSaturateFactor:BlendingSrcFactor;
 
     // TEXTURE CONSTANTS
-    export class Combine {}
+    export enum Combine {}
     export var MultiplyOperation:Combine;
     export var MixOperation     :Combine;
     export var AddOperation     :Combine;
     
     // Mapping modes
-    export class Mapping {}
+    export enum Mapping {}
     export var UVMapping                 :Mapping;
     export var CubeReflectionMapping     :Mapping;
     export var CubeRefractionMapping     :Mapping;
@@ -118,13 +205,13 @@ module THREE{
     export var SphericalRefractionMapping:Mapping;
 
     // Wrapping modes
-    export class Wrapping {}
+    export enum Wrapping {}
     export var RepeatWrapping        :Wrapping;
     export var ClampToEdgeWrapping   :Wrapping;
     export var MirroredRepeatWrapping:Wrapping;
 
     // Filters
-    export class TextureFilter {}
+    export enum TextureFilter {}
     export var NearestFilter             :TextureFilter;
     export var NearestMipMapNearestFilter:TextureFilter;
     export var NearestMipMapLinearFilter :TextureFilter;
@@ -133,7 +220,7 @@ module THREE{
     export var LinearMipMapLinearFilter  :TextureFilter;
 
     // Data types
-    export class TextureDataType {}
+    export enum TextureDataType {}
     export var UnsignedByteType :TextureDataType;
     export var ByteType         :TextureDataType;
     export var ShortType        :TextureDataType;
@@ -143,14 +230,14 @@ module THREE{
     export var FloatType        :TextureDataType;
 
     // Pixel types
-    export class PixelType {}
+    export enum PixelType {}
     //    export var UnsignedByteType:number;
     export var UnsignedShort4444Type:PixelType;
     export var UnsignedShort5551Type:PixelType;
     export var UnsignedShort565Type :PixelType;
 
     // Pixel formats
-    export class PixelFormat {}
+    export enum PixelFormat {}
     export var AlphaFormat         :PixelFormat;
     export var RGBFormat           :PixelFormat;
     export var RGBAFormat          :PixelFormat;
@@ -158,7 +245,7 @@ module THREE{
     export var LuminanceAlphaFormat:PixelFormat;
 
     // Compressed texture formats
-    export class CompressedPixelFormat {}
+    export enum CompressedPixelFormat {}
     export var RGB_S3TC_DXT1_Format :CompressedPixelFormat;
     export var RGBA_S3TC_DXT1_Format:CompressedPixelFormat;
     export var RGBA_S3TC_DXT3_Format:CompressedPixelFormat;
@@ -166,7 +253,7 @@ module THREE{
 
     
     // Potential future PVRTC compressed texture formats
-    // export class CompressedTextureFormats {}
+    // export enum CompressedTextureFormats {}
     // export var RGB_PVRTC_4BPPV1_Format :CompressedTextureFormats;
     // export var RGB_PVRTC_2BPPV1_Format :CompressedTextureFormats;
     // export var RGBA_PVRTC_4BPPV1_Format:CompressedTextureFormats;
