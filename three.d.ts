@@ -191,7 +191,7 @@ module THREE{
         computeVertexNormals():void;
         normalizeNormals():void;
         computeTangents():void;
-        deallocate():void;
+        dispose():void;        
     }
 
     export class Clock{
@@ -286,6 +286,46 @@ module THREE{
         contains(object:Object3D):bool;
     }
 
+    export class Plane{
+        constructor(normal?:Vector3, constant?:number);
+        normal:Vector3;
+        constant:number;
+        set(normal:Vector3, constant:number):Plane; 
+        setComponents(x:number, y:number, z:number, w:number):Plane;
+        setFromNormalAndCoplanarPoint(normal:Vector3, point:Vector3):Plane;
+        setFromCoplanarPoints(a:Vector3, b:Vector3, c:Vector3):Plane;
+        copy(plane:Plane):Plane;
+        normalize():Plane;
+        distanceToPoint(point:Vector3):number;
+        distanceToSphere(sphere:Sphere):number;
+        projectPoint(point:Vector3, optionalTarget?:Vector3);Vector3;
+        orthoPoint(point:Vector3, optionalTarget?:Vector3):Vector3;
+        isIntersectionLine(startPoint:Vector3, endPoint:Vector3):bool;
+        coplanarPoint(optionalTarget?:bool):Vector3;
+        transform(matrix:Matrix3, optionalNormalMatrix?:Matrix3):Plane;
+        translate(offset:Vector3):Plane;
+        equals(plane:Plane):bool;
+        clone():Plane;
+    }
+
+    export class Sphere{
+        constructor(center?:Vector3, radius?:number);
+        center:Vector3;
+        radius:number;
+        set(center:Vector3, radius:number):Sphere;
+        setFromCenterAndPoints(center:Vector3, points:Vector3[]):Sphere;
+        copy(sphere:Sphere):Sphere;
+        empty():bool;
+        containsPoint(point:Vector3):bool;
+        distanceToPoint(point:Vector3):number;
+        clampPoint(point:Vector3, optionalTarget?:Vector3):Sphere;
+        getBoundingBox(optionalTarget:Box3):Box3;
+        transform(matrix:Matrix):Sphere;
+        translate(offset:Vector3);
+        equals(sphere:Sphere):bool;
+        clone():Sphere;
+    }
+
 
     export interface MorphTarget{ 
         name:string;
@@ -314,8 +354,8 @@ module THREE{
         colors                 :Color[];
         materials              :Material[];
         faces                  :Face[];
-        faceUvs                :UV[];
-        faceVertexUvs          :UV[][];
+        faceUvs                :Vector2[];
+        faceVertexUvs          :Vector2[][];
         morphTargets           :MorphTarget[];
         morphColors            :MorphColor[];
         skinWeights            :number[];
@@ -343,7 +383,7 @@ module THREE{
         computeBoundingSphere():void;
         mergeVertices():number;
         clone():Geometry;
-        deallocate():void;
+        dispose():void;
     }
     
     var GeometryIdCount:number;
@@ -360,19 +400,21 @@ module THREE{
         sign(x:number):number;
     };
 
-    export class Matrix3{
-        constructor();
+    export class Matrix{
         elements:Float32Array;
         multiplyVector3(v:Vector3):Vector3;
         multiplyVector3Array(a:number[]):number[];
+    }
+
+    export class Matrix3 extends Matrix{
+        constructor();
         getInverse(matrix:Matrix3):Matrix3;
         transpose():Matrix3;
         transposeIntoArray(r:number[]):number[];
     }
 
-    export class Matrix4{
+    export class Matrix4 extends Matrix{
         constructor(n11?:number, n12?:number, n13?:number, n14?:number, n21?:number, n22?:number, n23?:number, n24?:number, n31?:number, n32?:number, n33?:number, n34?:number, n41?:number, n42?:number, n43?:number, n44?:number);
-        elements:Float32Array;
         set(n11:number, n12:number, n13:number, n14:number, n21:number, n22:number, n23:number, n24:number, n31:number, n32:number, n33:number, n34:number, n41:number, n42:number, n43:number, n44:number):Matrix4;
         identity():Matrix4;
         copy(m:Matrix4):Matrix4;
@@ -381,9 +423,7 @@ module THREE{
         multiplySelf(m:Matrix4):Matrix4;
         multiplyToArray(a:Matrix4, b:Matrix4, r:number[]):Matrix4;
         multiplyScalar(s:number):Matrix4;
-        multiplyVector3(v:Vector3):Vector3;
         multiplyVector4( v:Vector4):Vector4;
-        multiplyVector3Array(a:number[]):number[];
         rotateAxis(v:Vector3):Vector3;
         crossVector(a:Vector3):Vector4;
         determinant():number;
@@ -419,6 +459,25 @@ module THREE{
         makePerspective(fov:number, aspect:number, near:number, far:number):Matrix4;
         makeOrthographic(left:number, right:number, top:number, bottom:number, near:number, far:number):Matrix4;
         clone():Matrix4;
+    }
+
+    export class Ray{
+        constructor(origin?:Vector3, direction?:Vector3);
+        origin:Vector3;
+        direction:Vector3;
+        set(origin:Vector3, direction:Vector3):Ray;
+        copy(ray:Ray):Ray;
+        at(t:number, optionalTarget?:Vector3):Vector3;
+        recastSelf(t:number):Ray;
+        closestPointToPoint(point:Vector3, optionalTarget?:Vector3);
+        distanceToPoint(point:Vector3):number;
+        isIntersectionSphere(sphere:Sphere):bool;
+        isIntersectionPlane(plane:Plane):bool;  
+        distanceToPlane(plane:Plane):number;
+        intersectPlane(plane:Plane, optionalTarget?:Vector3):Vector3;
+        transform(matrix4:Matrix4):Ray;
+        equals(ray:Ray):bool;
+        clone():Ray;
     }
 
     export class Object3D{
@@ -474,7 +533,7 @@ module THREE{
         constructor();
         projectVector(vector:Vector3, camera:Camera):Vector3;
         unprojectVector(vector:Vector3, camera:Camera):Vector3;
-        pickingRay(vector:Vector3, camera:Camera):Ray;
+        pickingRay(vector:Vector3, camera:Camera):Raycaster;
         projectScene(scene:Scene, camera:Camera, sortObjects:bool, sortElements?:bool):{ 
             objects:Object3D[];     // Mesh, Line or other object  
             sprites:Object3D[];    // Sprite or Particle 
@@ -513,7 +572,7 @@ module THREE{
         object:Object3D;
     }
 
-    export class Ray{
+    export class Raycaster{
         constructor(origin?:Vector3, direction?:Vector3, near?:number, far?:number);
         origin:Vector3;
         direction:Vector3;
@@ -560,14 +619,6 @@ module THREE{
         getControlPointsArray():number[][];
         getLength(nSubDivisions?:number):{ chunks: number[];total:number;};
         reparametrizeByArcLength(samplingCoef:number):void;
-    }
-
-    export class UV{
-        constructor(u?:number, v?:number);
-        set(u:number, v:number):UV;
-        copy(uv:UV):UV;
-        lerpSelf(uv:UV, alpha:number):UV;
-        clone():UV;
     }
 
     export class Vector{
@@ -662,6 +713,59 @@ module THREE{
         setLength(l:number):Vector4;
         lerpSelf(v:Vector4, alpha:number):Vector4;
         clone():Vector4;
+    }
+
+    export class Box2{
+        constructor(min?:Vector2, max?:Vector2);
+        set(min:Vector2, max:Vector2):Box2;
+        setFromPoints(points:Vector2[]):Box2;
+        setFromCenterAndSize(center:Vector2, size:number):Box2;
+        copy(box:Box2):Box2;
+        makeEmpty():Box2;
+        empty():bool;
+        center(optionalTarget?:Vector2):Vector2;
+        size(optionalTarget?:Vector2):Vector2;
+        expandByPoint(point:Vector2):Box2;
+        expandByVector(vector:Vector2):Box2;
+        expandByScalar(scalar:number):Box2;
+        containsPoint(point:Vector2):bool;
+        containsBox(box:Box2):bool;
+        getParameter(point:Vector2);
+        isIntersectionBox(box:Box2):bool;
+        clampPoint(point:Vector2, optionalTarget?:Vector2):Vector2;
+        distanceToPoint(point:Vector2):Vector2;
+        intersect(box:Box2):Box2;
+        union(box:Box2):Box2;;
+        translate(offset:Vector2):Box2;
+        equals(box:Box2):bool;
+        clone():Box2;
+    }
+
+    export class Box3{
+        constructor(min?:Vector3, max?:Vector3);
+        set(min:Vector3, max:Vector3):Box3;
+        setFromPoints(points:Vector3[]):Box3;
+        setFromCenterAndSize(center:Vector3, size:number):Box3;
+        copy(box:Box3):Box3;
+        makeEmpty():Box3;
+        empty():bool;
+        center(optionalTarget?:Vector3):Vector3;
+        size(optionalTarget?:Vector3):Vector3;
+        expandByPoint(point:Vector3):Box3;
+        expandByVector(vector:Vector3):Box3;
+        expandByScalar(scalar:number):Box3;
+        containsPoint(point:Vector3):bool;
+        containsBox(box:Box3):bool;
+        getParameter(point:Vector3);
+        isIntersectionBox(box:Box3):bool;
+        clampPoint(point:Vector3, optionalTarget?:Vector3):Vector3;
+        distanceToPoint(point:Vector3):Vector3;
+        intersect(box:Box3):Box3;
+        union(box:Box3):Box3;;
+        transform(matrix:Matrix4):Box3;
+        translate(offset:Vector3):Box3;
+        equals(box:Box3):bool;
+        clone():Box3;
     }
 
     // Cameras ////////////////////////////////////////////////////////////////////////////////////////
@@ -872,6 +976,7 @@ module THREE{
         side:Side;
         needsUpdate:bool;
         clone():Material;
+        dispose():void;
     }
 
     var MaterialLibrary:Material[];
@@ -1361,13 +1466,36 @@ module THREE{
         useScreenCoordinates?:bool;
         mergeWith3D         ?:bool;
         affectedByDistance  ?:bool;
-        scaleByViewport     ?:number;
         alignment           ?:Vector2;
         fog                 ?:bool;
+        uvOffset            ?:Vector2;
+        uvScale             ?:Vector2;
+        depthTest           ?:bool;
+        sizeAttenuation     ?:bool;
+        scaleByViewport     ?:bool;
     }
 
-    export class Sprite extends Object3D{
+    export class SpriteMaterial extends Material{
         constructor(parameters?:SpriteParameters);
+        color               :Color;
+        map                 :Texture;
+        blending            :Blending;
+        blendEquation       :BlendingEquation;
+        useScreenCoordinates:bool;
+        mergeWith3D         :bool;
+        affectedByDistance  :bool;
+        scaleByViewport     :bool;
+        alignment           :Vector2;
+        fog                 :bool;
+        uvOffset            :Vector2;
+        uvScale             :Vector2; 
+        depthTest           :bool;
+        sizeAttenuation     :bool;     
+        clone():SpriteMaterial;          
+    }    
+
+    export class Sprite extends Object3D{
+        constructor(material?:SpriteMaterial);
         updateMatrix():void;
         clone(object?:Sprite):Sprite;
     }
@@ -1391,6 +1519,7 @@ module THREE{
 
     export interface CanvasRendererParameters{
         canvas?: HTMLCanvasElement;
+        devicePixelRatio?:number; 
     }
 
     export class CanvasRenderer implements Renderer{
@@ -1399,6 +1528,7 @@ module THREE{
         autoClear:bool;
         sortObjects:bool;
         sortElements:bool;
+        devicePixelRatio:number;
         info:{ render: { vertices:number; faces:number; }; };
         setSize(width:number, height:number):void;
         setClearColor(color:Color, opacity?:number):void;
@@ -1473,6 +1603,7 @@ module THREE{
         preserveDrawingBuffer?:bool;
         clearColor?:number;
         clearAlpha?:number;
+        devicePixelRatio?:number;
     }
 
     export class WebGLRenderer implements Renderer{
@@ -1500,6 +1631,7 @@ module THREE{
         autoScaleCubemaps:bool;
         renderPluginsPre:RendererPlugin[];
         renderPluginsPost:RendererPlugin[];
+        devicePixelRatio:number;
         info: {
             memory:{
                 programs:number;
@@ -1576,6 +1708,7 @@ module THREE{
         stencilBuffer:bool;
         generateMipmaps:bool;
         clone():WebGLRenderTarget;
+        dispose():void;
     }
 
     export class WebGLRenderTargetCube extends WebGLRenderTarget{
@@ -1597,7 +1730,7 @@ module THREE{
         vertexNormalsLength:number;
         color:number;
         material:Material;
-        uvs:UV[][];
+        uvs:Vector2[][];
         z:number;
     }
 
@@ -1614,7 +1747,7 @@ module THREE{
         vertexNormalsLength:number;
         color:number;
         material:Material;
-        uvs:UV[][];
+        uvs:Vector2[][];
         z:number;
     }
 
@@ -1712,7 +1845,7 @@ module THREE{
         needsUpdate     :bool;
         onUpdate        :()=> void;
         clone():Texture;
-        deallocate():void;
+        dispose():void;
     }
     var TextureIdCount:number;
     var TextureLibrary:Texture[];
@@ -1771,6 +1904,7 @@ module THREE{
         triangulateQuads(geometry:Geometry):void;
         explode(geometry:Geometry):void;
         tessellate(geometry:Geometry, maxEdgeLength:number):void;
+        setMaterialIndex(geometry:Geometry, index:number, startFace?:number, endFace?:number);
     };
 
     export var ImageUtils:{
@@ -2173,11 +2307,11 @@ module THREE{
         addShapeList(shapes:Shape[], options?:any):void;
         addShape(shape:Shape, options?:any):void;
         static WorldUVGenerator:{
-            generateTopUV(geometry:Geometry, extrudedShape:Shape, extrudeOptions:Object, indexA:number, indexB:number, indexC:number):UV[];
-            generateBottomUV(geometry:Geometry, extrudedShape:Shape, extrudeOptions:Object, indexA:number, indexB:number, indexC:number):UV[];
+            generateTopUV(geometry:Geometry, extrudedShape:Shape, extrudeOptions:Object, indexA:number, indexB:number, indexC:number):Vector2[];
+            generateBottomUV(geometry:Geometry, extrudedShape:Shape, extrudeOptions:Object, indexA:number, indexB:number, indexC:number):Vector2[];
             generateSideWallUV(geometry:Geometry, extrudedShape:Shape, wallContour:Object, extrudeOptions:Object,
                                   indexA:number, indexB:number, indexC:number, indexD:number, stepIndex:number, stepsLength:number,
-                                  contourIndex1:number, contourIndex2:number):UV[];
+                                  contourIndex1:number, contourIndex2:number):Vector2[];
         };
     }
 
