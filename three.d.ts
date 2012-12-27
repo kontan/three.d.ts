@@ -111,18 +111,7 @@ enum GLenum{}
 module THREE{
     export var REVISION:string;
 
-    // **HACK**   pseudo enum hack
-    // TypeScript has experimental enum construct but it creates new type.For example,
-    //
-    //    export enum Side{ FrontSide, BackSide, DoubleSide }
-    //
-    // will be compiled successfully.
-    // Ideally, those three.js constant values should be prefixed with the enum type name:
-    //
-    //     new THREE.MeshPhongMaterial().side = THREE.Side.FrontSide;
-    //
-    // Unfortunately, three.js currently doesn't. 
-    // Therefore, at the following constant value section, those enum type are no members.
+    // **Empty Enum Pattern**
     // In three.d.ts, you can write a enum value as follows:
     //
     //     new THREE.MeshPhongMaterial().side = THREE.FrontSide;
@@ -134,9 +123,24 @@ module THREE{
     // If you want to cast from enum type into internal type,
     // you can write as as follows:
     //
-    //     var n:number = <number><any>THREE.SmoothShading;    // cast enum into  number 
+    //     var n:number = <number><any>THREE.SmoothShading;   // cast a enum value into number 
     //
-    //     var smoothShading:Shading = <Shading><any>2; // cast number into enum
+    //     var smoothShading:Shading = <Shading><any>2;       // cast a number into enum value
+    //
+    // TypeScript has experimental enum construct but it creates new type. For example,
+    //
+    //    export enum Side{ FrontSide, BackSide, DoubleSide }
+    //
+    // will be compiled successfully.
+    // Ideally, those three.js constant values should be prefixed with the enum type name:
+    //
+    //     new THREE.MeshPhongMaterial().side = THREE.Side.FrontSide;
+    //
+    // Unfortunately, three.js currently doesn't. 
+    // At the following constant value section, those enum type have no members
+    // because those enums exists only to define a new type for those constant values.
+    //
+    
 
     // side
     export enum Side {} 
