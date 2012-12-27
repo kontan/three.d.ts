@@ -459,6 +459,7 @@ module THREE{
         colorsNeedUpdate       :bool;
         lineDistancesNeedUpdate:bool;
         buffersNeedUpdate      :bool;
+        animation              :AnimationData;         
         applyMatrix(matrix:Matrix4):void;
         computeCentroids():void;
         computeFaceNormals():void;
@@ -2071,8 +2072,7 @@ module THREE{
 
     export class AnimationInterpolation {}
 
-    export class AnimationHandler{
-        constructor();
+    export var AnimationHandler:{
         update(deltaTimeMS:number):void;
         addToUpdate(animation:Animation):void;
         removeFromUpdate(animation:Animation):void;
@@ -2081,10 +2081,10 @@ module THREE{
         parse(root:SkinnedMesh):Object3D[];
     
         // **HACK** enum values of AnimationInterpolation
-        static LINEAR            :AnimationInterpolation;
-        static CATMULLROM        :AnimationInterpolation;
-        static CATMULLROM_FORWARD:AnimationInterpolation;
-    }
+        LINEAR            :AnimationInterpolation;
+        CATMULLROM        :AnimationInterpolation;
+        CATMULLROM_FORWARD:AnimationInterpolation;
+    };
 
     export class AnimationMorphTarget{
         constructor(root:Bone, data:any);
