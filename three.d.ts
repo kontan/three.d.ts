@@ -121,11 +121,11 @@ module THREE{
     //     new THREE.MeshPhongMaterial().side = THREE.FlatShading;
     //
     // If you want to cast from enum type into internal type,
-    // you can write as as follows:
+    // you can write as follows:
     //
-    //     var n:number = <number><any>THREE.SmoothShading;   // cast a enum value into number 
+    //     var n:number = <any>THREE.SmoothShading;   // cast a enum value into number 
     //
-    //     var smoothShading:Shading = <Shading><any>2;       // cast a number into enum value
+    //     var smoothShading:Shading = <any>2;        // cast a number into enum value
     //
     // TypeScript has experimental enum construct but it creates new type. For example,
     //
