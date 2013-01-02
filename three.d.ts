@@ -6,104 +6,11 @@
  * @author Kon - http://phyzkit.net/
  */
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// WebGL Interface (incomplete)
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// When you use three.d.ts with other ambient source file for WebGL,
-// remove below definition for WebGLRenderingContext.
-interface WebGLRenderingContext {
-    getParameter(pname:GLenum):any;
-    ACTIVE_TEXTURE:GLenum; // unsigned long
-    ALIASED_LINE_WIDTH_RANGE:GLenum; //     Float32Array (with 2 elements)
-    ALIASED_POINT_SIZE_RANGE:GLenum; //     Float32Array (with 2 elements)
-    ALPHA_BITS:GLenum; //   long
-    ARRAY_BUFFER_BINDING:GLenum; //     WebGLBuffer
-    BLEND:GLenum; //    boolean
-    BLEND_COLOR:GLenum; //  Float32Array (with 4 values)
-    BLEND_DST_ALPHA:GLenum; //  unsigned long
-    BLEND_DST_RGB:GLenum; //    unsigned long
-    BLEND_EQUATION_ALPHA:GLenum; //     unsigned long
-    BLEND_EQUATION_RGB:GLenum; //   unsigned long
-    BLEND_SRC_ALPHA:GLenum; //  unsigned long
-    BLEND_SRC_RGB:GLenum; //    unsigned long
-    BLUE_BITS:GLenum; //    long
-    COLOR_CLEAR_VALUE:GLenum; //    Float32Array (with 4 values)
-    COLOR_WRITEMASK:GLenum; //  boolean[] (with 4 values)
-    COMPRESSED_TEXTURE_FORMATS:GLenum; //   null
-    CULL_FACE:GLenum; //    boolean
-    CULL_FACE_MODE:GLenum; //   unsigned long
-    CURRENT_PROGRAM:GLenum; //  WebGLProgram
-    DEPTH_BITS:GLenum; //   long
-    DEPTH_CLEAR_VALUE:GLenum; //    float
-    DEPTH_FUNC:GLenum; //   unsigned long
-    DEPTH_RANGE:GLenum; //  Float32Array (with 2 elements)
-    DEPTH_TEST:GLenum; //   boolean
-    DEPTH_WRITEMASK:GLenum; //  boolean
-    DITHER:GLenum; //   boolean
-    ELEMENT_ARRAY_BUFFER_BINDING:GLenum; //     WebGLBuffer
-    FRAMEBUFFER_BINDING:GLenum; //  WebGLFramebuffer
-    FRONT_FACE:GLenum; //   unsigned long
-    GENERATE_MIPMAP_HINT:GLenum; //     unsigned long
-    GREEN_BITS:GLenum; //   long
-    LINE_WIDTH:GLenum; //   float
-    MAX_COMBINED_TEXTURE_IMAGE_UNITS:GLenum; //     long
-    MAX_CUBE_MAP_TEXTURE_SIZE:GLenum; //    long
-    MAX_FRAGMENT_UNIFORM_VECTORS:GLenum; //     long
-    MAX_RENDERBUFFER_SIZE:GLenum; //    long
-    MAX_TEXTURE_IMAGE_UNITS:GLenum; //  long
-    MAX_TEXTURE_SIZE:GLenum; //     long
-    MAX_VARYING_VECTORS:GLenum; //  long
-    MAX_VERTEX_ATTRIBS:GLenum; //   long
-    MAX_VERTEX_TEXTURE_IMAGE_UNITS:GLenum; //   long
-    MAX_VERTEX_UNIFORM_VECTORS:GLenum; //   long
-    MAX_VIEWPORT_DIMS:GLenum; //    Int32Array (with 2 elements)
-    NUM_COMPRESSED_TEXTURE_FORMATS:GLenum; //   long
-    PACK_ALIGNMENT:GLenum; //   long
-    POLYGON_OFFSET_FACTOR:GLenum; //    float
-    POLYGON_OFFSET_FILL:GLenum; //  boolean
-    POLYGON_OFFSET_UNITS:GLenum; //     float
-    RED_BITS:GLenum; //     long
-    RENDERBUFFER_BINDING:GLenum; //     WebGLRenderbuffer
-    RENDERER:GLenum; //     DOMString
-    SAMPLE_BUFFERS:GLenum; //   long
-    SAMPLE_COVERAGE_INVERT:GLenum; //   boolean
-    SAMPLE_COVERAGE_VALUE:GLenum; //    float
-    SAMPLES:GLenum; //  long
-    SCISSOR_BOX:GLenum; //  Int32Array (with 4 elements)
-    SCISSOR_TEST:GLenum; //     boolean
-    SHADING_LANGUAGE_VERSION:GLenum; //     DOMString
-    STENCIL_BACK_FAIL:GLenum; //    unsigned long
-    STENCIL_BACK_FUNC:GLenum; //    unsigned long
-    STENCIL_BACK_PASS_DEPTH_FAIL:GLenum; //     unsigned long
-    STENCIL_BACK_PASS_DEPTH_PASS:GLenum; //     unsigned long
-    STENCIL_BACK_REF:GLenum; //     long
-    STENCIL_BACK_VALUE_MASK:GLenum; //  unsigned long
-    STENCIL_BACK_WRITEMASK:GLenum; //   unsigned long
-    STENCIL_BITS:GLenum; //     long
-    STENCIL_CLEAR_VALUE:GLenum; //  long
-    STENCIL_FAIL:GLenum; //     unsigned long
-    STENCIL_FUNC:GLenum; //     unsigned long
-    STENCIL_PASS_DEPTH_FAIL:GLenum; //  unsigned long
-    STENCIL_PASS_DEPTH_PASS:GLenum; //  unsigned long
-    STENCIL_REF:GLenum; //  long
-    STENCIL_TEST:GLenum; //     boolean
-    STENCIL_VALUE_MASK:GLenum; //   unsigned long
-    STENCIL_WRITEMASK:GLenum; //    unsigned long
-    SUBPIXEL_BITS:GLenum; //    long
-    TEXTURE_BINDING_2D:GLenum; //   WebGLTexture
-    TEXTURE_BINDING_CUBE_MAP:GLenum; //     WebGLTexture
-    UNPACK_ALIGNMENT:GLenum; //     int
-    UNPACK_COLORSPACE_CONVERSION_WEBGL:GLenum; //   unsigned long
-    UNPACK_FLIP_Y_WEBGL:GLenum; //  boolean
-    UNPACK_PREMULTIPLY_ALPHA_WEBGL:GLenum; //   boolean
-    VENDOR:GLenum; //   DOMString
-    VERSION:GLenum; //  DOMString
-    VIEWPORT:GLenum; //     Int32Array (with 4 elements)
-}
-enum GLenum{}
-
-
+// importing webgl.d.ts
+//      Currently accompanying webgl.d.ts is incomplete.
+//      If you need a other complete definitions of webgl, replace the following path.
+/// <reference path="webgl.d.ts" />
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //        three.js interface
@@ -389,7 +296,7 @@ module THREE{
         normalize():Plane;
         distanceToPoint(point:Vector3):number;
         distanceToSphere(sphere:Sphere):number;
-        projectPoint(point:Vector3, optionalTarget?:Vector3);Vector3;
+        projectPoint(point:Vector3, optionalTarget?:Vector3):Vector3;
         orthoPoint(point:Vector3, optionalTarget?:Vector3):Vector3;
         isIntersectionLine(startPoint:Vector3, endPoint:Vector3):bool;
         coplanarPoint(optionalTarget?:bool):Vector3;
@@ -412,7 +319,7 @@ module THREE{
         clampPoint(point:Vector3, optionalTarget?:Vector3):Sphere;
         getBoundingBox(optionalTarget:Box3):Box3;
         transform(matrix:Matrix):Sphere;
-        translate(offset:Vector3);
+        translate(offset:Vector3):Sphere;
         equals(sphere:Sphere):bool;
         clone():Sphere;
     }
@@ -561,7 +468,7 @@ module THREE{
         copy(ray:Ray):Ray;
         at(t:number, optionalTarget?:Vector3):Vector3;
         recastSelf(t:number):Ray;
-        closestPointToPoint(point:Vector3, optionalTarget?:Vector3);
+        closestPointToPoint(point:Vector3, optionalTarget?:Vector3):Vector3;
         distanceToPoint(point:Vector3):number;
         isIntersectionSphere(sphere:Sphere):bool;
         isIntersectionPlane(plane:Plane):bool;  
@@ -822,12 +729,12 @@ module THREE{
         expandByScalar(scalar:number):Box2;
         containsPoint(point:Vector2):bool;
         containsBox(box:Box2):bool;
-        getParameter(point:Vector2);
+        getParameter(point:Vector2):Vector2;
         isIntersectionBox(box:Box2):bool;
         clampPoint(point:Vector2, optionalTarget?:Vector2):Vector2;
         distanceToPoint(point:Vector2):Vector2;
         intersect(box:Box2):Box2;
-        union(box:Box2):Box2;;
+        union(box:Box2):Box2;
         translate(offset:Vector2):Box2;
         equals(box:Box2):bool;
         clone():Box2;
@@ -848,12 +755,12 @@ module THREE{
         expandByScalar(scalar:number):Box3;
         containsPoint(point:Vector3):bool;
         containsBox(box:Box3):bool;
-        getParameter(point:Vector3);
+        getParameter(point:Vector3):Vector3;
         isIntersectionBox(box:Box3):bool;
         clampPoint(point:Vector3, optionalTarget?:Vector3):Vector3;
         distanceToPoint(point:Vector3):Vector3;
         intersect(box:Box3):Box3;
-        union(box:Box3):Box3;;
+        union(box:Box3):Box3;
         transform(matrix:Matrix4):Box3;
         translate(offset:Vector3):Box3;
         equals(box:Box3):bool;
@@ -2700,7 +2607,7 @@ module THREE{
         merge(uniforms:Object[]):Uniforms;
         merge(uniforms:Uniforms[]):Uniforms;
         clone(uniforms_src:Object[][]):Object[][];
-    }
+    };
 
     export var UniformsLib:{
         common:Uniforms;
