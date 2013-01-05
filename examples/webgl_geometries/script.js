@@ -80,7 +80,7 @@ function init() {
     object.position.set(200, 0, 400);
     scene.add(object);
     renderer = new THREE.WebGLRenderer({
-        antialias: 1
+        antialias: true
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
     container.appendChild(renderer.domElement);

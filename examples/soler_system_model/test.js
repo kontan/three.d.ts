@@ -1,7 +1,7 @@
 $(function () {
     var renderer = new THREE.WebGLRenderer({
         clearColor: 48,
-        clearAlpha: 1
+        clearAlpha: 1.0
     });
     var WIDTH = 400, HEIGHT = 300;
     renderer.shadowMapEnabled = true;
