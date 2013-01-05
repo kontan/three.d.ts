@@ -1,3 +1,9 @@
+// Original ColladaLoader.js is written by:
+/**
+ * @author Tim Knip / http://www.floorplanner.com/ / tim at floorplanner.com
+ * 
+ */
+// Ported into TypeScript by kontan / https://github.com/kontan 
 
 /// <reference path="../libs/Detector.d.ts" />
 /// <reference path="../libs/Stats.d.ts" />
