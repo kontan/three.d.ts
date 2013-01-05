@@ -989,21 +989,21 @@ module THREE{
     //
     //     new THREE.LineBasicMaterial({ color:"red" });
     //
-    // However, this trick is helpless for typo. The below code has a type "colour"
+    // However, this trick is helpless for typo. The below code has a typo "colour"
     // but the compiler will compile it with no errors.
     //
     //     new THREE.LineBasicMaterial({ colour:0xff0000 });
     //
     export interface LineBasicMaterialParameters{
         color?:number;
-         opacity?:number;
-         blending?:Blending;
+        opacity?:number;
+        blending?:Blending;
         depthTest?:bool;
         linewidth?:number;
         linecap?:string;
-         linejoin?:string;
-         vertexColors?:bool;
-         fog?:bool;
+        linejoin?:string;
+        vertexColors?:bool;
+        fog?:bool;
      }
 
     export class LineBasicMaterial extends Material{
