@@ -5,13 +5,13 @@
 // translated by Kon - http://phyzkit.net/
 
 /// <reference path="../libs/xpath.d.ts" />
-/// <reference path="../../../three.d.ts" />
+/// <reference path="../../three.d.ts" />
 
 // **HACK**
 // Create a alias of Math because THREE.Math hides Math.
 var _Math = Math;
 
-module THREE{
+module THREE.Collada{
 	// **HACK** THREE.Math hides Math
 	var TO_RADIANS = _Math.PI / 180;
 
@@ -2500,7 +2500,7 @@ module THREE{
 
 					var vs:number[] = [];
 					var ns:THREE.Vector3[] = [];
-					var ts:{[key:string]:THREE.UV[];} = null;
+					var ts:{[key:string]:THREE.Vector2[];} = null;
 					var cs:THREE.Color[] = [];
 
 					if ( primitive.vcount ) {
@@ -2544,7 +2544,7 @@ module THREE{
 									ts = ts || { };
 									if ( ts[ input.set ] === undefined ) ts[ input.set ] = [];
 									// invert the V
-									ts[ input.set ].push( new THREE.UV( source.data[ idx32 ], source.data[ idx32 + 1 ] ) );
+									ts[ input.set ].push( new THREE.Vector2( source.data[ idx32 ], source.data[ idx32 + 1 ] ) );
 
 									break;
 

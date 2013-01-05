@@ -12,7 +12,7 @@ var camera, scene, renderer, objects;
 var particleLight, pointLight;
 var dae, skin;
 
-var loader = new THREE.ColladaLoader();
+var loader = new THREE.Collada.ColladaLoader();
 loader.options.convertUpAxis = true;
 loader.load( '../models/collada/monster/monster.dae', function ( collada ) {
 
