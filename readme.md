@@ -44,6 +44,4 @@ Enjoy three.js!
 
 ### TODO
 
-*  Currently, a automatically-generated reference is not provided because there is no document generator for TypeScript. If it is released, I intend to provide a API reference generated from three.d.ts. It would be very helpful for not only TypeScript users but also JavaScript users.
-
-* Prividing a lot of examples written in TypeScript. 
+* Prividing a lot more examples written in TypeScript. 
