@@ -1437,10 +1437,13 @@ module THREE{
     }
 
     export class SkinnedMesh extends Mesh{
-        constructor(geometry:Geometry, material?:ParticleBasicMaterial,  useVertexTexture?:bool);
-        constructor(geometry:Geometry, material?:ParticleCanvasMaterial, useVertexTexture?:bool);
-        constructor(geometry:Geometry, material?:ParticleDOMMaterial,    useVertexTexture?:bool);
-        constructor(geometry:Geometry, material?:ShaderMaterial,         useVertexTexture?:bool);
+        constructor(geometry?:Geometry, material?:MeshBasicMaterial);
+        constructor(geometry?:Geometry, material?:MeshDepthMaterial);
+        constructor(geometry?:Geometry, material?:MeshFaceMaterial);
+        constructor(geometry?:Geometry, material?:MeshLambertMaterial);
+        constructor(geometry?:Geometry, material?:MeshNormalMaterial);
+        constructor(geometry?:Geometry, material?:MeshPhongMaterial);
+        constructor(geometry?:Geometry, material?:ShaderMaterial);
         useVertexTexture:bool;
         identityMatrix:Matrix4;
         bones:Bone[];
@@ -1991,7 +1994,6 @@ module THREE{
         get(name:string):AnimationData;
         parse(root:SkinnedMesh):Object3D[];
     
-        // **HACK** enum values of AnimationInterpolation
         LINEAR            :AnimationInterpolation;
         CATMULLROM        :AnimationInterpolation;
         CATMULLROM_FORWARD:AnimationInterpolation;
