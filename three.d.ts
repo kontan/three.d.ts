@@ -831,7 +831,7 @@ module THREE{
         shadowDarkness:number;
         shadowMapWidth:number;
         shadowMapHeight:number;
-        shadowCascad:bool;
+        shadowCascade:bool;
         shadowCascadeOffset:Vector3;
         shadowCascadeCount:number;
         shadowCascadeBias:number[];
