@@ -31,8 +31,8 @@ http://kontan.github.com/dtsdoc/three.d.ts.html
  Be careful about the path.
 
 
-5. Write your application. If you want to refer a API reference, watch [official API reference](http://mrdoob.github.com/three.js/docs/54/) (a little out of date) or read three.d.ts. 
-5. Launch a shell and compile the your code.
+5. Write your application. If you want to know how to use classes in three.d.ts, examples in three.js are helpful. Usege of three.d.ts classes is all the same except for type checking.
+5. Launch a shell and compile your source code.
 6. Create your html file to invoke the generated JavaScript source code. Don't forget to refer both of three.js and yourcode.js from your html source file. The previous special comment line does not influence the generated JavaScript. 
 6. Open the html file. If your application doesn't work, [source maps](http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/) is useful to debug.  
 
