@@ -47,7 +47,28 @@ module THREE{
     // At the following constant value section, those enum type have no members
     // because those enums exists only to define a new type for those constant values.
     //
+
+
+    // GL STATE CONSTANTS
     
+    export enum CullFace {}
+    export var CullFaceNone     :CullFace;
+    export var CullFaceBack     :CullFace;
+    export var CullFaceFront    :CullFace;
+    export var CullFaceFrontBack:CullFace;
+
+    export enum FrontFaceDirection {}
+    export var FrontFaceDirectionCW:FrontFaceDirection;
+    export var FrontFaceDirectionCCW:FrontFaceDirection;
+
+    // SHADOWING TYPES
+
+    export enum ShadowMapType {}
+    export var BasicShadowMap  :ShadowMapType;
+    export var PCFShadowMap    :ShadowMapType;
+    export var PCFSoftShadowMap:ShadowMapType;
+
+    // MATERIAL CONSTANTS
 
     // side
     export enum Side {} 
@@ -227,7 +248,7 @@ module THREE{
         getHex():number;
         setHex(hex:number):Color;
         getHexString():string;
-        getContextStyle():string;
+        getStyle():string;
         setContextStyle(style:string):Color;
         getHSV(hsv?:HSV):HSV;
         lerpSelf(color:Color, alpha:number):Color;
@@ -448,12 +469,12 @@ module THREE{
         rotateByAxis(axis:Vector3, angle:number):Matrix4;
         scale(v:Vector3):Matrix4;
         getMaxScaleOnAxis():number;
-        makeTranslation(x:number, y:number, z:number):Matrix4;
+        makeTranslation(offset:Vector3):Matrix4;
         makeRotationX(theta:number):Matrix4;
         makeRotationY(theta:number):Matrix4;
         makeRotationZ(theta:number):Matrix4;
         makeRotationAxis(axis:Vector3, angle:number):Matrix4;
-        makeScale(x:number, y:number, z:number):Matrix4;
+        makeScale(factor:Vector3):Matrix4;
         makeFrustum(left:number, right:number, bottom:number, top:number, near:number, far:number):Matrix4;
         makePerspective(fov:number, aspect:number, near:number, far:number):Matrix4;
         makeOrthographic(left:number, right:number, top:number, bottom:number, near:number, far:number):Matrix4;
@@ -581,27 +602,6 @@ module THREE{
         set(origin:Vector3, direction:Vector3):void;
         intersectObject(object:Object3D, recursive?:bool):Intersection[];
         intersectObjects(objects:Object3D[], recursive?:bool):Intersection[];
-    }
-
-    export class Rectangle{
-        constructor();
-        getX():number;
-        getY():number;
-        getWidth():number;
-        getHeight():number;
-        getLeft():number;
-        getTop():number;
-        getRight():number;
-        getBottom():number;
-        set(left:number, top:number, right:number, bottom:number):void;
-        addPoint(x:number, y:number):void;
-        add3Points(x1:number, y1:number, x2:number, y2:number, x3:number, y3:number):void;
-        addRectangle(r:Rectangle):void;
-        inflate(v:number):void;
-        minSelf(r:Rectangle):void;
-        intersects(r:Rectangle):bool;
-        empty():void;
-        isEmpty():bool;
     }
 
     export interface SplineControlPoint{
@@ -1484,8 +1484,6 @@ module THREE{
         blending            :Blending;
         blendEquation       :BlendingEquation;
         useScreenCoordinates:bool;
-        mergeWith3D         :bool;
-        affectedByDistance  :bool;
         scaleByViewport     :bool;
         alignment           :Vector2;
         fog                 :bool;
@@ -1624,8 +1622,9 @@ module THREE{
         physicallyBasedShading:bool;
         shadowMapEnabled:bool;
         shadowMapAutoUpdate:bool;
+        shadowMapType:ShadowMapType;
         shadowMapSoft:bool;
-        shadowMapCullFrontFaces:bool;
+        shadowMapCullFace:CullFace;
         shadowMapDebug:bool;
         shadowMapCascade:bool;
         maxMorphTargets:number;
@@ -1672,7 +1671,7 @@ module THREE{
         renderImmediateObject(camera:Camera, lights:Light[], fog:Fog, material:Material, object:Object3D):void;
         initWebGLObjects(scene:Scene):void;
         initMaterial(material:Material, lights:Light[], fog:Fog, object:Object3D):void;
-        setFaceCulling(cullFace?:string, frontFace?:string):void;
+        setFaceCulling(cullFace?:string, frontFace?:FrontFaceDirection):void;
         setMaterialFaces(material:Material):void;
         setDepthTest(depthTest:bool):void;
         setDepthWrite(depthWrite:bool):void;
@@ -2482,20 +2481,6 @@ module THREE{
         gyroscope   :Gyroscope;
         targetSphere:Mesh;
         targetLine  :Line;
-    }
-
-    // Extras / Modifiers /////////////////////////////////////////////////////////////////////
-
-    export class SubdivisionModifier{
-        constructor(subdivisions?:number);
-        subdivisions      :number;
-        useOldVertexColors:bool;
-        supportUVs        :bool;
-        debug             :bool;
-        modify(geometry:Geometry):void;
-        orderedKey(a:number, b:number):string;
-        computeEdgeFaces(geometry:Geometry):{[key:string]:number;};
-        smooth(oldGeometry:Geometry):void;
     }
 
     // Extras / Objects /////////////////////////////////////////////////////////////////////
