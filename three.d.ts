@@ -271,7 +271,7 @@ module THREE{
         vertexColors:Color[];
         vertexTangents:number[];
         materialIndex:number;
-        centroid:number;    
+        centroid:Vector3;    
         clone():Face;    
     }
 
