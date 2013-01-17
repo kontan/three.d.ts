@@ -237,23 +237,181 @@ module THREE{
         constructor(hex?:number);
         r:number;
         g:number;
-        b:number;
+        b:number;        
+        set(value:number):void;
+        set(value:string):void;
+        setHex(hex:number):Color;
+        setRGB(r:number, g:number, b:number):Color;
+        setHSV(h:number, s:number, v:number):Color;
+        setStyle(style:string):Color;              
         copy(color:Color):Color;
         copyGammaToLinear(color:Color):Color;
         copyLinearToGamma(color:Color):Color;
         convertGammaToLinear():Color;
         convertLinearToGamma():Color;
-        setRGB(r:number, g:number, b:number):Color;
-        setHSV(h:number, s:number, v:number):Color;
         getHex():number;
-        setHex(hex:number):Color;
         getHexString():string;
         getStyle():string;
-        setContextStyle(style:string):Color;
         getHSV(hsv?:HSV):HSV;
-        lerpSelf(color:Color, alpha:number):Color;
+        add(color:Color):Color;
+        addColors(color1:Color, color2:Color):Color;
+        addScalar(s:number):Color;
+        multiply(color:Color):Color;
+        multiplyScalar(s:number):Color;
+        lerp(color:Color, alpha:number):Color;
         clone():Color;
     }
+
+    var ColorKeywords:{ 
+        [name:string]:number;
+        aliceblue: number; 
+        antiquewhite: number;
+        aqua: number;
+        aquamarine: number;
+        azure: number;
+        beige: number;
+        bisque: number;
+        black: number;
+        blanchedalmond: number;
+        blue: number;
+        blueviolet: number;
+        brown: number;
+        burlywood: number;
+        cadetblue: number;
+        chartreuse: number;
+        chocolate: number;
+        coral: number;
+        cornflowerblue: number;
+        cornsilk: number;
+        crimson: number;
+        cyan: number;
+        darkblue: number;
+        darkcyan: number;
+        darkgoldenrod: number;
+        darkgray: number;
+        darkgreen: number;
+        darkgrey: number;
+        darkkhaki: number;
+        darkmagenta: number;
+        darkolivegreen: number;
+        darkorange: number;
+        darkorchid: number;
+        darkred: number;
+        darksalmon: number;
+        darkseagreen: number;
+        darkslateblue: number;
+        darkslategray: number;
+        darkslategrey: number;
+        darkturquoise: number;
+        darkviolet: number;
+        deeppink: number;
+        deepskyblue: number;
+        dimgray: number;
+        dimgrey: number;
+        dodgerblue: number;
+        firebrick: number;
+        floralwhite: number;
+        forestgreen: number;
+        fuchsia: number;
+        gainsboro: number;
+        ghostwhite: number;
+        gold: number;
+        goldenrod: number;
+        gray: number;
+        green: number;
+        greenyellow: number;
+        grey: number;
+        honeydew: number;
+        hotpink: number;
+        indianred: number;
+        indigo: number;
+        ivory: number;
+        khaki: number;
+        lavender: number;
+        lavenderblush: number;
+        lawngreen: number;
+        lemonchiffon: number;
+        lightblue: number;
+        lightcoral: number;
+        lightcyan: number;
+        lightgoldenrodyellow: number;
+        lightgray: number;
+        lightgreen: number;
+        lightgrey: number;
+        lightpink: number;
+        lightsalmon: number;
+        lightseagreen: number;
+        lightskyblue: number;
+        lightslategray: number;
+        lightslategrey: number;
+        lightsteelblue: number;
+        lightyellow: number;
+        lime: number;
+        limegreen: number;
+        linen: number;
+        magenta: number;
+        maroon: number;
+        mediumaquamarine: number;
+        mediumblue: number;
+        mediumorchid: number;
+        mediumpurple: number;
+        mediumseagreen: number;
+        mediumslateblue: number;
+        mediumspringgreen: number;
+        mediumturquoise: number;
+        mediumvioletred: number;
+        midnightblue: number;
+        mintcream: number;
+        mistyrose: number;
+        moccasin: number;
+        navajowhite: number;
+        navy: number;
+        oldlace: number;
+        olive: number;
+        olivedrab: number;
+        orange: number;
+        orangered: number;
+        orchid: number;
+        palegoldenrod: number;
+        palegreen: number;
+        paleturquoise: number;
+        palevioletred: number;
+        papayawhip: number;
+        peachpuff: number;
+        peru: number;
+        pink: number;
+        plum: number;
+        powderblue: number;
+        purple: number;
+        red: number;
+        rosybrown: number;
+        royalblue: number;
+        saddlebrown: number;
+        salmon: number;
+        sandybrown: number;
+        seagreen: number;
+        seashell: number;
+        sienna: number;
+        silver: number;
+        skyblue: number;
+        slateblue: number;
+        slategray: number;
+        slategrey: number;
+        snow: number;
+        springgreen: number;
+        steelblue: number;
+        tan: number;
+        teal: number;
+        thistle: number;
+        tomato: number;
+        turquoise: number;
+        violet: number;
+        wheat: number;
+        white: number;
+        whitesmoke: number;
+        yellow: number;
+        yellowgreen: number; 
+    };
 
     export class EventTarget{
         constructor();
@@ -299,10 +457,15 @@ module THREE{
     }
 
     export class Frustum{
-        constructor();
-        planes:Vector4[];
-        setFromMatrix(m:Matrix4):void;
-        contains(object:Object3D):bool;
+        constructor(p0?:number, p1?:number, p2?:number, p3?:number, p4?:number, p5?:number);
+        set(p0?:number, p1?:number, p2?:number, p3?:number, p4?:number, p5?:number):Frustum;
+        copy(frustum:Frustum):Frustum;
+        setFromMatrix(m:Matrix4):Frustum;
+        intersectsObject(object:Object3D):bool;
+        intersectsSphere(sphere:Sphere):bool;
+        containsPoint(point:Vector3):bool;
+        clone():Frustum;
+        planes:Plane[];
     }
 
     export class Plane{
@@ -315,6 +478,7 @@ module THREE{
         setFromCoplanarPoints(a:Vector3, b:Vector3, c:Vector3):Plane;
         copy(plane:Plane):Plane;
         normalize():Plane;
+        negate():Plane;
         distanceToPoint(point:Vector3):number;
         distanceToSphere(sphere:Sphere):number;
         projectPoint(point:Vector3, optionalTarget?:Vector3):Vector3;
@@ -337,6 +501,7 @@ module THREE{
         empty():bool;
         containsPoint(point:Vector3):bool;
         distanceToPoint(point:Vector3):number;
+        intersectsSphere(sphere:Sphere):bool;
         clampPoint(point:Vector3, optionalTarget?:Vector3):Sphere;
         getBoundingBox(optionalTarget:Box3):Box3;
         transform(matrix:Matrix):Sphere;
@@ -420,30 +585,44 @@ module THREE{
         sign(x:number):number;
     };
 
-    export class Matrix{
+    export interface Matrix{
         elements:Float32Array;
-        multiplyVector3(v:Vector3):Vector3;
+        //multiplyVector3(v:Vector3):Vector3;
         multiplyVector3Array(a:number[]):number[];
     }
 
-    export class Matrix3 extends Matrix{
-        constructor();
-        getInverse(matrix:Matrix3):Matrix3;
+    export class Matrix3 implements Matrix{
+        constructor(n11?:number, n12?:number, n13?:number, n21?:number, n22?:number, n23?:number, n31?:number, n32?:number, n33?:number);
+        elements:Float32Array;
+        set(n11:number, n12:number, n13:number, n21:number, n22:number, n23:number, n31:number, n32:number, n33:number):Matrix3;
+        identity():Matrix3;
+        copy(m:Matrix3):Matrix3;
+        multiplyVector3(v:Vector3):Vector3;
+        multiplyVector3Array(a:number[]):number[];        
+        multiplyScalar(s:number):Matrix3;
+        determinant():number;
+        getInverse(matrix:Matrix3, throwOnInvertible?:bool):Matrix3;
         transpose():Matrix3;
         transposeIntoArray(r:number[]):number[];
+        clone():Matrix3;
     }
 
-    export class Matrix4 extends Matrix{
+    export class Matrix4 implements Matrix{
         constructor(n11?:number, n12?:number, n13?:number, n14?:number, n21?:number, n22?:number, n23?:number, n24?:number, n31?:number, n32?:number, n33?:number, n34?:number, n41?:number, n42?:number, n43?:number, n44?:number);
+        elements:Float32Array;
         set(n11:number, n12:number, n13:number, n14:number, n21:number, n22:number, n23:number, n24:number, n31:number, n32:number, n33:number, n34:number, n41:number, n42:number, n43:number, n44:number):Matrix4;
         identity():Matrix4;
         copy(m:Matrix4):Matrix4;
+        setRotationFromEuler(v:Vector3, order:string):Matrix4;
+        setRotationFromQuaternion(q:Quaternion):Matrix4;
         lookAt(eye:Vector3, target:Vector3, up:Vector3):Matrix4;
-        multiply(a:Matrix4, b:Matrix4):Matrix4;
-        multiplySelf(m:Matrix4):Matrix4;
+        multiply(m:Matrix4):Matrix4;
+        multiplyMatrices(a:Matrix4, b:Matrix4):Matrix4;
         multiplyToArray(a:Matrix4, b:Matrix4, r:number[]):Matrix4;
         multiplyScalar(s:number):Matrix4;
-        multiplyVector4( v:Vector4):Vector4;
+        //multiplyVector3(v:Vector3):Vector3;   //DEPRECATED
+        //multiplyVector4(v:Vector4):Vector4;   //DEPRECATED
+        multiplyVector3Array(a:number[]):number[];
         rotateAxis(v:Vector3):Vector3;
         crossVector(a:Vector3):Vector4;
         determinant():number;
@@ -455,9 +634,7 @@ module THREE{
         getColumnX():Vector3;
         getColumnY():Vector3;
         getColumnZ():Vector3;
-        getInverse(m:Matrix4):Matrix4;
-        setRotationFromEuler(v:Vector3, order:string):Matrix4;
-        setRotationFromQuaternion(q:Quaternion):Matrix4;
+        getInverse(m:Matrix4, throwOnInvertible?:bool):Matrix4;
         compose(translation:Vector3, rotation:Quaternion, scale:Vector3):Matrix4;
         decompose(translation?:Vector3, rotation?:Quaternion, scale?:Vector3):Object[]; // [Vector3, Quaternion, Vector3]
         extractPosition(m:Matrix4):Matrix4;
@@ -575,12 +752,14 @@ module THREE{
         setFromRotationMatrix(m:Matrix4):Quaternion;
         inverse():Quaternion;
         conjugate():Quaternion;
+        lengthSq():number;
         length():number;
         normalize():Quaternion;
-        multiply(a:Quaternion, b:Quaternion):Quaternion;
-        multiplySelf(b:Quaternion):Quaternion;
-        multiplyVector3(vector:Vector3, dest?:Vector3):Vector3;
-        slerpSelf(qb:Quaternion, t:number):Quaternion;
+        multiply(q:Quaternion):Quaternion;
+        multiplyQuaternions(a:Quaternion, b:Quaternion):Quaternion;
+        // multiplyVector3(vector:Vector3):Vector3; DEPRECATED
+        slerp(qb:Quaternion, t:number):Quaternion;
+        equals(v:Quaternion):bool;
         clone():Quaternion;
         static slerp(qa:Quaternion, qb:Quaternion, qm:Quaternion, t:number):Quaternion;
     }
@@ -657,17 +836,28 @@ module THREE{
         setX(x:number):Vector3;
         setY(y:number):Vector3;
         setZ(z:number):Vector3;
+        setComponent(index:number, value:number):void;
+        getComponent(index:number):number;
         copy(v:Vector3):Vector3;
-        add(a:Vector3, b:Vector3):Vector3;
-        addSelf(v:Vector3):Vector3;
+        add(a:Vector3):Vector3;
         addScalar(s:number):Vector3;
-        sub(a:Vector3, b:Vector3):Vector3;
-        subSelf( v:Vector3):Vector3;
-        multiply(a:Vector3, b:Vector3):Vector3;
-        multiplySelf(v:Vector3):Vector3;
+        addVectors(a:Vector3, b:Vector3):Vector3;
+        sub(a:Vector3):Vector3;
+        subVectors(a:Vector3, b:Vector3):Vector3;
+        multiply(v:Vector3):Vector3;
         multiplyScalar(s:number):Vector3;
-        divideSelf(v:Vector3):Vector3;
+        multiplyVectors(a:Vector3, b:Vector3):Vector3;
+        applyMatrix3(m:Matrix3):Vector3;
+        applyMatrix4(m:Matrix4):Vector3;
+        applyQuaternion(q:Quaternion):Vector3;
+        applyEuler(v:Vector3, eulerOrder:string):Vector3;
+        applyAxisAngle(axis:Vector3, angle:number):Vector3;
+        projectPoint(m:Matrix4):Vector3;
+        divide(v:Vector3):Vector3;
         divideScalar(s:number):Vector3;
+        min(v:Vector3):Vector3;
+        max(v:Vector3):Vector3;
+        clamp(min:Vector3, max:Vector3):Vector3;
         negate():Vector3;
         dot(v:Vector3):number;
         lengthSq():number;
@@ -675,15 +865,15 @@ module THREE{
         lengthManhattan():number;
         normalize():Vector3;
         setLength(l:number):Vector3;
-        lerpSelf(v:Vector3, alpha:number):Vector3;
-        cross(a:Vector3, b:Vector3):Vector3;
-        crossSelf(v:Vector3):Vector3;
+        lerp(v:Vector3, alpha:number):Vector3;
+        cross(a:Vector3):Vector3;
+        crossVectors(a:Vector3, b:Vector3):Vector3;
         angleTo(v:Vector3):number;
         distanceTo(v:Vector3):number;
         distanceToSquared(v:Vector3):number;
         getPositionFromMatrix(m:Matrix4):Vector3;
         setEulerFromRotationMatrix(m:Matrix4, order:string):Vector3; 
-        setEulerFromQuaternion(q:Quaternion, order:string ):Vector3;
+        setEulerFromQuaternion(q:Quaternion, order:string):Vector3;
         getScaleFromMatrix(m:Matrix4):Vector3;
         equals(v:Vector3):bool;
         clone():Vector3;
@@ -907,14 +1097,6 @@ module THREE{
         initMaterials(materials:Material[], texturePath:string):Material[];
         needsTangents(materials:Material[]):bool;
         createMaterial(m:Material, texturePath:string):bool;
-    }
-
-    export class BinaryLoader extends Loader{
-        constructor(showStatus:bool);
-        load(url:string, callback:(geometry:Geometry, materials:Material[])=> void, texturePath?:string, binaryPath?:string):void;
-        loadAjaxJSON(context:BinaryLoader, url:string, callback:(geometry:Geometry, materials:Material[])=> void, texturePath:string, binaryPath:string, callbackProgress:(progress:Progress)=> void):void;
-        loadAjaxBuffers(json:any, callback:(geometry:Geometry, materials:Material[])=> void, binaryPath:string, texturePath?:string, callbackProgress?:(progress:Progress)=> void):void;
-        createBinModel(data:any, callback:(geometry:Geometry, materials:Material[])=> void, texturePath:string, jsonMaterials:any):void;
     }
 
     export class ImageLoader extends EventTarget{
@@ -1384,6 +1566,7 @@ module THREE{
         morphTargetForcedOrder:number;
         morphTargetInfluences:number[];
         morphTargetDictionary:{[key:string]:number;};
+        updateMorphTargets():void;
         getMorphTargetIndexByName(name:string):number;
         clone(object?:Mesh):Mesh;
     }
@@ -1680,6 +1863,80 @@ module THREE{
         setRenderTarget(renderTarget:RenderTarget):void;
     }
 
+    export class WebGLRenderer2 implements Renderer{
+        constructor(parameters?:WebGLRendererParameters);
+        domElement:HTMLCanvasElement;
+        context:WebGLRenderingContext;
+        autoClear:bool;
+        autoClearColor:bool;
+        autoClearDepth:bool;
+        autoClearStencil:bool;
+        sortObjects:bool;
+        autoUpdateObjects:bool;
+        autoUpdateScene:bool;
+        gammaInput:bool;
+        gammaOutput:bool;
+        physicallyBasedShading:bool;
+        shadowMapEnabled:bool;
+        shadowMapAutoUpdate:bool;
+        shadowMapType:ShadowMapType;
+        shadowMapSoft:bool;
+        shadowMapCullFace:CullFace;
+        shadowMapDebug:bool;
+        shadowMapCascade:bool;
+        maxMorphTargets:number;
+        maxMorphNormals:number;
+        autoScaleCubemaps:bool;
+        renderPluginsPre:RendererPlugin[];
+        renderPluginsPost:RendererPlugin[];
+        devicePixelRatio:number;
+        info: {
+            memory:{
+                programs:number;
+                geometries:number;
+                textures:number;
+            };
+            render:{
+                calls:number;
+                vertices:number;
+                faces:number;
+                points:number;
+            };
+        };
+        getContext():WebGLRenderingContext;
+        supportsVertexTextures():bool;
+        getMaxAnisotropy():number;
+        setSize(width:number, height:number):void;
+        setViewport(x?:number, y?:number, width?:number, height?:number):void;
+        setScissor(x:number, y:number, width:number, height:number):void;
+        enableScissorTest(enable:bool):void;
+        setClearColorHex(hex:number, alpha:number):void;
+        setClearColor(color:Color, alpha:number):void;
+        getClearColor():Color;
+        getClearAlpha():number;
+        clear(color?:bool, depth?:bool, stencil?:bool):void;
+        addPostPlugin(plugin:RendererPlugin):void;
+        addPrePlugin(plugin:RendererPlugin):void;
+        deallocateObject(object:Object3D):void;
+        deallocateTexture(texture:Texture):void;
+        deallocateRenderTarget(renderTarget:RenderTarget):void;
+        updateShadowMap(scene:Scene, camera:Camera):void;
+        renderBufferImmediate(object:Object3D, program:Object, material:Material):void;
+        renderBufferDirect(camera:Camera, lights:Light[], fog:Fog, material:Material, geometryGroup:any, object:Object3D):void;
+        renderBuffer      (camera:Camera, lights:Light[], fog:Fog, material:Material, geometryGroup:any, object:Object3D):void;
+        render(scene:Scene, camera:Camera, renderTarget?:RenderTarget, forceClear?:bool):void;
+        renderImmediateObject(camera:Camera, lights:Light[], fog:Fog, material:Material, object:Object3D):void;
+        initWebGLObjects(scene:Scene):void;
+        initMaterial(material:Material, lights:Light[], fog:Fog, object:Object3D):void;
+        setFaceCulling(cullFace?:string, frontFace?:FrontFaceDirection):void;
+        setMaterialFaces(material:Material):void;
+        setDepthTest(depthTest:bool):void;
+        setDepthWrite(depthWrite:bool):void;
+        setBlending(blending:Blending, blendEquation:BlendingEquation, blendSrc:BlendingSrcFactor, blendDst:BlendingDstFactor):void;
+        setTexture(texture:Texture, slot:number ):void;
+        setRenderTarget(renderTarget:RenderTarget):void;
+    }
+
     export interface WebGLRenderTargetOptions{
         wrapS?:Wrapping;
         wrapT?:Wrapping;
@@ -1903,8 +2160,6 @@ module THREE{
         center(geometry:Geometry):Vector3;
         normalizeUVs(geometry:Geometry):void;
         triangulateQuads(geometry:Geometry):void;
-        explode(geometry:Geometry):void;
-        tessellate(geometry:Geometry, maxEdgeLength:number):void;
         setMaterialIndex(geometry:Geometry, index:number, startFace?:number, endFace?:number);
     };
 
@@ -2201,13 +2456,13 @@ module THREE{
     //    ELLIPSE,
     //}
     export class PathActions{
-    	static MOVE_TO:PathActions;
-		static LINE_TO:PathActions;
-    	static QUADRATIC_CURVE_TO:PathActions;
-    	static BEZIER_CURVE_TO:PathActions;
-    	static CSPLINE_THRU:PathActions;
-    	static ARC:PathActions;
-    	static ELLIPSE:PathActions;
+        static MOVE_TO:PathActions;
+        static LINE_TO:PathActions;
+        static QUADRATIC_CURVE_TO:PathActions;
+        static BEZIER_CURVE_TO:PathActions;
+        static CSPLINE_THRU:PathActions;
+        static ARC:PathActions;
+        static ELLIPSE:PathActions;
     }    
 
     export class Path extends CurvePath{
