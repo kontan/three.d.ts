@@ -3,7 +3,7 @@ three.d.ts
 #### TypeScript interface for three.js ####
 
 three.d.ts provides a type-safe and readable interface for **[three.js](http://mrdoob.github.com/three.js/)**.   
-This porject is currently based on three.js **r54**. (You can also get [three.d.ts r53](https://github.com/kontan/three.d.ts/tags))
+This porject is currently based on three.js **r55**. (You can also get [three.d.ts r53 or r54](https://github.com/kontan/three.d.ts/tags))
 
 ### Download
 
@@ -18,7 +18,7 @@ http://kontan.github.com/dtsdoc/three.d.ts.html
 
 ### Usage (for beginners of TypeScript)
 
-1. Download [three.js](https://github.com/mrdoob/three.js/tags) (three.js r54 is recommended) and unzip it.
+1. Download [three.js](https://github.com/mrdoob/three.js/tags) (three.js **r55** is recommended) and unzip it.
 2. Download [three.d.ts](https://github.com/kontan/three.d.ts/raw/master/three.d.ts) and place it at any directory.
 3. Create your TypeScript source file. 
 4. To reference three.d.ts from your typescript code, write the following special comment at the top of the your source file:
