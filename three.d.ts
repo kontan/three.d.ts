@@ -2246,6 +2246,15 @@ module THREE{
         color:Color;
     }
 
+    /**
+     * This light's color gets applied to all the objects in the scene globally.
+     * 
+     * @example
+     * var light = new THREE.AmbientLight( 0x404040 ); // soft white light 
+     * scene.add( light );
+     *
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/lights/AmbientLight.js">src/lights/AmbientLight.js</a>
+     */
     export class AmbientLight extends Light{
         constructor(hex?:number);
     }
@@ -2253,38 +2262,179 @@ module THREE{
     export class RenderTarget{
     }
 
+    /**
+     * Affects objects using MeshLambertMaterial or MeshPhongMaterial.
+     *
+     * @example
+     * // White directional light at half intensity shining from the top.  
+     * var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 ); 
+     * directionalLight.position.set( 0, 1, 0 ); 
+     * scene.add( directionalLight );
+     *
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/lights/DirectionalLight.js">src/lights/DirectionalLight.js</a>
+     */
     export class DirectionalLight extends Light{
+
         constructor(hex?:number, intensity?:number);
+
+        /**
+         * Direction of the light is normalized vector from position to (0,0,0).
+         * Default — new THREE.Vector3().
+         */
         position:Vector3;
+
+        /**
+         * Target used for shadow camera orientation.
+         */
         target:Object3D;
+
+        /**
+         * Light's intensity.
+         * Default — 1.0.
+         */
         intensity:number;
 
-        // shadow map
+        /**
+         * If set to true light will cast dynamic shadows. Warning: This is expensive and requires tweaking to get shadows looking right.
+         * Default — false.
+         */
         castShadow:bool;
+        
+        /**
+         * If set to true light will only cast shadow but not contribute any lighting (as if intensity was 0 but cheaper to compute).
+         * Default — false.
+         */
         onlyShadow:bool;
+
+        /**
+         * Orthographic shadow camera frustum parameter.
+         * Default — 50.
+         */
         shadowCameraNear:number;
+
+        /**
+         * Orthographic shadow camera frustum parameter.
+         * Default — 5000.
+         */
         shadowCameraFar:number;
+
+        /**
+         * Orthographic shadow camera frustum parameter.
+         * Default — -500.
+         */
         shadowCameraLeft:number;
+
+        /**
+         * Orthographic shadow camera frustum parameter.
+         * Default — 500.
+         */
         shadowCameraRight:number;
+
+        /**
+         * Orthographic shadow camera frustum parameter.
+         * Default — 500.
+         */
         shadowCameraTop:number;
+
+        /**
+         * Orthographic shadow camera frustum parameter.
+         * Default — -500.
+         */
         shadowCameraBottom:number;
+
+        /**
+         * Show debug shadow camera frustum.
+         * Default — false.
+         */
         shadowCameraVisible:bool;
+
+        /**
+         * Shadow map bias.
+         * Default — 0.
+         */
         shadowBias:number;
+
+        /**
+         * Darkness of shadow casted by this light (from 0 to 1).
+         * Default — 0.5.
+         */
         shadowDarkness:number;
+
+        /**
+         * Shadow map texture width in pixels.
+         * Default — 512.
+         */
         shadowMapWidth:number;
+
+        /**
+         * Shadow map texture height in pixels.
+        * Default — 512.
+         */
         shadowMapHeight:number;
+
+        /**
+         * Default — false.
+         */
         shadowCascade:bool;
+
+        /**
+         * Three.Vector3( 0, 0, -1000 ).
+         */
         shadowCascadeOffset:Vector3;
+
+        /**
+         * Default — 2.
+         */
         shadowCascadeCount:number;
+
+        /**
+         * Default — [ 0, 0, 0 ].
+         */
         shadowCascadeBias:number[];
+
+        /**
+         * Default — [ 512, 512, 512 ].
+         */
         shadowCascadeWidth:number[];
+
+        /**
+         * Default — [ 512, 512, 512 ].
+         */
         shadowCascadeHeight:number[];
+
+        /**
+         * Default — [ -1.000, 0.990, 0.998 ].
+         */
         shadowCascadeNearZ:number[];
+
+        /**
+         * Default — [ 0.990, 0.998, 1.000 ].
+         */
         shadowCascadeFarZ:number[];
+
+        /**
+         * Default — [ ].
+         */
         shadowCascadeArray:DirectionalLight[];
+
+        /**
+         * Default — null.
+         */
         shadowMap:RenderTarget;
+
+        /**
+         * Default — null.
+         */
         shadowMapSize:number;
+
+        /**
+         * Default — null.
+         */
         shadowCamera:Camera;
+
+        /**
+         * Default — null.
+         */
         shadowMatrix:Matrix4;
     }
 
@@ -2388,27 +2538,108 @@ module THREE{
 
     // Materials //////////////////////////////////////////////////////////////////////////////////
     
+    /**
+     * Materials describe the appearance of objects. They are defined in a (mostly) renderer-independent way, so you don't have to rewrite materials if you decide to use a different renderer.
+     */
     export class Material{
         constructor();
+
+        /**
+         * Unique number of this material instance.
+         */
         id:number;
+
+        /**
+         * Material name. Default is an empty string.
+         */
         name:string;
+
+        /**
+         * Opacity. Default is 1.
+         */
         opacity:number;
+
+        /**
+         * Defines whether this material is transparent. This has an effect on rendering, as transparent objects need an special treatment, and are rendered after the opaque (i.e. non transparent) objects. For a working example of this behaviour, check the {@link WebGLRenderer} code.
+         * Default is false.
+         */
         transparent:bool;
+
+        /**
+         * Which blending to use when displaying objects with this material. Default is {@link NormalBlending}.
+         */
         blending:Blending;
+
+        /**
+         * Blending source. It's one of the blending mode constants defined in Three.js. Default is {@link SrcAlphaFactor}.
+         */
         blendSrc:BlendingDstFactor;
+
+        /**
+         * Blending destination. It's one of the blending mode constants defined in Three.js. Default is {@link OneMinusSrcAlphaFactor}.
+         */
         blendDst:BlendingSrcFactor;
+
+        /**
+         * Blending equation to use when applying blending. It's one of the constants defined in Three.js. Default is AddEquation.
+         */
         blendEquation:BlendingEquation;
+
+        /**
+         * Whether to have depth test enabled when rendering this material. Default is true.
+         */
         depthTest:bool;
+
+        /**
+         * Whether rendering this material has any effect on the depth buffer. Default is true.
+         * When drawing 2D overlays it can be useful to disable the depth writing in order to layer several things together without creating z-index artifacts.
+         */
         depthWrite:bool;
+
+        /**
+         * Whether to use polygon offset. Default is false. This corresponds to the POLYGON_OFFSET_FILL WebGL feature.
+         */
         polygonOffset:bool;
+
+        /**
+         * Sets the polygon offset factor. Default is 0.
+         */
         polygonOffsetFactor:number;
+
+        /** 
+         * Sets the polygon offset units. Default is 0.
+         */
         polygonOffsetUnits:number;
+
+        /** 
+         * Sets the alpha value to be used when running an alpha test. Default is 0.
+         */
         alphaTest:number;
+
+        /**
+         * Enables/disables overdraw. If enabled, polygons are drawn slightly bigger in order to fix antialiasing gaps when using the CanvasRenderer. Default is false.
+         */
         overdraw:bool;
+
+        /**
+         * Defines whether this material is visible. Default is true.
+         */
         visible:bool;
+
+        /**
+         * Defines which of the face sides will be rendered - front, back or both.
+         * Default is THREE.FrontSide. Other options are THREE.BackSide and THREE.DoubleSide.
+         */
         side:Side;
+
+        /**
+         * Specifies that the material needs to be updated, WebGL wise. Set it to true if you made changes that need to be reflected in WebGL.
+         * This property is automatically set to true when instancing a new material.
+         */
         needsUpdate:bool;
+
         clone():Material;
+        
         dispose():void;
     }
 
@@ -2476,24 +2707,61 @@ module THREE{
         clone():LineDashedMaterial;
     }
 
+
+    /**
+     * parameters is an object with one or more properties defining the material's appearance.
+     */
     export interface MeshBasicMaterialParameters{
+        /**
+         * geometry color in hexadecimal. Default is 0xffffff.
+         */
         color?:number;
         opacity?:number;
         map?:Texture;
+        /**
+         * Default is null.
+         */
         lightMap?:Texture;
+        /**
+         * Default is null.
+         */
         specularMap?:Texture;
+        /**
+         * Default is null.
+         */
         envMap?:Texture;
         combine?:Combine;
         reflectivity?:number;
         refractionRatio?:number;
+        /** 
+         * Define shading type. Default is THREE.SmoothShading.
+         */
         shading?:Shading;
         blending?:Blending;
         depthTest?:bool;
+        /**
+         * render geometry as wireframe. Default is false.
+         */
         wireframe?:bool;
+        /**
+         * Line thickness. Default is 1.
+         */
         wireframeLinewidth?:number;
+        /**
+         *  Define whether the material uses vertex colors, or not. Default is false.
+         */
         vertexColors?:Colors;
+        /**
+         * Default is false.
+         */
         skinning?:bool;
+        /**
+         * Default is false.
+         */
         morphTargets?:bool;
+        /**
+         * Define whether the material color is affected by global fog settings. Default is true.
+         */
         fog?:bool;
     }
 
@@ -2524,7 +2792,7 @@ module THREE{
         blending?:Blending;
         depthTest?:bool;
         wireframe?:bool;
-         wireframeLinewidth?:number;
+        wireframeLinewidth?:number;
     }
 
     export class MeshDepthMaterial extends Material{
@@ -3029,45 +3297,193 @@ module THREE{
     }
 
     export interface WebGLRendererParameters{
+        /** 
+         * A Canvas where the renderer draws its output.
+         */
         canvas?:HTMLCanvasElement;
+
+        /**
+         *  shader precision. Can be "highp", "mediump" or "lowp".
+         */
         precision?:string;
+
+        /**
+         * default is true.
+         */
         alpha?:bool;
+
+        /**
+         * default is true.
+         */
         premultipliedAlpha?:bool;
+
+        /**
+         * default is false.
+         */
         antialias?:bool;
+
+        /**
+         * default is true.
+         */
         stencil?:bool;
+
+        /**
+         * default is false.
+         */
         preserveDrawingBuffer?:bool;
+
+        /**
+         * default is 0x000000.
+         */
         clearColor?:number;
+
+        /**
+         * default is 0.
+         */
         clearAlpha?:number;
+
         devicePixelRatio?:number;
     }
 
+
+    /**
+     * The WebGL renderer displays your beautifully crafted scenes using WebGL, if your device supports it.
+     * This renderer has way better performance than CanvasRenderer.
+     *
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/renderers/WebGLRenderer.js">src/renderers/WebGLRenderer.js</a>
+     */
     export class WebGLRenderer implements Renderer{
+        /**
+         * parameters is an optional object with properties defining the renderer's behaviour. The constructor also accepts no parameters at all. In all cases, it will assume sane defaults when parameters are missing.
+         */
         constructor(parameters?:WebGLRendererParameters);
+
+        /**
+         * A Canvas where the renderer draws its output.
+         * This is automatically created by the renderer in the constructor (if not provided already); you just need to add it to your page.
+         */
         domElement:HTMLCanvasElement;
+
+        /**
+         * The HTML5 Canvas's 'webgl' context obtained from the canvas where the renderer will draw.
+         */
         context:WebGLRenderingContext;
+
+        /**
+         * Defines whether the renderer should automatically clear its output before rendering.
+         */
         autoClear:bool;
+
+        /**
+         * If autoClear is true, defines whether the renderer should clear the color buffer. Default is true.
+         */
         autoClearColor:bool;
+
+        /**
+         * If autoClear is true, defines whether the renderer should clear the depth buffer. Default is true.
+         */
         autoClearDepth:bool;
+
+        /**
+         * If autoClear is true, defines whether the renderer should clear the stencil buffer. Default is true.
+         */
         autoClearStencil:bool;
+
+        /**
+         * Defines whether the renderer should sort objects. Default is true.
+         */
         sortObjects:bool;
+
+        /**
+         * Defines whether the renderer should auto update objects. Default is true.
+         */
         autoUpdateObjects:bool;
+        
+        /**
+         * Defines whether the renderer should auto update the scene. Default is true.
+         */
         autoUpdateScene:bool;
+
+        /**
+         * Default is false.
+         */
         gammaInput:bool;
+
+        /** 
+         * Default is false.
+         */
         gammaOutput:bool;
+
+        /**
+         * Default is false.
+         */
         physicallyBasedShading:bool;
+
+        /**
+         * Default is false.
+         */
         shadowMapEnabled:bool;
+
+        /**
+         * Default is true.
+         */
         shadowMapAutoUpdate:bool;
+
+        /**
+         * Defines shadow map type (unfiltered, percentage close filtering, percentage close filtering with bilinear filtering in shader)
+         * Options are THREE.BasicShadowMap, THREE.PCFShadowMap, THREE.PCFSoftShadowMap. Default is THREE.PCFShadowMap.
+         */
         shadowMapType:ShadowMapType;
+
         shadowMapSoft:bool;
+
+        /**
+         * Default is true
+         */
         shadowMapCullFace:CullFace;
+
+        /**
+         * Default is false.
+         */
         shadowMapDebug:bool;
+
+        /**
+         * Default is false. 
+         */
         shadowMapCascade:bool;
+
+        /**
+         * Default is 8.
+         */
         maxMorphTargets:number;
+
+        /**
+         * Default is 4.
+         */
         maxMorphNormals:number;
+
+        /**
+         * Default is true.
+         */
         autoScaleCubemaps:bool;
+
+        /**
+         * An array with render plugins to be applied before rendering.
+         * Default is an empty array, or [].
+         */
         renderPluginsPre:RendererPlugin[];
+
+        /**
+         * An array with render plugins to be applied after rendering.
+         * Default is an empty array, or [].
+         */
         renderPluginsPost:RendererPlugin[];
+
         devicePixelRatio:number;
+        
+        /**
+         * An object with a series of statistical information about the graphics board memory and the rendering process. Useful for debugging or just for the sake of curiosity. The object contains the following fields:
+         */
         info: {
             memory:{
                 programs:number;
@@ -3081,31 +3497,117 @@ module THREE{
                 points:number;
             };
         };
+
+        /**
+         * Return the WebGL context.
+         */
         getContext():WebGLRenderingContext;
+        
+        /**
+         * Return a Boolean true if the context supports vertex textures.
+         */
         supportsVertexTextures():bool;
+
         getMaxAnisotropy():number;
+
+        /**
+         * Resizes the output canvas to (width, height), and also sets the viewport to fit that size, starting in (0, 0).
+         */
         setSize(width:number, height:number):void;
+
+        /**
+         * Sets the viewport to render from (x, y) to (x + width, y + height).
+         */
         setViewport(x?:number, y?:number, width?:number, height?:number):void;
+
+        /**
+         * Sets the scissor area from (x, y) to (x + width, y + height).
+         */
         setScissor(x:number, y:number, width:number, height:number):void;
+
+        /** 
+         * Enable the scissor test. When this is enabled, only the pixels within the defined scissor area will be affected by further renderer actions.
+         */
         enableScissorTest(enable:bool):void;
+        
+        /**
+         * Sets the clear color, using hex for the color and alpha for the opacity.
+         * 
+         * @example
+         * // Creates a renderer with black background 
+         * var renderer = new THREE.WebGLRenderer(); 
+         * renderer.setSize(200, 100); 
+         * renderer.setClearColorHex(0x000000, 1);
+         */
         setClearColorHex(hex:number, alpha:number):void;
+
+        /**
+         * Sets the clear color, using color for the color and alpha for the opacity.
+         */
         setClearColor(color:Color, alpha:number):void;
+
+        /**
+         * Returns a THREE.Color instance with the current clear color.
+         */
         getClearColor():Color;
+
+        /**
+         * Returns a float with the current clear alpha. Ranges from 0 to 1.
+         */
         getClearAlpha():number;
+
+        /**
+         * Tells the renderer to clear its color, depth or stencil drawing buffer(s).
+         * If no parameters are passed, no buffer will be cleared.
+         */
         clear(color?:bool, depth?:bool, stencil?:bool):void;
+
+        /**
+         * Initialises the postprocessing plugin, and adds it to the renderPluginsPost array.
+         */
         addPostPlugin(plugin:RendererPlugin):void;
+
+        /**
+         * Initialises the preprocessing plugin, and adds it to the renderPluginsPre array.
+         */
         addPrePlugin(plugin:RendererPlugin):void;
+
         deallocateObject(object:Object3D):void;
+
         deallocateTexture(texture:Texture):void;
+
         deallocateRenderTarget(renderTarget:RenderTarget):void;
+
+        /**
+         * Tells the shadow map plugin to update using the passed scene and camera parameters.
+         * 
+         * @param scene an instance of Scene
+         * @param camera — an instance of Camera
+         */
         updateShadowMap(scene:Scene, camera:Camera):void;
+
         renderBufferImmediate(object:Object3D, program:Object, material:Material):void;
+
         renderBufferDirect(camera:Camera, lights:Light[], fog:Fog, material:Material, geometryGroup:any, object:Object3D):void;
+
         renderBuffer      (camera:Camera, lights:Light[], fog:Fog, material:Material, geometryGroup:any, object:Object3D):void;
+
+        /**
+         * Render a scene using a camera.
+         * The render is done to the renderTarget (if specified) or to the canvas as usual.
+         * If forceClear is true, the canvas will be cleared before rendering, even if the renderer's autoClear property is false.
+         */
         render(scene:Scene, camera:Camera, renderTarget?:RenderTarget, forceClear?:bool):void;
         renderImmediateObject(camera:Camera, lights:Light[], fog:Fog, material:Material, object:Object3D):void;
         initWebGLObjects(scene:Scene):void;
         initMaterial(material:Material, lights:Light[], fog:Fog, object:Object3D):void;
+
+        /**
+         * Used for setting the gl frontFace, cullFace states in the GPU, thus enabling/disabling face culling when rendering.
+         * If cullFace is false, culling will be disabled.
+         * @param cullFace "back", "front", "front_and_back", or false. 
+         * @param frontFace "ccw" or "cw
+         */
         setFaceCulling(cullFace?:string, frontFace?:FrontFaceDirection):void;
         setMaterialFaces(material:Material):void;
         setDepthTest(depthTest:bool):void;
