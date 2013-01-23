@@ -1,53 +1,36 @@
 /**
  * three.d.ts (https://github.com/kontan/three.d.ts)
  *
- * based on three.js (http://mrdoob.github.com/three.js/) r55
- *
- * @author Kon - http://phyzkit.net/
+ * based on three.js (http://mrdoob.github.com/three.js/) r55 
+ * 
+ * Copyright (c) 2012- Kon (http://phyzkit.net/)
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
-
 
 // importing webgl.d.ts
 //      Currently accompanying webgl.d.ts is incomplete.
-//      If you need a other complete definitions of webgl, replace the following path.
-/// <reference path="webgl.d.ts" />
+//      If you are using three.d.ts with other complete definitions of webgl, remove the following declaration.
+interface WebGLRenderingContext {};
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-//        three.js interface
-//////////////////////////////////////////////////////////////////////////////////////////////////////
 module THREE{
     export var REVISION:string;
-
-    // **Empty Enum Pattern**
-    // In three.d.ts, you can write a enum value as follows:
-    //
-    //     new THREE.MeshPhongMaterial().side = THREE.FrontSide;
-    //
-    // But the following code will cause a type error on compile time:
-    //
-    //     new THREE.MeshPhongMaterial().side = THREE.FlatShading;
-    //
-    // If you want to cast from enum type into internal type,
-    // you can write as follows:
-    //
-    //     var n:number = <any>THREE.SmoothShading;   // cast a enum value into number 
-    //
-    //     var smoothShading:Shading = <any>2;        // cast a number into enum value
-    //
-    // TypeScript has experimental enum construct but it creates new type. For example,
-    //
-    //    export enum Side{ FrontSide, BackSide, DoubleSide }
-    //
-    // will be compiled successfully.
-    // Ideally, those three.js constant values should be prefixed with the enum type name:
-    //
-    //     new THREE.MeshPhongMaterial().side = THREE.Side.FrontSide;
-    //
-    // Unfortunately, three.js currently doesn't. 
-    // At the following constant value section, those enum type have no members
-    // because those enums exists only to define a new type for those constant values.
-    //
-
 
     // GL STATE CONSTANTS
     
@@ -3367,7 +3350,9 @@ module THREE{
         /**
          * The HTML5 Canvas's 'webgl' context obtained from the canvas where the renderer will draw.
          */
-        context:WebGLRenderingContext;
+        //  If you are using three.d.ts with other complete definitions of webgl, context:WebGLRenderingContext is suitable.
+        //context:WebGLRenderingContext;
+        context:any;
 
         /**
          * Defines whether the renderer should automatically clear its output before rendering.
