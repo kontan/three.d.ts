@@ -194,35 +194,144 @@ module THREE{
 
     // Core ///////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * This is a superefficent class for geometries because it saves all data in buffers. 
+     * It reduces memory costs and cpu cycles. But it is not as easy to work with because of all the nessecary buffer calculations.
+     * It is mainly interesting when working with static objects.
+     *
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/core/BufferGeometry.js">src/core/BufferGeometry.js</a>
+     */
     export class BufferGeometry{ 
+        /**
+         * This creates a new BufferGeometry. It also sets several properties to an default value.
+         */
         constructor();
+
+        /**
+         * Unique number of this buffergeometry instance
+         */
         id:number;
+
+        /**
+         * This hashmap has as id the name of the attribute to be set and as value the buffer to set it to.
+         */
         attributes:{[name:string]:any;};
+
+        /**
+         * When set, it holds certain buffers in memory to have faster updates for this object. When unset, it deletes those buffers and saves memory.
+         */
         dynamic:bool;
+
+        /**
+         * Bounding box.
+         */
         boundingBox:BoundingBox3D;
+
+        /**
+         * Bounding sphere.
+         */
         boundingSphere:BoundingSphere;
+
         hasTangents:bool;
         morphTargets:any[];
+
+        /**
+         * Bakes matrix transform directly into vertex coordinates.
+         */
         applyMatrix(matrix:Matrix4):void;
+
         verticesNeedUpdate:bool;
+
+        /**
+         * Computes bounding box of the geometry, updating Geometry.boundingBox attribute.
+         * Bounding boxes aren't computed by default. They need to be explicitly computed, otherwise they are null.
+         */
         computeBoundingBox():void;
+
+        /**
+         * Computes bounding sphere of the geometry, updating Geometry.boundingSphere attribute.
+         * Bounding spheres aren't' computed by default. They need to be explicitly computed, otherwise they are null.
+         */
         computeBoundingSphere():void;
+
+        /**
+         * Computes vertex normals by averaging face normals.
+         */
         computeVertexNormals():void;
+
         normalizeNormals():void;
+
+        /**
+         * Computes vertex tangents.
+         * Based on http://www.terathon.com/code/tangent.html
+         * Geometry must have vertex UVs (layer 0 will be used).
+         */
         computeTangents():void;
+
+        /**
+         * Disposes the object from memory. 
+         * You need to call this when you want the bufferGeometry removed while the application is running.
+         */
         dispose():void;        
     }
 
+    /**
+     * Object for keeping track of time.
+     *
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/core/Clock.js">src/core/Clock.js</a>
+     */
     export class Clock{
-        constructor(autoStart?:bool);        
+        /**
+         * @param autoStart Automatically start the clock.
+         */
+        constructor(autoStart?:bool);
+
+        /**
+         * If set, starts the clock automatically when the first update is called.
+         */    
         autoStart:bool;
+
+        /**
+         * When the clock is running, It holds the starttime of the clock. 
+         * This counted from the number of milliseconds elapsed since 1 January 1970 00:00:00 UTC.
+         */
         startTime:number;
+
+        /**
+         * When the clock is running, It holds the previous time from a update.
+         * This counted from the number of milliseconds elapsed since 1 January 1970 00:00:00 UTC.
+         */
         oldTime:number;
+
+        /**
+         * When the clock is running, It holds the time elapsed btween the start of the clock to the previous update.
+         * This counted from the number of milliseconds elapsed since 1 January 1970 00:00:00 UTC.
+         */
         elapsedTime:number;
+
+        /**
+         * This property keeps track whether the clock is running or not.
+         */
         running:bool;
+
+        /**
+         * Starts clock.
+         */
         start():void;
+
+        /**
+         * Stops clock.
+         */
         stop():void;
+  
+        /**
+         * Get milliseconds passed since the clock started.
+         */
         getElapsedTime():number;
+
+        /**
+         * Get the milliseconds passed since the last call to this method.
+         */
         getDelta():number;
     }
 
@@ -232,26 +341,108 @@ module THREE{
         v:number;
     }
 
+    /**
+     * Represents a color. See also {@link ColorUtils}.
+     *
+     * @example 
+     * var color = new THREE.Color( 0xff0000 );
+     *
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/math/Color.js">src/math/Color.js</a>
+     */
     export class Color{
         constructor(hex?:string);
+
+        /**
+         * @param hex initial color in hexadecimal
+         */ 
         constructor(hex?:number);
+
+        /**
+         * Red channel value between 0 and 1. Default is 1.
+         */
         r:number;
+
+        /**
+         * Green channel value between 0 and 1. Default is 1.
+         */
         g:number;
+
+        /**
+         * Blue channel value between 0 and 1. Default is 1.
+         */
         b:number;        
         set(value:number):void;
         set(value:string):void;
         setHex(hex:number):Color;
+
+        /**
+         * Sets this color from RGB values.
+         * @param r Red channel value between 0 and 1.
+         * @param g Green channel value between 0 and 1.
+         * @param b Blue channel value between 0 and 1.
+         */
         setRGB(r:number, g:number, b:number):Color;
+
+        /**
+         * Sets this color from HSV values.
+         * Based on MochiKit implementation by Bob Ippolito.
+         *
+         * @param h Hue channel value between 0 and 1.
+         * @param s Saturation value channel between 0 and 1.
+         * @param v Value channel value between 0 and 1.
+         */
         setHSV(h:number, s:number, v:number):Color;
+
+        /**
+         * Sets this color from a CSS context style string.
+         * @param contextStyle Color in CSS context style format.
+         */
         setStyle(style:string):Color;              
+
+        /**
+         * Copies given color.
+         * @param color Color to copy.
+         */
         copy(color:Color):Color;
+
+        /**
+         * Copies given color making conversion from gamma to linear space.
+         * @param color Color to copy.
+         */
         copyGammaToLinear(color:Color):Color;
+
+        /**
+         * Copies given color making conversion from linear to gamma space.
+         * @param color Color to copy.
+         */
         copyLinearToGamma(color:Color):Color;
+
+        /**
+         * Converts this color from gamma to linear space.
+         */
         convertGammaToLinear():Color;
+        
+        /**
+         * Converts this color from linear to gamma space.
+         */
         convertLinearToGamma():Color;
+
+        /**
+         * Returns the hexadecimal value of this color.
+         */
         getHex():number;
+
+        /**
+         * Returns the string formated hexadecimal value of this color.
+         */
         getHexString():string;
+
+        /** 
+         * Returns the value of this color in CSS context style.
+         * Example: rgb(r, g, b)
+         */
         getStyle():string;
+
         getHSV(hsv?:HSV):HSV;
         add(color:Color):Color;
         addColors(color1:Color, color2:Color):Color;
@@ -259,6 +450,10 @@ module THREE{
         multiply(color:Color):Color;
         multiplyScalar(s:number):Color;
         lerp(color:Color, alpha:number):Color;
+
+        /**
+         * Clones this color.
+         */
         clone():Color;
     }
 
@@ -423,49 +618,157 @@ module THREE{
     // **HACK**
     // three.js has no Face class but some properties have array contains both of Face3 and Face4.
     export class Face{
+        /**
+         * Face normal.
+         */
         normal:Vector3;
+
+        /**
+         * Face color.
+         */
         color:Color;
+
+        /**
+         * Array of 4 vertex normals.
+         */
         vertexNormals:Vector3[];
+
+        /**
+         * Array of 4 vertex normals.
+         */
         vertexColors:Color[];
+
+        /**
+         * Array of 4 vertex tangets.
+         */
         vertexTangents:number[];
+
+        /**
+         * Material index (points to {@link Geometry.materials}).
+         */
         materialIndex:number;
-        centroid:Vector3;    
+
+        /**
+         * Face centroid.
+         */
+        centroid:Vector3;
+
         clone():Face;    
     }
 
+    /**
+     * Triangle face.
+     *
+     * @example 
+     * var normal = new THREE.Vector3( 0, 1, 0 ); 
+     * var color = new THREE.Color( 0xffaa00 ); 
+     * var face = new THREE.Face3( 0, 1, 2, normal, color, 0 );
+     *
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/core/Face3.js">src/core/Face3.js</a>
+     */
     export class Face3 extends Face{
+        /**
+         * @param a Vertex A index.
+         * @param b Vertex B index.
+         * @param c Vertex C index.
+         * @param normal Face normal or array of vertex normals.
+         * @param color Face color or array of vertex colors.
+         * @param materialIndex Material index.
+         */
         constructor(a:number, b:number, c:number, normal?:Vector3,          color?:Color,          materialIndex?:number);
         constructor(a:number, b:number, c:number, normal?:Vector3,          vertexColors?:Color[], materialIndex?:number);
         constructor(a:number, b:number, c:number, vertexNormals?:Vector3[], color?:Color,          materialIndex?:number);
         constructor(a:number, b:number, c:number, vertexNormals?:Vector3[], vertexColors?:Color[], materialIndex?:number);
+
+        /**
+         * Vertex A index.
+         */
         a:number;
+
+        /**
+         * Vertex B index.
+         */
         b:number;
+
+        /**
+         * Vertex C index.
+         */
         c:number;
+
         clone():Face3;
     }
 
+    /**
+     * Quad face.
+     * 
+     * @example 
+     * var normal = new THREE.Vector3( 0, 1, 0 ); 
+     * var color = new THREE.Color( 0xffaa00 ); 
+     * var face = new THREE.Face4( 0, 1, 2, 3, normal, color, 0 );
+     *
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/core/Face4.js">src/core/Face4.js</a>
+     */
     export class Face4 extends Face{
+        /**
+         * @param a Vertex A index.
+         * @param b Vertex B index.
+         * @param c Vertex C index.
+         * @param d Vertex D index.
+         * @param normal Face normal or array of vertex normals.
+         * @param color Face color or array of vertex colors.
+         * @param materialIndex Material index.
+         */        
         constructor(a:number, b:number, c:number, d:number, normal?:Vector3,          color?:Color,          materialIndex?:number);
         constructor(a:number, b:number, c:number, d:number, normal?:Vector3,          vertexColors?:Color[], materialIndex?:number);
         constructor(a:number, b:number, c:number, d:number, vertexNormals?:Vector3[], color?:Color,          materialIndex?:number);
         constructor(a:number, b:number, c:number, d:number, vertexNormals?:Vector3[], vertexColors?:Color[], materialIndex?:number);
+        
+        /**
+         * Vertex A index.
+         */
         a:number;
+
+        /**
+         * Vertex B index.
+         */        
         b:number;
+
+        /**
+         * Vertex C index.
+         */        
         c:number;
+
+        /**
+         * Vertex D index.
+         */        
         d:number;
+
         clone():Face4;
     }
 
+    /**
+     * Frustums are used to determine what is inside the camera's field of view. They help speed up the rendering process.
+     */
     export class Frustum{
         constructor(p0?:number, p1?:number, p2?:number, p3?:number, p4?:number, p5?:number);
+
+        /**
+         * Array of 6 vectors.
+         */
+        planes:Plane[];
+
         set(p0?:number, p1?:number, p2?:number, p3?:number, p4?:number, p5?:number):Frustum;
         copy(frustum:Frustum):Frustum;
         setFromMatrix(m:Matrix4):Frustum;
+
+        /**
+         * Checks whether the object is inside the Frustum.
+         */
         intersectsObject(object:Object3D):bool;
+
         intersectsSphere(sphere:Sphere):bool;
         containsPoint(point:Vector3):bool;
         clone():Frustum;
-        planes:Plane[];
     }
 
     export class Plane{
@@ -530,6 +833,20 @@ module THREE{
         radius:number;
     }
 
+
+    /**
+     * Base class for geometries
+     * 
+     * @example
+     * var geometry = new THREE.Geometry();
+     * geometry.vertices.push( new THREE.Vector3( -10, 10, 0 ) ); 
+     * geometry.vertices.push( new THREE.Vector3( -10, -10, 0 ) ); 
+     * geometry.vertices.push( new THREE.Vector3( 10, -10, 0 ) );  
+     * geometry.faces.push( new THREE.Face3( 0, 1, 2 ) );  
+     * geometry.computeBoundingSphere();
+     *
+     * @see <a link="https://github.com/mrdoob/three.js/blob/master/src/core/Geometry.js">src/core/Geometry.js</a>
+     */
     export class Geometry{
         constructor();
         id                     :number;
@@ -556,44 +873,146 @@ module THREE{
         colorsNeedUpdate       :bool;
         lineDistancesNeedUpdate:bool;
         buffersNeedUpdate      :bool;
-        animation              :AnimationData;         
+        animation              :AnimationData;
+
+        /**
+         * Bakes matrix transform directly into vertex coordinates.
+         */       
         applyMatrix(matrix:Matrix4):void;
+
+        /**
+         * Computes centroids for all faces.
+         */
         computeCentroids():void;
+
+        /**
+         * Computes face normals.
+         */
         computeFaceNormals():void;
+
+        /**
+         * Computes vertex normals by averaging face normals.
+         * Face normals must be existing / computed beforehand.
+         */
         computeVertexNormals(areaWeighted?:bool):void;
+
         computeMorphNormals():void;
+
+        /**
+         * Computes vertex tangents.
+         * Based on <a href="http://www.terathon.com/code/tangent.html">http://www.terathon.com/code/tangent.html</a>
+         * Geometry must have vertex UVs (layer 0 will be used).
+         */
         computeTangents():void;
+
         computeLineDistances():void;
+
+        /**
+         * Computes bounding box of the geometry, updating {@link Geometry.boundingBox} attribute.
+         */
         computeBoundingBox():void;
+
+        /**
+         * Computes bounding sphere of the geometry, updating Geometry.boundingSphere attribute.
+         * Neither bounding boxes or bounding spheres are computed by default. They need to be explicitly computed, otherwise they are null.
+         */
         computeBoundingSphere():void;
+
+        /**
+         * Checks for duplicate vertices using hashmap.
+         * Duplicated vertices are removed and faces' vertices are updated.
+         */
         mergeVertices():number;
+
         clone():Geometry;
+        
         dispose():void;
     }
     
     var GeometryIdCount:number;
     var GeometryLibrary:Geometry[];
 
+    /**
+     *
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/math/Math.js">src/math/Math.js</a>
+     */  
     export var Math : {
+        /**
+         * Clamps the x to be between a and b.
+         *
+         * @param x Value to be clamped.
+         * @param a Minimum value
+         * @param b Maximum value.
+         */
         clamp(x:number, a:number, b:number):number;
+
+        /**
+         * Clamps the x to be larger than a.
+         * 
+         * @param x — Value to be clamped.
+         * @param a — Minimum value
+         */
         clampBottom(x:number, a:number):number;
+
+        /**
+         * Linear mapping of x from range [a1, a2] to range [b1, b2].
+         * 
+         * @param x Value to be mapped.
+         * @param a1 Minimum value for range A.
+         * @param a2 Maximum value for range A.
+         * @param b1 Minimum value for range B.
+         * @param b2 Maximum value for range B.
+         */
         mapLinear(x:number, a1:number, a2:number, b1:number, b2:number):number;
+
+        /**
+         * Random float from 0 to 1 with 16 bits of randomness.
+         * Standard Math.random() creates repetitive patterns when applied over larger space.
+         */
         random16():number;
+
+        /**
+         * Random integer from low to high interval.
+         */
         randInt(low:number, high:number):number;
+
+        /**
+         * Random float from low to high interval.
+         */
         randFloat(low:number, high:number):number;
+
+        /**
+         * Random float from - range / 2 to range / 2 interval.
+         */
         randFloatSpread(range:number):number;
+
+        /**
+         * Returns -1 if x is less than 0, 1 if x is greater than 0, and 0 if x is zero.
+         */
         sign(x:number):number;
     };
 
+    /**
+     * A 3x3 matrix.
+     */
     export interface Matrix{
+        /**
+         * Float32Array with matrix values.
+         */
         elements:Float32Array;
+
         //multiplyVector3(v:Vector3):Vector3;
         multiplyVector3Array(a:number[]):number[];
     }
 
     export class Matrix3 implements Matrix{
         constructor(n11?:number, n12?:number, n13?:number, n21?:number, n22?:number, n23?:number, n31?:number, n32?:number, n33?:number);
+
+        /**
+         * Float32Array with matrix values.
+         */
         elements:Float32Array;
+
         set(n11:number, n12:number, n13:number, n21:number, n22:number, n23:number, n31:number, n32:number, n33:number):Matrix3;
         identity():Matrix3;
         copy(m:Matrix3):Matrix3;
@@ -602,59 +1021,283 @@ module THREE{
         multiplyScalar(s:number):Matrix3;
         determinant():number;
         getInverse(matrix:Matrix3, throwOnInvertible?:bool):Matrix3;
+
+        /**
+         * Transposes this matrix in place.
+         */
         transpose():Matrix3;
+
+        /**
+         * Transposes this matrix into the supplied array r, and returns itself.
+         */
         transposeIntoArray(r:number[]):number[];
+
         clone():Matrix3;
     }
 
+    /**
+     * A 4x4 Matrix.
+     *
+     * @example
+     * // Simple rig for rotating around 3 axes  
+     * var m = new THREE.Matrix4();  
+     * var m1 = new THREE.Matrix4(); 
+     * var m2 = new THREE.Matrix4(); 
+     * var m3 = new THREE.Matrix4();  
+     * var alpha = 0; 
+     * var beta = Math.PI; 
+     * var gamma = Math.PI/2;  
+     * m1.makeRotationX( alpha ); 
+     * m2.makeRotationY( beta ); 
+     * m3.makeRotationZ( gamma );  
+     * m.multiplyMatrices( m1, m2 ); 
+     * m.multiply( m3 ); 
+     */
     export class Matrix4 implements Matrix{
+
+        /**
+         * Initialises the matrix with the supplied n11..n44 values, or just creates an identity matrix if no values are passed.
+         */
         constructor(n11?:number, n12?:number, n13?:number, n14?:number, n21?:number, n22?:number, n23?:number, n24?:number, n31?:number, n32?:number, n33?:number, n34?:number, n41?:number, n42?:number, n43?:number, n44?:number);
+
+        /**
+         * Float32Array with matrix values.
+         */
         elements:Float32Array;
+        
+        /** 
+         * Sets all fields of this matrix.
+         */
         set(n11:number, n12:number, n13:number, n14:number, n21:number, n22:number, n23:number, n24:number, n31:number, n32:number, n33:number, n34:number, n41:number, n42:number, n43:number, n44:number):Matrix4;
+
+        /**
+         * Resets this matrix to identity.
+         */
         identity():Matrix4;
+
+        /**
+         * Copies a matrix m into this matrix.
+         */
         copy(m:Matrix4):Matrix4;
+
+        /**
+         * Sets the rotation submatrix of this matrix to the rotation specified by Euler angles.
+         * Default order is "XYZ".
+         *
+         * @param v Rotation vector. order — The order of rotations. Eg. "XYZ".
+         */
         setRotationFromEuler(v:Vector3, order:string):Matrix4;
+
+        /**
+         * Sets the rotation submatrix of this matrix to the rotation specified by q.
+         */
         setRotationFromQuaternion(q:Quaternion):Matrix4;
+
+        /**
+         * Constructs a rotation matrix, looking from eye towards center with defined up vector.
+         */
         lookAt(eye:Vector3, target:Vector3, up:Vector3):Matrix4;
+
+        /**
+         * Multiplies this matrix by m.
+         */ 
         multiply(m:Matrix4):Matrix4;
+
+        /**
+         * Sets this matrix to a x b.
+         */
         multiplyMatrices(a:Matrix4, b:Matrix4):Matrix4;
+
+        /**
+         * Sets this matrix to a x b and stores the result into the flat array r.
+         * r can be either a regular Array or a TypedArray.
+         */
         multiplyToArray(a:Matrix4, b:Matrix4, r:number[]):Matrix4;
+
+        /**
+         * Multiplies this matrix by s.
+         */ 
         multiplyScalar(s:number):Matrix4;
+
         //multiplyVector3(v:Vector3):Vector3;   //DEPRECATED
         //multiplyVector4(v:Vector4):Vector4;   //DEPRECATED
+        
         multiplyVector3Array(a:number[]):number[];
+
         rotateAxis(v:Vector3):Vector3;
+
+        /**
+         * Computes the cross product between this matrix and the Vector4 parameter a.
+         */
         crossVector(a:Vector3):Vector4;
+
+        /**
+         * Computes determinant of this matrix.
+         * Based on http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
+         */
         determinant():number;
+        
+        /**
+         * Transposes this matrix.
+         */
         transpose():Matrix4;
+
+        /** 
+         * Flattens this matrix into supplied flat array.
+         */
         flattenToArray(flat:number[]):number[];
+
+        /**
+         * Flattens this matrix into supplied flat array starting from offset position in the array.
+         */
         flattenToArrayOffset(flat:number[], offset:number):number[];
+
+        /**
+         * Returns position component from this matrix.
+         * Note: this method returns a reference to the internal class vector, make a copy or clone it if you don't use it right away.
+         */
         getPosition():Vector3;
+
+        /**
+         * Sets the position component for this matrix from vector v.
+         */
         setPosition(v:Vector3):Vector3;
+
+        /**
+         * Returns x column component from this matrix.
+         * Note: this method returns a reference to the internal class vector, make a copy or clone it if you don't use it right away.
+         */
         getColumnX():Vector3;
+
+        /**
+         * Returns y column component from this matrix.
+         * Note: this method returns a reference to the internal class vector, make a copy or clone it if you don't use it right away.
+         */
         getColumnY():Vector3;
+
+        /**
+         * Returns z column component from this matrix.
+         * Note: this method returns a reference to the internal class vector, make a copy or clone it if you don't use it right away.
+         */
         getColumnZ():Vector3;
+
+        /**
+         * Sets this matrix to the inverse of matrix m.
+         * Based on http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm.
+         */
         getInverse(m:Matrix4, throwOnInvertible?:bool):Matrix4;
+
+        /**
+         * Sets this matrix to the transformation composed of translation, rotation and scale.
+         */
         compose(translation:Vector3, rotation:Quaternion, scale:Vector3):Matrix4;
+
+        /**
+         * Decomposes this matrix into the translation, rotation and scale components.
+         * If parameters are not passed, new instances will be created.
+         */
         decompose(translation?:Vector3, rotation?:Quaternion, scale?:Vector3):Object[]; // [Vector3, Quaternion, Vector3]
+        
+        /**
+         * Copies the translation component of the supplied matrix m into this matrix translation component.
+         */
         extractPosition(m:Matrix4):Matrix4;
+
+        /**
+         * Copies the rotation component of the supplied matrix m into this matrix rotation component.
+         */
         extractRotation(m:Matrix4):Matrix4;
+
+        /**
+         * Translates this matrix by vector v.
+         */
         translate(v:Vector3):Matrix4;
+
+        /**
+         * Rotates this matrix around the x axis by angle.
+         */
         rotateX(angle:number):Matrix4;
+
+        /**
+         * Rotates this matrix around the y axis by angle.
+         */
         rotateY(angle:number):Matrix4;
+
+        /**
+         * Rotates this matrix around the z axis by angle.
+         */
         rotateZ(angle:number):Matrix4;
+
+        /**
+         * Rotates this matrix around the supplied axis by angle.
+         */
         rotateByAxis(axis:Vector3, angle:number):Matrix4;
+        
+        /**
+         * Multiplies the columns of this matrix by vector v.
+         */
         scale(v:Vector3):Matrix4;
+
         getMaxScaleOnAxis():number;
+
+        /**
+         * Sets this matrix as translation transform.
+         */
         makeTranslation(offset:Vector3):Matrix4;
+
+        /**
+         * Sets this matrix as rotation transform around x axis by theta radians.
+         *
+         * @param theta Rotation angle in radians.
+         */
         makeRotationX(theta:number):Matrix4;
+
+        /**
+         * Sets this matrix as rotation transform around y axis by theta radians.
+         * 
+         * @param theta Rotation angle in radians.
+         */
         makeRotationY(theta:number):Matrix4;
+
+        /**
+         * Sets this matrix as rotation transform around z axis by theta radians.
+         *
+         * @param theta Rotation angle in radians.
+         */
         makeRotationZ(theta:number):Matrix4;
+
+        /**
+         * Sets this matrix as rotation transform around axis by angle radians.
+         * Based on http://www.gamedev.net/reference/articles/article1199.asp.
+         *
+         * @param axis Rotation axis. 
+         * @param theta Rotation angle in radians.
+         */
         makeRotationAxis(axis:Vector3, angle:number):Matrix4;
+
+        /**
+         * Sets this matrix as scale transform.
+         */
         makeScale(factor:Vector3):Matrix4;
+
+        /** 
+         * Creates a frustum matrix.
+         */
         makeFrustum(left:number, right:number, bottom:number, top:number, near:number, far:number):Matrix4;
+
+        /**
+         * Creates a perspective projection matrix.
+         */
         makePerspective(fov:number, aspect:number, near:number, far:number):Matrix4;
+
+        /**
+         * Creates an orthographic projection matrix.
+         */
         makeOrthographic(left:number, right:number, top:number, bottom:number, near:number, far:number):Matrix4;
+
+        /**
+         * Clones this matrix.
+         */
         clone():Matrix4;
     }
 
@@ -677,28 +1320,110 @@ module THREE{
         clone():Ray;
     }
 
+
+    /**
+     * Base class for scene graph objects
+     */
     export class Object3D{
-        constructor();        
+        constructor();
+
+        /**
+         * Unique number of this object instance.
+         */   
         id:number;
+
+        /**
+         * Optional name of the object (doesn't need to be unique).
+         */
         name:string;
+
         properties:any;
+
+        /**
+         * Object's parent in the scene graph.
+         */
         parent:Object3D;
+
+        /**
+         * Array with object's children.
+         */
         children:Object3D[];
+
+        /**
+         * Object's local position.
+         */
         position:Vector3;
+        
+        /**
+         * Object's local rotation (Euler angles), in radians.
+         */
         rotation:Vector3;
+
+        /**
+         * Order of axis for Euler angles.
+         */
         eulerOrder:string;
+
+        /**
+         * Object's local scale.
+         */
         scale:Vector3;
+
+        /**
+         * Up direction.
+         */
         up:Vector3;    
+
+        /**
+         * Local transform.
+         */
         matrix:Matrix4;
+
+        /**
+         * Global rotation.
+         */
         matrixRotationWorld:Matrix4;
+
+        /**
+         * Global rotation.
+         */
         quaternion:Quaternion;
+
+        /**
+         * Use quaternion instead of Euler angles for specifying local rotation.
+         */
         useQuaternion:bool;
+
+        /**
+         * Default is 0.0.
+         */
         boundRadius:number;
+
+        /**
+         * Maximum scale from x, y, z scale components.
+         */
         boundRadiusScale:number;
+
+        /**
+         * Override depth-sorting order if non null.
+         */
         renderDepth:number;
+
+        /**
+         * Object gets rendered if true.
+         */
         visible:bool;
+
+        /**
+         * Gets rendered into shadow map.
+         */
         castShadow:bool;
+
+        /**
+         * Material gets baked in shadow receiving.
+         */
         receiveShadow:bool;
+
         frustumCulled:bool;
         matrixAutoUpdate:bool;
         matrixWorldNeedsUpdate:bool;
@@ -711,12 +1436,45 @@ module THREE{
         localToWorld(vector:Vector3):Vector3;
         worldToLocal(vector:Vector3):Vector3;
         lookAt(vector:Vector3):void;
+
+        /**
+         * Adds object as child of this object.
+         */
         add(object:Object3D):void;
+
+        /**
+         * Removes object as child of this object.
+         */
         remove(object:Object3D):void;
+
+        /**
+         * Translates object along arbitrary axis by distance.
+         * @param distance Distance.
+         * @param axis Translation direction.
+         */
         traverse(callback:(object:Object3D)=> any):void;
+
+        /**
+         * Gets first child with name matching the argument. Searches whole subgraph recursively if recursive is true.
+         * @param name Object name.
+         * @param recursive Whether check in the objects's children.
+         */
         getChildByName(name:string, recursive:bool):Object3D;
+
+        /**
+         * Searches whole subgraph recursively to add all objects in the array.
+         * @param array optional argument that returns the the array with descendants.
+         */
         getDescendants(array?:Object3D[]):Object3D[];
+
+        /**
+         * Updates local transform.
+         */
         updateMatrix():void;
+
+        /**
+         * Updates global transform of the object and its children.
+         */
         updateMatrixWorld(force:bool):void;
         clone(object?:Object3D):Object3D;
         deallocate():void;
@@ -726,11 +1484,30 @@ module THREE{
     var Object3DIdCount:number;
     var Object3DLibrary:Object3D[];
 
+    /**
+     * Projects points between spaces.
+     */
     export class Projector{
+        
         constructor();
+
         projectVector(vector:Vector3, camera:Camera):Vector3;
+        
         unprojectVector(vector:Vector3, camera:Camera):Vector3;
+        
+        /**
+         * Translates a 2D point from NDC (Normalized Device Coordinates) to a Raycaster that can be used for picking. NDC range from [-1..1] in x (left to right) and [1.0 .. -1.0] in y (top to bottom).
+         */
         pickingRay(vector:Vector3, camera:Camera):Raycaster;
+
+        /**
+         * Transforms a 3D scene object into 2D render data that can be rendered in a screen with your renderer of choice, projecting and clipping things out according to the used camera.
+         * If the scene were a real scene, this method would be the equivalent of taking a picture with the camera (and developing the film would be the next step, using a Renderer). 
+         *
+         * @param scene scene to project.
+         * @param camera camera to use in the projection.
+         * @param sort select whether to sort elements using the Painter's algorithm.
+         */
         projectScene(scene:Scene, camera:Camera, sortObjects:bool, sortElements?:bool):{ 
             objects:Object3D[];     // Mesh, Line or other object  
             sprites:Object3D[];    // Sprite or Particle 
@@ -739,28 +1516,101 @@ module THREE{
         };
     }
 
+    /**
+     * Implementation of a quaternion. This is used for rotating things without incurring in the dreaded gimbal lock issue, amongst other advantages.
+     *
+     * @example
+     * var quaternion = new THREE.Quaternion(); 
+     * quaternion.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), Math.PI / 2 );  
+     * var vector = new THREE.Vector3( 1, 0, 0 ); 
+     * vector.applyQuaternion( quaternion );
+     */
     export class Quaternion{
+        /**
+         * @param x x coordinate
+         * @param y y coordinate
+         * @param z z coordinate
+         * @param w w coordinate
+         */
         constructor(x?:number, y?:number, z?:number, w?:number);
+
         x:number;
         y:number;
         z:number;
         w:number;
+        
+        /**
+         * Sets values of this quaternion.
+         */
         set(x:number, y:number, z:number, w:number):Quaternion;
+
+        /**
+         * Copies values of q to this quaternion.
+         */
         copy(q:Quaternion):Quaternion;
+
+        /**
+         * Sets this quaternion from rotation specified by Euler angles.
+         */
         setFromEuler(v:Vector3, order:string):Quaternion;
+
+        /**
+         * Sets this quaternion from rotation specified by axis and angle.
+         * Adapted from http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm.
+         * Axis have to be normalized, angle is in radians.
+         */
         setFromAxisAngle(axis:Vector3, angle:number):Quaternion;
+
+        /**
+         * Sets this quaternion from rotation component of m. Adapted from http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm.
+         */
         setFromRotationMatrix(m:Matrix4):Quaternion;
+
+        /**
+         * Inverts this quaternion.
+         */
         inverse():Quaternion;
+
         conjugate():Quaternion;
+
         lengthSq():number;
+
+        /**
+         * Computes length of this quaternion.
+         */
         length():number;
+
+        /**
+         * Normalizes this quaternion.
+         */
         normalize():Quaternion;
+
+        /**
+         * Multiplies this quaternion by b.
+         */
         multiply(q:Quaternion):Quaternion;
+
+        /**
+         * Sets this quaternion to a x b
+         * Adapted from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm.
+         */
         multiplyQuaternions(a:Quaternion, b:Quaternion):Quaternion;
+
         // multiplyVector3(vector:Vector3):Vector3; DEPRECATED
+        
+        
         slerp(qb:Quaternion, t:number):Quaternion;
+
         equals(v:Quaternion):bool;
+        
+        /**
+         * Clones this quaternion.
+         */
         clone():Quaternion;
+        
+        /**
+         * Adapted from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/.
+         */
         static slerp(qa:Quaternion, qb:Quaternion, qm:Quaternion, t:number):Quaternion;
     }
 
@@ -789,63 +1639,240 @@ module THREE{
         z:number;
     }
 
+    /**
+     * Represents a spline.
+     * 
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/math/Spline.js">src/math/Spline.js</a>
+     */
     export class Spline{
+        /**
+         * Initialises the spline with points, which are the places through which the spline will go.
+         */
         constructor(points:SplineControlPoint[]);
+
         points:SplineControlPoint[];
+        
+        /**
+         * Initialises using the data in the array as a series of points. Each value in a must be another array with three values, where a[n] is v, the value for the nth point, and v[0], v[1] and v[2] are the x, y and z coordinates of that point n, respectively.
+         *
+         * @param a array of triplets containing x, y, z coordinates
+         */
         initFromArray(a:number[][]):void;
+
+        /**
+         * Return the interpolated point at k.
+         *
+         * @param k point index
+         */
         getPoint(k:number):SplineControlPoint;
+
+        /**
+         * Returns an array with triplets of x, y, z coordinates that correspond to the current control points.
+         */
         getControlPointsArray():number[][];
+
+        /**
+         * Returns the length of the spline when using nSubDivisions.
+         * @param nSubDivisions number of subdivisions between control points. Default is 100.
+         */
         getLength(nSubDivisions?:number):{ chunks: number[];total:number;};
+
+        /**
+         * Modifies the spline so that it looks similar to the original but has its points distributed in such way that moving along the spline it's done at a more or less constant speed. The points should also appear more uniformly spread along the curve.
+         * This is done by resampling the original spline, with the density of sampling controlled by samplingCoef. Here it's interesting to note that denser sampling is not necessarily better: if sampling is too high, you may get weird kinks in curvature.
+         *
+         * @param samplingCoef how many intermediate values to use between spline points
+         */
         reparametrizeByArcLength(samplingCoef:number):void;
     }
 
     export class Vector{
     }
 
+    /**
+     * 2D vector.
+     */
     export class Vector2 extends Vector{
+        
         constructor(x?:number, y?:number);        
+        
         x:number;
+        
         y:number;
-        set(x:number, y:number):void;
+        
+        /**
+         * Sets value of this vector.
+         */
+        set(x:number, y:number):Vector2;
+        
+        /**
+         * Copies value of v to this vector.
+         */
         copy(v:Vector2):Vector2;
-        add(a:number, b:number):Vector2;
-        addSelf(v:Vector2):Vector2;
-        sub(a:number, b:number):Vector2;
-        subSelf(v:Vector2):Vector2;
+
+        /**
+         * Adds v to this vector.
+         */
+        add(v:Vector2):Vector2;
+
+        /**
+         * Sets this vector to a + b.
+         */
+        addVectors(a:number, b:number):Vector2;
+
+        /**
+         * Subtracts v from this vector.
+         */
+        sub(v:Vector2):Vector2;
+        
+        /**
+         * Sets this vector to a - b.
+         */
+        subVectors(a:number, b:number):Vector2;
+
+        /**
+         * Multiplies this vector by scalar s.
+         */
         multiplyScalar(s:number):Vector2;
+
+        /**
+         * Divides this vector by scalar s.
+         * Set vector to ( 0, 0 ) if s == 0.
+         */
         divideScalar(s:number):Vector2;
-        negate:Vector2;
+
+        /** 
+         * Inverts this vector.
+         */
+        negate():Vector2;
+
+        /**
+         * Computes dot product of this vector and v.
+         */
         dot(v:Vector2):Vector2;
+
+        /**
+         * Computes squared length of this vector.
+         */
         lengthSq():number;
+
+        /**
+         * Computes length of this vector.
+         */
         length():number;
+
+        /**
+         * Normalizes this vector.
+         */
         normalize():Vector2;
+
+        /**
+         * Computes distance of this vector to v.
+         */
         distanceTo(v:Vector2):number;
+
+        /**
+         * Computes squared distance of this vector to v.
+         */
         distanceToSquared(v:Vector2):number;
+
+        /**
+         * Normalizes this vector and multiplies it by l.
+         */
         setLength(l:number):Vector2;
-        lerpSelf(v:Vector2, alpha:number):Vector2;
+
+        lerp(v:Vector2, alpha:number):Vector2;
+
+        /**
+         * Checks for strict equality of this vector and v.
+         */
         equals(v:Vector2):bool;
+        
+        /**
+         * Clones this vector.
+         */
         clone():Vector2;
     }
 
+    /**
+     * 3D vector.
+     *
+     * @example
+     * var a = new THREE.Vector3( 1, 0, 0 ); 
+     * var b = new THREE.Vector3( 0, 1, 0 );  
+     * var c = new THREE.Vector3(); 
+     * c.crossVectors( a, b );
+     *
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/math/Vector3.js">src/math/Vector3.js</a>
+     */
     export class Vector3 extends Vector{
+
         constructor(x?:number, y?:number, z?:number);    
+        
         x:number;
+        
         y:number;
+        
         z:number;
+        
+        /**
+         * Sets value of this vector.
+         */
         set(x:number, y:number, z:number):Vector3;
+
+        /**
+         * Sets x value of this vector.
+         */ 
         setX(x:number):Vector3;
+        
+        /**
+         * Sets y value of this vector.
+         */
         setY(y:number):Vector3;
+
+        /**
+         * Sets z value of this vector.
+         */
         setZ(z:number):Vector3;
+
         setComponent(index:number, value:number):void;
+
         getComponent(index:number):number;
+
+        /**
+         * Copies value of v to this vector.
+         */
         copy(v:Vector3):Vector3;
+
+        /**
+         * Adds v to this vector.
+         */
         add(a:Vector3):Vector3;
+
         addScalar(s:number):Vector3;
+
+        /**
+         * Sets this vector to a + b.
+         */
         addVectors(a:Vector3, b:Vector3):Vector3;
+
+        /** 
+         * Subtracts v from this vector.
+         */
         sub(a:Vector3):Vector3;
+
+        /**
+         * Sets this vector to a - b.
+         */
         subVectors(a:Vector3, b:Vector3):Vector3;
+
         multiply(v:Vector3):Vector3;
+
+        /** 
+         * Multiplies this vector by scalar s.
+         */
         multiplyScalar(s:number):Vector3;
+
         multiplyVectors(a:Vector3, b:Vector3):Vector3;
         applyMatrix3(m:Matrix3):Vector3;
         applyMatrix4(m:Matrix4):Vector3;
@@ -854,54 +1881,207 @@ module THREE{
         applyAxisAngle(axis:Vector3, angle:number):Vector3;
         projectPoint(m:Matrix4):Vector3;
         divide(v:Vector3):Vector3;
+
+        /**
+         * Divides this vector by scalar s.
+         * Set vector to ( 0, 0, 0 ) if s == 0.
+         */
         divideScalar(s:number):Vector3;
+
         min(v:Vector3):Vector3;
         max(v:Vector3):Vector3;
+
         clamp(min:Vector3, max:Vector3):Vector3;
+
+        /**
+         * Inverts this vector.
+         */
         negate():Vector3;
+
+        /**
+         * Computes dot product of this vector and v.
+         */
         dot(v:Vector3):number;
+
+        /**
+         * Computes squared length of this vector.
+         */
         lengthSq():number;
+
+        /**
+         * Computes length of this vector.
+         */
         length():number;
+
+        /**
+         * Computes Manhattan length of this vector.
+         * http://en.wikipedia.org/wiki/Taxicab_geometry
+         */
         lengthManhattan():number;
+
+        /**
+         * Normalizes this vector.
+         */
         normalize():Vector3;
+
+        /**
+         * Normalizes this vector and multiplies it by l.
+         */
         setLength(l:number):Vector3;
+
         lerp(v:Vector3, alpha:number):Vector3;
+        
+        /**
+         * Sets this vector to cross product of itself and v.
+         */
         cross(a:Vector3):Vector3;
+
+        /**
+         * Sets this vector to cross product of a and b.
+         */
         crossVectors(a:Vector3, b:Vector3):Vector3;
+
         angleTo(v:Vector3):number;
+
+        /**
+         * Computes distance of this vector to v.
+         */
         distanceTo(v:Vector3):number;
+
+        /**
+         * Computes squared distance of this vector to v.
+         */
         distanceToSquared(v:Vector3):number;
+
+        /**
+         * Sets this vector extracting position from matrix transform.
+         */
         getPositionFromMatrix(m:Matrix4):Vector3;
+
         setEulerFromRotationMatrix(m:Matrix4, order:string):Vector3; 
+
         setEulerFromQuaternion(q:Quaternion, order:string):Vector3;
+
+        /**
+         * Sets this vector extracting scale from matrix transform.
+         */        
         getScaleFromMatrix(m:Matrix4):Vector3;
+
+        /**
+         * Checks for strict equality of this vector and v.
+         */
         equals(v:Vector3):bool;
+        
+        /**
+         * Clones this vector.
+         */
         clone():Vector3;
     }
 
+    /**
+     * 4D vector.
+     */
     export class Vector4{
         constructor(x?:number, y?:number, z?:number, w?:number);        
         x:number;
         y:number;
         z:number;
         w:number;
+
+        /**
+         * Sets value of this vector.
+         */
         set(x:number, y:number, z:number, w:number):Vector4;
+        
+        /**
+         * Copies value of v to this vector.
+         */
         copy(v:Vector4):Vector4;
-        add(a:Vector4, b:Vector4):Vector4;
-        addSelf(v:Vector4):Vector4;
-        sub(a:Vector4, b:Vector4):Vector4;
-        subSelf(v:Vector4):Vector4;
+
+        /**
+         * Adds v to this vector.
+         */
+        add(v:Vector4):Vector4;
+
+        /**
+         * Sets this vector to a + b.
+         */
+        addVectors(a:Vector4, b:Vector4):Vector4;
+
+        /**
+         * Subtracts v from this vector.
+         */
+        sub(v:Vector4):Vector4;
+
+        /**
+         * Sets this vector to a - b.
+         */
+        subVectors(a:Vector4, b:Vector4):Vector4;
+
+        /**
+         * Multiplies this vector by scalar s.
+         */
         multiplyScalar(s:number):Vector4;
+
+        /**
+         * Divides this vector by scalar s.
+         * Set vector to ( 0, 0, 0 ) if s == 0.
+         */
         divideScalar(s:number):Vector4;
+
+        /**
+         * Inverts this vector.
+         */
         negate():Vector4;
+
+        /**
+         * Computes dot product of this vector and v.
+         */
         dot(v:Vector4):number;
+
+        /** 
+         * Computes squared length of this vector.
+         */
         lengthSq():number;
+
+        /**
+         * Computes length of this vector.
+         */
         length():number;
+
         lengthManhattan():number;
+
+        /**
+         * Normalizes this vector.
+         */
         normalize():Vector4;
+
+        /**
+         * Normalizes this vector and multiplies it by l.
+         */
         setLength(l:number):Vector4;
-        lerpSelf(v:Vector4, alpha:number):Vector4;
+
+        /**
+         * Linearly interpolate between this vector and v with alpha factor.
+         */
+        lerp(v:Vector4, alpha:number):Vector4;
+
+        /**
+         * Clones this vector.
+         */
         clone():Vector4;
+
+        /**
+         * http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/index.htm
+         * @param q is assumed to be normalized
+         */
+        setAxisAngleFromQuaternion(q:Quaternion):Vector4;
+
+        /**
+         * http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm
+         * @param m assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
+         */
+        setAxisAngleFromRotationMatrix(m:Matrix3):Vector4;
     }
 
     export class Box2{
@@ -958,25 +2138,104 @@ module THREE{
     }
 
     // Cameras ////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Abstract base class for cameras. This class should always be inherited when you build a new camera.
+     */
     export class Camera extends Object3D{
+
+        /**
+         * This constructor sets following properties to the correct type: matrixWorldInverse, projectionMatrix and projectionMatrixInverse.
+         */
         constructor();
+
+        /**
+         * This is the inverse of matrixWorld. MatrixWorld contains the Matrix which has the world transform of the Camera.
+         */
         matrixWorldInverse:Matrix4;
+
+        /**
+         * This is the matrix which contains the projection.
+         */
         projectionMatrix:Matrix4;
+
+        /**
+         * This is the inverse of projectionMatrix.
+         */
         projectionMatrixInverse:Matrix4;
+
+        /**
+         * This make the camera look at the vector position in local space.
+         * @param vector point to look at
+         */
         lookAt(vector:Vector3):void;
     }
 
+    /**
+     * Camera with orthographic projection
+     *
+     * @example 
+     * var camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 ); 
+     * scene.add( camera );
+     *
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/cameras/OrthographicCamera.js">src/cameras/OrthographicCamera.js</a>
+     */
     export class OrthographicCamera extends Camera{
+        /**
+         * @param left Camera frustum left plane.
+         * @param right Camera frustum right plane.
+         * @param top Camera frustum top plane.
+         * @param bottom Camera frustum bottom plane.
+         * @param near Camera frustum near plane.
+         * @param far Camera frustum far plane.
+         */
         constructor(left:number, right:number, top:number, bottom:number, near?:number, far?:number);
+
+        /**
+         * Camera frustum left plane.
+         */
         left:number;
+
+        /**
+         * Camera frustum right plane.
+         */
         right:number;
+
+        /**
+         * Camera frustum top plane.
+         */
         top:number;
+
+        /**
+         * Camera frustum bottom plane.
+         */
         bottom:number;
+
+        /**
+         * Camera frustum near plane.
+         */
         near:number;
+
+        /**
+         * Camera frustum far plane.
+         */
         far:number;
+
+        /**
+         * Updates the camera projection matrix. Must be called after change of parameters.
+         */
         updateProjectionMatrix():void;
     }
 
+    /**
+     * Camera with perspective projection.
+     *
+     * @example
+     * var camera = new THREE.PerspectiveCamera( 45, width / height, 1, 1000 );
+     * scene.add( camera );
+     *
+     * @see <a  href="https://github.com/mrdoob/three.js/blob/master/src/cameras/PerspectiveCamera.js">src/cameras/PerspectiveCamera.js</a>
+     */
     export class PerspectiveCamera extends Camera{
         constructor(fov?:number, aspect?:number, near?:number, far?:number);
         fov:number;
