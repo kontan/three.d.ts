@@ -1,7 +1,7 @@
 /**
  * three.d.ts (https://github.com/kontan/three.d.ts)
  *
- * based on three.js (http://mrdoob.github.com/three.js/) r54
+ * based on three.js (http://mrdoob.github.com/three.js/) r55
  *
  * @author Kon - http://phyzkit.net/
  */
