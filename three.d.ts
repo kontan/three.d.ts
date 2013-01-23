@@ -24,9 +24,8 @@
  * THE SOFTWARE.
  */
 
-// importing webgl.d.ts
-//      Currently accompanying webgl.d.ts is incomplete.
-//      If you are using three.d.ts with other complete definitions of webgl, remove the following declaration.
+
+// If you are using three.d.ts with other complete definitions of webgl, remove the following declaration.
 interface WebGLRenderingContext {};
 
 module THREE{
