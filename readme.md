@@ -7,11 +7,11 @@ This porject is currently based on three.js **r55**. (You can also get [three.d.
 
 ### Download
 
-[only three.d.ts](https://github.com/kontan/three.d.ts/raw/master/three.d.ts) or [zipped whole of the project](https://github.com/kontan/three.d.ts/archive/master.zip) contains some examples.
+[only single three.d.ts file](https://github.com/kontan/three.d.ts/raw/master/three.d.ts) or [zipped whole of the project](https://github.com/kontan/three.d.ts/archive/master.zip) contains some examples.
 
 ### API Reference
 
-HTML API reference is available. (Experimental)
+HTML API reference is available. (Experimental, based r54)
 
 http://kontan.github.com/dtsdoc/three.d.ts.html
 

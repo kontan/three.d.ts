@@ -1001,7 +1001,6 @@ module THREE{
          */
         elements:Float32Array;
 
-        //multiplyVector3(v:Vector3):Vector3;
         multiplyVector3Array(a:number[]):number[];
     }
 
@@ -1016,7 +1015,6 @@ module THREE{
         set(n11:number, n12:number, n13:number, n21:number, n22:number, n23:number, n31:number, n32:number, n33:number):Matrix3;
         identity():Matrix3;
         copy(m:Matrix3):Matrix3;
-        multiplyVector3(v:Vector3):Vector3;
         multiplyVector3Array(a:number[]):number[];        
         multiplyScalar(s:number):Matrix3;
         determinant():number;
@@ -1118,9 +1116,6 @@ module THREE{
          * Multiplies this matrix by s.
          */ 
         multiplyScalar(s:number):Matrix4;
-
-        //multiplyVector3(v:Vector3):Vector3;   //DEPRECATED
-        //multiplyVector4(v:Vector4):Vector4;   //DEPRECATED
         
         multiplyVector3Array(a:number[]):number[];
 
@@ -1243,7 +1238,7 @@ module THREE{
         /**
          * Sets this matrix as translation transform.
          */
-        makeTranslation(offset:Vector3):Matrix4;
+        makeTranslation(x:number, y:number, z:number):Matrix4;
 
         /**
          * Sets this matrix as rotation transform around x axis by theta radians.
@@ -1278,7 +1273,7 @@ module THREE{
         /**
          * Sets this matrix as scale transform.
          */
-        makeScale(factor:Vector3):Matrix4;
+        makeScale(x:number, y:number, z:number):Matrix4;
 
         /** 
          * Creates a frustum matrix.
@@ -1595,9 +1590,6 @@ module THREE{
          * Adapted from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm.
          */
         multiplyQuaternions(a:Quaternion, b:Quaternion):Quaternion;
-
-        // multiplyVector3(vector:Vector3):Vector3; DEPRECATED
-        
         
         slerp(qb:Quaternion, t:number):Quaternion;
 
@@ -1876,6 +1868,7 @@ module THREE{
         multiplyVectors(a:Vector3, b:Vector3):Vector3;
         applyMatrix3(m:Matrix3):Vector3;
         applyMatrix4(m:Matrix4):Vector3;
+        applyProjection(m:Matrix4):Vector3;
         applyQuaternion(q:Quaternion):Vector3;
         applyEuler(v:Vector3, eulerOrder:string):Vector3;
         applyAxisAngle(axis:Vector3, angle:number):Vector3;
