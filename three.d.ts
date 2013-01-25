@@ -4182,26 +4182,15 @@ module THREE{
         getWrapPoints(oldPts:Vector2[], path:Path) :Vector2[];
     }
 
-    // **TODO**
-    // TypeScript's enum construction is experimental feature
-    //export enum PathActions{
-    //    MOVE_TO,
-    //    LINE_TO,
-    //    QUADRATIC_CURVE_TO, // Bezier quadratic curve
-    //    BEZIER_CURVE_TO,     // Bezier cubic curve
-    //    CSPLINE_THRU,        // Catmull-rom spline
-    //    ARC,                // Circle
-    //    ELLIPSE,
-    //}
-    export class PathActions{
-        static MOVE_TO:PathActions;
-        static LINE_TO:PathActions;
-        static QUADRATIC_CURVE_TO:PathActions;
-        static BEZIER_CURVE_TO:PathActions;
-        static CSPLINE_THRU:PathActions;
-        static ARC:PathActions;
-        static ELLIPSE:PathActions;
-    }    
+    export enum PathActions{
+        MOVE_TO,
+        LINE_TO,
+        QUADRATIC_CURVE_TO, // Bezier quadratic curve
+        BEZIER_CURVE_TO,     // Bezier cubic curve
+        CSPLINE_THRU,        // Catmull-rom spline
+        ARC,                // Circle
+        ELLIPSE,
+    }
 
     export class Path extends CurvePath{
         constructor(points?:Vector2);
