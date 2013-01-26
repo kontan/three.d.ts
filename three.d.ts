@@ -2223,6 +2223,10 @@ module THREE{
     }
 
     // Lights //////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Abstract base class for lights.
+     */
     export class Light extends Object3D{
         constructor(hex?:number);
         color:Color;
@@ -2427,33 +2431,150 @@ module THREE{
         intensity:number;
     }
 
+    /**
+     * Affects objects using {@link MeshLambertMaterial} or {@link MeshPhongMaterial}.
+     *
+     * @example
+     * var light = new THREE.PointLight( 0xff0000, 1, 100 );
+     * light.position.set( 50, 50, 50 ); 
+     * scene.add( light );
+     */
     export class PointLight extends Light{
         constructor(hex?:number, intensity?:number, distance?:number);
+
+        /**
+         * Light's position.
+         * Default — new THREE.Vector3().
+         */
         position:Vector3;
+
+        /*
+         * Light's intensity.
+         * Default - 1.0.
+         */
         intensity:number;
+
+        /**
+         * If non-zero, light will attenuate linearly from maximum intensity at light position down to zero at distance.
+         * Default — 0.0.
+         */
         distance:number;
     }
 
+    /**
+     * A point light that can cast shadow in one direction.
+     *
+     * @example
+     * // white spotlight shining from the side, casting shadow  
+     * var spotLight = new THREE.SpotLight( 0xffffff );
+     * spotLight.position.set( 100, 1000, 100 );
+     * spotLight.castShadow = true; 
+     * spotLight.shadowMapWidth = 1024;
+     * spotLight.shadowMapHeight = 1024; 
+     * spotLight.shadowCameraNear = 500;
+     * spotLight.shadowCameraFar = 4000; 
+     * spotLight.shadowCameraFov = 30; 
+     * scene.add( spotLight );
+     */
     export class SpotLight extends Light{
         constructor(hex?:number, intensity?:number, distance?:number, angle?:number, exponent?:number);
+        
+        /**
+         * Light's position.
+         * Default — new THREE.Vector3().
+         */
         position:Vector3;
+        
+        /**
+         * Spotlight focus points at target.position.
+         * Default position — (0,0,0).
+         */
         target:Object3D;
+        
+        /**
+         * Light's intensity.
+         * Default — 1.0.
+         */
         intensity:number;
+        
+        /**
+         * If non-zero, light will attenuate linearly from maximum intensity at light position down to zero at distance.
+         * Default — 0.0.
+         */
         distance:number;
+
+        /*
+         * Maximum extent of the spotlight, in radians, from its direction.
+         * Default — Math.PI/2.
+         */
         angle:number;
+        
+        /**
+         * Rapidity of the falloff of light from its target direction.
+         * Default — 10.0.
+         */
         exponent:number;
 
-        // shadow map
+        /**
+         * If set to true light will cast dynamic shadows. Warning: This is expensive and requires tweaking to get shadows looking right.
+         * Default — false.
+         */
         castShadow:bool;
+
+        /**
+         * If set to true light will only cast shadow but not contribute any lighting (as if intensity was 0 but cheaper to compute).
+         * Default — false.
+         */
         onlyShadow:bool;
+        
+        /**
+         * Perspective shadow camera frustum near parameter.
+         * Default — 50.
+         */
         shadowCameraNear:number;
+        
+        /**
+         * Perspective shadow camera frustum far parameter.
+         * Default — 5000.
+         */
         shadowCameraFar:number;
+
+        /**
+         * Perspective shadow camera frustum field of view parameter.
+         * Default — 50.
+         */
         shadowCameraFov:number;
+
+        /**
+         * Show debug shadow camera frustum.
+         * Default — false.
+         */
         shadowCameraVisible:bool;
+
+        /**
+         * Shadow map bias.
+         * Default — 0.
+         */
         shadowBias:number;
+        
+        /**
+         * Darkness of shadow casted by this light (from 0 to 1).
+         * Default — 0.5.
+         */
         shadowDarkness:number;
+
+        /**
+         * Shadow map texture width in pixels.
+         * Default — 512.
+         */
         shadowMapWidth:number;
+        
+        /**
+         * Shadow map texture height in pixels.
+         * Default — 512.
+         */
         shadowMapHeight:number;
+
         shadowMap:RenderTarget;
         shadowMapSize:Vector2;
         shadowCamera:Camera;
@@ -2467,13 +2588,54 @@ module THREE{
         loaded:number;
     }
 
+    /**
+     * Base class for implementing loaders.
+     *
+     * Events:
+     *     load
+     *         Dispatched when the image has completed loading
+     *         content — loaded image
+     * 
+     *     error
+     *
+     *          Dispatched when the image can't be loaded
+     *          message — error message
+     */
     export class Loader{
         constructor(showStatus?:bool);
+
+        /**
+         * If true, show loading status in the statusDomElement.
+         */
         showStatus:bool;
+        
+        /**
+         * This is the recipient of status messages.
+         */
         statusDomElement:HTMLElement;
+
+        /**
+         * Will be called when load starts.
+         * The default is a function with empty body.
+         */
         onLoadStart:()=> void;
+
+        /**
+         * Will be called while load progresses.
+         * The default is a function with empty body.
+         */
         onLoadProgress:()=> void;
+
+        /**
+         * Will be called when load completes.
+         * The default is a function with empty body.
+         */
         onLoadComplete:()=> void;
+
+        /**
+         * default — null.
+         * If set, assigns the crossOrigin attribute of the image to the value of crossOrigin, prior to starting the load.
+         */
         crossOrigin:string;
         addStatusElement():HTMLElement;
         updateProgress(progress:Progress):void;
@@ -2483,17 +2645,36 @@ module THREE{
         createMaterial(m:Material, texturePath:string):bool;
     }
 
+    /**
+     * A loader for loading an image.
+     * Unlike other loaders, this one emits events instead of using predefined callbacks. So if you're interested in getting notified when things happen, you need to add listeners to the object.
+     */
     export class ImageLoader extends EventTarget{
         constructor();
         crossOrigin:string;
+
+        /**
+         * Begin loading from url
+         * @param url
+         */
         load(url:string, image?:HTMLImageElement):void;
     }
 
 
+    /**
+     * A loader for loading objects in JSON format.
+     */
     export class JSONLoader extends Loader{
         constructor(showStatus?:bool);
         withCredentials:bool;
+        
+        /**
+         * @param url
+         * @param callback. This function will be called with the loaded model as an instance of geometry when the load is completed.
+         * @param texturePath If not specified, textures will be assumed to be in the same folder as the Javascript model file.
+         */
         load(url:string, callback:(geometry:Geometry, materials:Material[])=> void, texturePath?:string):void;
+        
         loadAjaxJSON( context:JSONLoader, url:string, callback:(geometry:Geometry, materials:Material[])=> void, texturePath?:string, callbackProgress?:(progress:Progress)=> void):void;
         createModel(json:any, callback:(geometry:Geometry, materials:Material[])=> void, texturePath?:string):void;
     }
@@ -2503,18 +2684,61 @@ module THREE{
         add(loader:Loader):void;
     }
 
+    /**
+     * A loader for loading a complete scene out of a JSON file.
+     */
     export class SceneLoader{
         constructor();
+
+        /**
+         * Will be called when load starts.
+         * The default is a function with empty body.
+         */
         onLoadStart:()=> void;
+
+        /**
+         * Will be called while load progresses.
+         * The default is a function with empty body.
+         */
         onLoadProgress:()=> void;
+
+        /**
+         * Will be called when each element in the scene completes loading.
+         * The default is a function with empty body.
+         */
         onLoadComplete:()=> void;
+
+        /**
+         * Will be called when load completes.
+         * The default is a function with empty body.
+         */
         callbackSync:()=> void;
+
+        /**
+         * Will be called as load progresses.
+         * The default is a function with empty body.
+         */
         callbackProgress:()=> void;
+
+        /**
+         * @param url
+         * @param callbackFinished This function will be called with the loaded model as an instance of scene when the load is completed.
+         */
         load(url:string, callbackFinished:(scene:Scene)=> void):void;
     }
 
+    /**
+     * Class for loading a texture.
+     * Unlike other loaders, this one emits events instead of using predefined callbacks. So if you're interested in getting notified when things happen, you need to add listeners to the object.
+     */
     export class TextureLoader extends EventTarget{
         constructor();
+
+        /**
+         * Begin loading from url
+         *
+         * @param url
+         */
         load(url:string):void;
     }
 
@@ -3103,14 +3327,37 @@ module THREE{
         clone( object?:Particle ):Particle;
     }
 
+    /**
+     * A class for displaying particles in the form of variable size points. For example, if using the WebGLRenderer, the particles are displayed using GL_POINTS.
+     * 
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/objects/ParticleSystem.js">src/objects/ParticleSystem.js</a>
+     */
     export class ParticleSystem extends Object3D{
+
+        /**
+         * @param geometry An instance of Geometry.
+         * @param material An instance of Material (optional).
+         */
         constructor(geometry:Geometry, material?:ParticleBasicMaterial);
         constructor(geometry:Geometry, material?:ParticleCanvasMaterial);
         constructor(geometry:Geometry, material?:ParticleDOMMaterial);
         constructor(geometry:Geometry, material?:ShaderMaterial);
+
+        /**
+         * An instance of Geometry, where each vertex designates the position of a particle in the system.
+         */
         geometry:Geometry;
+
+        /**
+         * An instance of Material, defining the object's appearance. Default is a ParticleBasicMaterial with randomised colour.
+         */
         material:Material;
+
+        /**
+         * Specifies whether the particle system will be culled if it's outside the camera's frustum. By default this is set to false.
+         */ 
         sortParticles:bool;
+
         clone(object?:ParticleSystem):ParticleSystem;
     }
 
@@ -3785,26 +4032,70 @@ module THREE{
     export class AbstractFog{
     }
 
+
+    /**
+     * This class contains the parameters that define linear fog, i.e., that grows linearly denser with the distance.
+     */
     export class Fog extends AbstractFog{
+
+        /**
+         * Fog color in hexadecimal. Example: 0x000000 will render far away objects black.
+         */
         hex:number;
+
+        /**
+         * The minimum distance to start applying fog. Objects that are less than 'near' units from the active camera won't be affected by fog.
+         */
         near:number;
+
+        /**
+         * The maximum distance at which fog stops being calculated and applied. Objects that are more than 'far' units away from the active camera won't be affected by fog.
+         * Default is 1000.
+         */
         far:number;
+
         constructor(hex:number, near?:number, far?:number);
+        
         clone():Fog;
     }
 
+    /**
+     * This class contains the parameters that define linear fog, i.e., that grows exponentially denser with the distance.
+     */
     export class FogExp2 extends AbstractFog{
         constructor(hex:number, density?:number);
         name:string;
         color:Color;
+
+        /**
+         * Defines how fast the fog will grow dense.
+         * Default is 0.00025.
+         */
         density:number;
+        
         clone():FogExp2;
     }
 
+    /**
+     * Scenes allow you to set up what and where is to be rendered by three.js. This is where you place objects, lights and cameras.
+     */
     export class Scene extends Object3D{
+
+        /**
+         * A fog instance defining the type of fog that affects everything rendered in the scene. Default is null.
+         */
         fog:AbstractFog;
+        
+        /**
+         * If not null, it will force everything in the scene to be rendered with that material. Default is null.
+         */
         overrideMaterial:Material;
+
+        /**
+         * Default is false.
+         */
         matrixAutoUpdate:bool;
+
         constructor();
     }
 
@@ -3860,6 +4151,14 @@ module THREE{
 
     // Extras /////////////////////////////////////////////////////////////////////
     export var ColorUtils:{
+        /**
+         * Taking a color as input, converts it to HSV, and applies the h, s, v parameters in place, i.e. no new color is returned but the original object is modified.
+         * 
+         * @param color source color to be adjusted
+         * @param h hue change amount
+         * @param s saturation change amount
+         * @param v value change amount
+         */
         adjustHSV(color:Color, h:number, s:number, v:number):void;
     };
 
@@ -4069,19 +4368,64 @@ module THREE{
 
     // Extras / Core /////////////////////////////////////////////////////////////////////
 
+    /**
+     * An extensible curve object which contains methods for interpolation
+     */
     export class Curve{
         constructor();
+        
+        /**
+         * Returns a vector for point t of the curve where t is between 0 and 1
+         */
         getPoint(t:number):Vector2;
+
+        /**
+         * Returns a vector for point at relative position in curve according to arc length
+         */
         getPointAt(u:number):Vector2;
+
+        /**
+         * Get sequence of points using getPoint( t )
+         */
         getPoints(divisions?:number):Vector2[];
+
+        /**
+         * Get sequence of equi-spaced points using getPointAt( u )
+         */
         getSpacedPoints(divisions?:number):Vector2[];
+
+        /**
+         * Get total curve arc length
+         */
         getLength():number;
+
+        /**
+         * Get list of cumulative segment lengths
+         */
         getLengths(divisions?:number):number[];
+
         needsUpdate:bool;
+        
+        /**
+         * Update the cumlative segment distance cache
+         */
         updateArcLengths():void;
+
+        /**
+         * Given u ( 0 .. 1 ), get a t to find p. This gives you points which are equi distance
+         */
         getUtoTmapping(u:number, distance:number):number;
+
         getNormalVector(t:number):Vector2;
+
+        /**
+         * Returns a unit vector tangent at t. If the subclassed curve do not implement its tangent derivation, 2 points a small delta apart will be used to find its gradient which seems to give a reasonable approximation
+         */        
         getTangent(t:number):Vector2;
+
+        /**
+         * Returns tangent at equidistance point u on the curve
+         */
         getTangentAt(u:number):Vector2;
 
         static Utils:{
@@ -4192,6 +4536,9 @@ module THREE{
         ELLIPSE,
     }
 
+    /**
+     * a 2d path representation, comprising of points, lines, and cubes, similar to the html5 2d canvas api. It extends CurvePath.
+     */
     export class Path extends CurvePath{
         constructor(points?:Vector2);
         actions:PathActions[];
@@ -4219,6 +4566,9 @@ module THREE{
         scaleObject:Vector3;
     }
 
+    /**
+     * Defines a 2d shape plane using paths.
+     */
     export class Shape extends Path{
         constructor();
         holes:Vector2[][];
@@ -4273,11 +4623,30 @@ module THREE{
         constructor(vertices:Vector3);
     }
 
+    /**
+     * CubeGeometry is the quadrilateral primitive geometry class. It is typically used for creating a cube or irregular quadrilateral of the dimensions provided within the (optional) 'width', 'height', & 'depth' constructor arguments.
+     */
     export class CubeGeometry extends Geometry{
+        /**
+         * @param width — Width of the sides on the X axis.
+         * @param height — Height of the sides on the Y axis.
+         * @param depth — Depth of the sides on the Z axis.
+         * @param widthSegments — Number of segmented faces along the width of the sides.
+         * @param heightSegments — Number of segmented faces along the height of the sides.
+         * @param depthSegments — Number of segmented faces along the depth of the sides.
+         */
         constructor(width:number, height:number, depth:number, widthSegments?:number, heightSegments?:number, depthSegments?:number);
     }
 
     export class CylinderGeometry extends Geometry{
+        /**
+         * @param radiusTop — Radius of the cylinder at the top.
+         * @param radiusBottom — Radius of the cylinder at the bottom.
+         * @param height — Height of the cylinder.
+         * @param radiusSegments — Number of segmented faces around the circumference of the cylinder.
+         * @param heightSegments — Number of rows of faces along the height of the cylinder.
+         * @param openEnded - A Boolean indicating whether or not to cap the ends of the cylinder.
+          */
         constructor(radiusTop?:number, radiusBottom?:number, height?:number, radiusSegments?:number, heightSegments?:number, openEnded?:bool);
     }
 
@@ -4332,7 +4701,21 @@ module THREE{
         addShape(shape:Shape, options?:any):void;
     }
 
+    /**
+     * A class for generating sphere geometries
+     */
     export class SphereGeometry extends Geometry{
+        /**
+         * The geometry is created by sweeping and calculating vertexes around the Y axis (horizontal sweep) and the Z axis (vertical sweep). Thus, incomplete spheres (akin to 'sphere slices') can be created through the use of different values of phiStart, phiLength, thetaStart and thetaLength, in order to define the points in which we start (or end) calculating those vertices.
+         *
+         * @param radius — sphere radius. Default is 50.
+         * @param segmentsWidth — number of horizontal segments. Minimum value is 3, and the default is 8.
+         * @param segmentsHeight — number of vertical segments. Minimum value is 2, and the default is 6.
+         * @param phiStart — specify horizontal starting angle. Default is 0.
+         * @param phiLength — specify horizontal sweep angle size. Default is Math.PI * 2.
+         * @param thetaStart — specify vertical starting angle. Default is 0.
+         * @param thetaLength — specify vertical sweep angle size. Default is Math.PI.
+         */
         constructor(radius:number, widthSegments?:number, heightSegments?:number, phiStart?:number, phiLength?:number, thetaStart?:number, thetaLength?:number);
         radius:number;
         widthSegments:number;
