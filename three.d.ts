@@ -597,9 +597,7 @@ module THREE{
         removeEventListener(type:string, listener:(event:any)=> void):void;
     }
 
-    // **HACK**
-    // three.js has no Face class but some properties have array contains both of Face3 and Face4.
-    export class Face{
+    export interface Face{
         /**
          * Face normal.
          */
@@ -648,7 +646,7 @@ module THREE{
      *
      * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/core/Face3.js">src/core/Face3.js</a>
      */
-    export class Face3 extends Face{
+    export class Face3 implements Face{
         /**
          * @param a Vertex A index.
          * @param b Vertex B index.
@@ -678,6 +676,43 @@ module THREE{
         c:number;
 
         clone():Face3;
+
+        // properties inherits from Face ///////////////////////////////////
+
+        /**
+         * Face normal.
+         */
+        normal:Vector3;
+
+        /**
+         * Face color.
+         */
+        color:Color;
+
+        /**
+         * Array of 4 vertex normals.
+         */
+        vertexNormals:Vector3[];
+
+        /**
+         * Array of 4 vertex normals.
+         */
+        vertexColors:Color[];
+
+        /**
+         * Array of 4 vertex tangets.
+         */
+        vertexTangents:number[];
+
+        /**
+         * Material index (points to {@link Geometry.materials}).
+         */
+        materialIndex:number;
+
+        /**
+         * Face centroid.
+         */
+        centroid:Vector3;
     }
 
     /**
@@ -690,7 +725,7 @@ module THREE{
      *
      * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/core/Face4.js">src/core/Face4.js</a>
      */
-    export class Face4 extends Face{
+    export class Face4 implements Face{
         /**
          * @param a Vertex A index.
          * @param b Vertex B index.
@@ -726,6 +761,45 @@ module THREE{
         d:number;
 
         clone():Face4;
+
+
+
+        // properties inherits from Face ///////////////////////////////////
+        
+        /**
+         * Face normal.
+         */
+        normal:Vector3;
+
+        /**
+         * Face color.
+         */
+        color:Color;
+
+        /**
+         * Array of 4 vertex normals.
+         */
+        vertexNormals:Vector3[];
+
+        /**
+         * Array of 4 vertex normals.
+         */
+        vertexColors:Color[];
+
+        /**
+         * Array of 4 vertex tangets.
+         */
+        vertexTangents:number[];
+
+        /**
+         * Material index (points to {@link Geometry.materials}).
+         */
+        materialIndex:number;
+
+        /**
+         * Face centroid.
+         */
+        centroid:Vector3;
     }
 
     /**
@@ -1660,13 +1734,83 @@ module THREE{
         reparametrizeByArcLength(samplingCoef:number):void;
     }
 
-    export class Vector{
+
+    /**
+     * Abstruct interface of Vector2, Vector3 and Vector3.
+     * Currently the members of Vector is NOT typesafe because it accepts different typed vectors.
+     * Those definitions will be changed when TypeScript innovocates Generics to be type safe.
+     *
+     * @example
+     * var v:THREE.Vector = new THREE.Vector2();
+     * c.addVectors(new THREE.Vector3(0,1,2), new THREE.Vector3(3,4,5));    // invalid
+     */
+    // interface Vector<T>
+    export interface Vector{
+        //copy(v:T):T;
+        copy(v:Vector):Vector;
+
+        // add(v:T):T;
+        add(v:Vector):Vector;
+        
+        // clone():T;
+        clone():Vector;
+
+        // addVectors(a:T, b:T):T;
+        addVectors(a:Vector, b:Vector):Vector;
+
+        //sub(v:T):T;
+        sub(v:Vector):Vector;
+
+        // subVectors(a:T, b:T):T;
+        subVectors(a:Vector, b:Vector):Vector;
+
+        // multiplyScalar(s:number):T;
+        multiplyScalar(s:number):Vector;
+
+        // divideScalar(s:number):T;
+        divideScalar(s:number):Vector;
+
+        // negate():T;
+        negate():Vector;
+
+        // dot(v:T):T;
+        dot(v:Vector):Vector;
+
+        // lengthSq():number;
+        lengthSq():number;
+
+        // length():number;
+        length():number;
+
+        // normalize():T;
+        normalize():Vector;
+
+        // Vector4 doesn't have the property.
+        // distanceTo(v:T):number;
+        // distanceTo(v:Vector):number;
+
+        // Vector4 doesn't have the property.
+        // distanceToSquared(v:T):number;
+        // distanceToSquared(v:Vector):number;
+
+        // setLength(l:number):T;
+        setLength(l:number):Vector;
+
+        // lerp(v:T, alpha:number):T;
+        lerp(v:Vector, alpha:number):Vector;
+
+        // equals(v:T):bool;
+        equals(v:Vector):bool;
+
+        // clone():Vector can't coexist with clone():Vector2. 
+        // clone():T;
+        // clone():Vector;
     }
 
     /**
      * 2D vector.
      */
-    export class Vector2 extends Vector{
+    export class Vector2 implements Vector{
         
         constructor(x?:number, y?:number);        
         
@@ -1692,7 +1836,7 @@ module THREE{
         /**
          * Sets this vector to a + b.
          */
-        addVectors(a:number, b:number):Vector2;
+        addVectors(a:Vector2, b:Vector2):Vector2;
 
         /**
          * Subtracts v from this vector.
@@ -1702,7 +1846,7 @@ module THREE{
         /**
          * Sets this vector to a - b.
          */
-        subVectors(a:number, b:number):Vector2;
+        subVectors(a:Vector2, b:Vector2):Vector2;
 
         /**
          * Multiplies this vector by scalar s.
@@ -1779,7 +1923,7 @@ module THREE{
      *
      * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/math/Vector3.js">src/math/Vector3.js</a>
      */
-    export class Vector3 extends Vector{
+    export class Vector3 implements Vector{
 
         constructor(x?:number, y?:number, z?:number);    
         
@@ -1956,7 +2100,7 @@ module THREE{
     /**
      * 4D vector.
      */
-    export class Vector4{
+    export class Vector4 implements Vector{
         constructor(x?:number, y?:number, z?:number, w?:number);        
         x:number;
         y:number;
@@ -2020,6 +2164,11 @@ module THREE{
         lengthSq():number;
 
         /**
+         * Computes dot product of this vector and v.
+         */
+        dot(v:Vector4):Vector4;
+
+        /**
          * Computes length of this vector.
          */
         length():number;
@@ -2040,6 +2189,11 @@ module THREE{
          * Linearly interpolate between this vector and v with alpha factor.
          */
         lerp(v:Vector4, alpha:number):Vector4;
+
+        /**
+         * Checks for strict equality of this vector and v.
+         */
+        equals(v:Vector4):bool;
 
         /**
          * Clones this vector.
