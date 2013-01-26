@@ -174,6 +174,36 @@ module THREE{
     // export var RGBA_PVRTC_2BPPV1_Format:CompressedTextureFormats;
 
 
+    // Following enums don't be contained by three.js
+
+    // export enum EulerOrder {}
+    // export var XYZ:EulerOrder;
+    // export var XZY:EulerOrder;
+    // export var YXZ:EulerOrder;
+    // export var YZX:EulerOrder;
+    // export var ZXY:EulerOrder;
+    // export var ZYX:EulerOrder;
+
+    // enum UniformType {}
+    //    i,        // single integer
+    //    f,        // single float
+    //    v2,        // single THREE.Vector2
+    //    v3,        // single THREE.Vector3
+    //    v4,        // single THREE.Vector4
+    //    c,        // single THREE.Color
+    //    iv1,    // flat array of integers (JS or typed array)
+    //    iv,        // flat array of integers with 3 x N size (JS or typed array)
+    //    fv1,    // flat array of floats (JS or typed array)
+    //    fv,        // flat array of floats with 3 x N size (JS or typed array)
+    //    v2v,    // array of THREE.Vector2
+    //    v3v,    // array of THREE.Vector3
+    //    v4v,    // array of THREE.Vector4
+    //    m4,        // single THREE.Matrix4
+    //    m4v,    // array of THREE.Matrix4
+    //    t,         // single THREE.Texture (2d or cube)
+    //    tv,        // array of THREE.Texture (2d)
+    // }
+
     // Core ///////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -1050,6 +1080,8 @@ module THREE{
 
     /**
      * A 3x3 matrix.
+     *
+     * ( interface Matrix<T> )
      */
     export interface Matrix{
         /**
@@ -1057,9 +1089,44 @@ module THREE{
          */
         elements:Float32Array;
 
+        /**
+         * identity():T;
+         */
+        identity():Matrix;
+        
+        /**
+         * copy(m:T):T;
+         */
+        copy(m:Matrix):Matrix;
+
         multiplyVector3Array(a:number[]):number[];
+
+        /**
+         * multiplyScalar(s:number):T;
+         */
+        multiplyScalar(s:number):Matrix;
+
+        determinant():number;
+        
+        /**
+         * getInverse(matrix:T, throwOnInvertible?:bool):T;
+         */
+        getInverse(matrix:Matrix, throwOnInvertible?:bool):Matrix;
+
+        /**
+         * transpose():T;
+         */
+        transpose():Matrix;
+
+        /**
+         * clone():T;
+         */
+        clone():Matrix;
     }
 
+    /**
+     * ( class Matrix3 implements Matrix<Matrix3> )
+     */
     export class Matrix3 implements Matrix{
         constructor(n11?:number, n12?:number, n13?:number, n21?:number, n22?:number, n23?:number, n31?:number, n32?:number, n33?:number);
 
@@ -1414,6 +1481,7 @@ module THREE{
          * Order of axis for Euler angles.
          */
         eulerOrder:string;
+        // eulerOrder:EulerOrder;
 
         /**
          * Object's local scale.
@@ -1529,7 +1597,9 @@ module THREE{
         updateMatrixWorld(force:bool):void;
         clone(object?:Object3D):Object3D;
         deallocate():void;
+
         static defaultEulerOrder:string;
+        // static defaultEulerOrder:EulerOrder;
     }
 
     var Object3DIdCount:number;
@@ -1736,76 +1806,116 @@ module THREE{
 
 
     /**
-     * interface Vector<T>
+     * ( interface Vector<T> )
      *
      * Abstruct interface of Vector2, Vector3 and Vector4.
      * Currently the members of Vector is NOT type safe because it accepts different typed vectors.
      * Those definitions will be changed when TypeScript innovocates Generics to be type safe.
      *
      * @example
-     * var v:THREE.Vector = new THREE.Vector2();
-     * c.addVectors(new THREE.Vector3(0,1,2), new THREE.Vector3(3,4,5));    // invalid
+     * var v:THREE.Vector = new THREE.Vector3();
+     * v.addVectors(new THREE.Vector2(0, 1), new THREE.Vector2(2, 3));    // invalid but compiled successfully
      */
     export interface Vector{
-        //copy(v:T):T;
+        /**
+         * copy(v:T):T;
+         */
         copy(v:Vector):Vector;
 
-        // add(v:T):T;
+        /**
+         * add(v:T):T;
+         */
         add(v:Vector):Vector;
         
-        // addVectors(a:T, b:T):T;
+        /**
+         * addVectors(a:T, b:T):T;
+         */
         addVectors(a:Vector, b:Vector):Vector;
 
-        //sub(v:T):T;
+        /**
+         * sub(v:T):T;
+         */
         sub(v:Vector):Vector;
 
-        // subVectors(a:T, b:T):T;
+        /**
+         * subVectors(a:T, b:T):T;
+         */
         subVectors(a:Vector, b:Vector):Vector;
 
-        // multiplyScalar(s:number):T;
+        /**
+         * multiplyScalar(s:number):T;
+         */
         multiplyScalar(s:number):Vector;
 
-        // divideScalar(s:number):T;
+        /**
+         * divideScalar(s:number):T;
+         */
         divideScalar(s:number):Vector;
 
-        // negate():T;
+        /**
+         * negate():T;
+         */
         negate():Vector;
 
-        // dot(v:T):T;
+        /**
+         * dot(v:T):T;
+         */
         dot(v:Vector):number;
 
-        // lengthSq():number;
+        /**
+         * lengthSq():number;
+         */
         lengthSq():number;
 
-        // length():number;
+        /**
+         * length():number;
+         */
         length():number;
 
-        // normalize():T;
+        /**
+         * normalize():T;
+         */
         normalize():Vector;
 
-        // Vector4 doesn't have the property.
-        // distanceTo(v:T):number;
-        // distanceTo(v:Vector):number;
+        /**
+         * NOTE: Vector4 doesn't have the property.
+         * 
+         * distanceTo(v:T):number;
+         */
+        distanceTo(v:Vector):number;
 
-        // Vector4 doesn't have the property.
-        // distanceToSquared(v:T):number;
-        // distanceToSquared(v:Vector):number;
+        /**
+         * NOTE: Vector4 doesn't have the property.
+         *
+         * distanceToSquared(v:T):number;
+         */
+        distanceToSquared(v:Vector):number;
 
-        // setLength(l:number):T;
+        /**
+         * setLength(l:number):T;
+         */
         setLength(l:number):Vector;
 
-        // lerp(v:T, alpha:number):T;
+        /**
+         * lerp(v:T, alpha:number):T;
+         */
         lerp(v:Vector, alpha:number):Vector;
 
-        // equals(v:T):bool;
+        /**
+         * equals(v:T):bool;
+         */
         equals(v:Vector):bool;
-        
-        // clone():T;
+
+        /**
+         * clone():T;
+         */
         clone():Vector;
     }
 
     /**
      * 2D vector.
+     * 
+     * ( class Vector2 implements Vector<Vector2> )
      */
     export class Vector2 implements Vector{
         
@@ -1919,6 +2029,8 @@ module THREE{
      * c.crossVectors( a, b );
      *
      * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/math/Vector3.js">src/math/Vector3.js</a>
+     *
+     * ( class Vector3 implements Vector<Vector3> )
      */
     export class Vector3 implements Vector{
 
@@ -1993,7 +2105,10 @@ module THREE{
         applyMatrix4(m:Matrix4):Vector3;
         applyProjection(m:Matrix4):Vector3;
         applyQuaternion(q:Quaternion):Vector3;
+
+        // applyEuler(v:Vector3, eulerOrder:EulerOrder):Vector3; 
         applyEuler(v:Vector3, eulerOrder:string):Vector3;
+        
         applyAxisAngle(axis:Vector3, angle:number):Vector3;
         projectPoint(m:Matrix4):Vector3;
         divide(v:Vector3):Vector3;
@@ -2096,6 +2211,8 @@ module THREE{
 
     /**
      * 4D vector.
+     *
+     * ( class Vector4 implements Vector<Vector4> )
      */
     export class Vector4 implements Vector{
         constructor(x?:number, y?:number, z?:number, w?:number);        
@@ -2176,6 +2293,19 @@ module THREE{
          * Normalizes this vector.
          */
         normalize():Vector4;
+
+        /**
+         * NOTE: Vector4 doesn't have the property.
+         * Computes distance of this vector to v.
+         */
+        distanceTo(v:Vector3):number;
+
+        /**
+         * NOTE: Vector4 doesn't have the property.
+         * Computes squared distance of this vector to v.
+         */
+        distanceToSquared(v:Vector3):number;
+
 
         /**
          * Normalizes this vector and multiplies it by l.
@@ -3340,25 +3470,7 @@ module THREE{
     }
 
 
-    //enum UniformType{
-    //    i,        // single integer
-    //    f,        // single float
-    //    v2,        // single THREE.Vector2
-    //    v3,        // single THREE.Vector3
-    //    v4,        // single THREE.Vector4
-    //    c,        // single THREE.Color
-    //    iv1,    // flat array of integers (JS or typed array)
-    //    iv,        // flat array of integers with 3 x N size (JS or typed array)
-    //    fv1,    // flat array of floats (JS or typed array)
-    //    fv,        // flat array of floats with 3 x N size (JS or typed array)
-    //    v2v,    // array of THREE.Vector2
-    //    v3v,    // array of THREE.Vector3
-    //    v4v,    // array of THREE.Vector4
-    //    m4,        // single THREE.Matrix4
-    //    m4v,    // array of THREE.Matrix4
-    //    t,         // single THREE.Texture (2d or cube)
-    //    tv,        // array of THREE.Texture (2d)
-    //}
+
 
     export interface Uniforms{
         [name:string]:{type:string;value:Object;};
@@ -3621,7 +3733,7 @@ module THREE{
         render(scene:Scene, camera:Camera):void;
     }
 
-    export var ShaderChunk:{
+    export interface ShaderChunk{
         [name:string]:string;
         fog_pars_fragment:string;
         fog_fragment:string;
@@ -3669,7 +3781,9 @@ module THREE{
         shadowmap_vertex:string;
         alphatest_fragment:string;
         linear_to_gamma_fragment:string;
-    };
+    }
+
+    export var ShaderChunk:ShaderChunk;
 
     export interface RendererPlugin{
         init(renderer:WebGLRenderer):void;
@@ -5095,7 +5209,7 @@ module THREE{
         render(scene:Scene, camera:Camera, viewportWidth:number, viewportHeight:number):void;
     }
 
-    // Extras / Renderers / Shaders /////////////////////////////////////////////////////////////////////
+    // renderers  /////////////////////////////////////////////////////////////////////
 
     export interface ShaderLibrary{
         [name:string]:{
@@ -5129,13 +5243,16 @@ module THREE{
     }
 
     export var ShaderLib:{
-        depth         :Shader;
-        normal        :Shader;
+        [name:string] :Shader;
         basic         :Shader;
         lambert       :Shader;
         phong         :Shader;
         particle_basic:Shader;
+        depth         :Shader;
         dashed        :Shader;
+        normal        :Shader;
+        normalmap     :Shader;
+        cube          :Shader;
         depthRGBA     :Shader;
     };
 }
