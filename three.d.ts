@@ -1736,15 +1736,16 @@ module THREE{
 
 
     /**
-     * Abstruct interface of Vector2, Vector3 and Vector3.
-     * Currently the members of Vector is NOT typesafe because it accepts different typed vectors.
+     * interface Vector<T>
+     *
+     * Abstruct interface of Vector2, Vector3 and Vector4.
+     * Currently the members of Vector is NOT type safe because it accepts different typed vectors.
      * Those definitions will be changed when TypeScript innovocates Generics to be type safe.
      *
      * @example
      * var v:THREE.Vector = new THREE.Vector2();
      * c.addVectors(new THREE.Vector3(0,1,2), new THREE.Vector3(3,4,5));    // invalid
      */
-    // interface Vector<T>
     export interface Vector{
         //copy(v:T):T;
         copy(v:Vector):Vector;
@@ -1752,9 +1753,6 @@ module THREE{
         // add(v:T):T;
         add(v:Vector):Vector;
         
-        // clone():T;
-        clone():Vector;
-
         // addVectors(a:T, b:T):T;
         addVectors(a:Vector, b:Vector):Vector;
 
@@ -1801,10 +1799,9 @@ module THREE{
 
         // equals(v:T):bool;
         equals(v:Vector):bool;
-
-        // clone():Vector can't coexist with clone():Vector2. 
+        
         // clone():T;
-        // clone():Vector;
+        clone():Vector;
     }
 
     /**
