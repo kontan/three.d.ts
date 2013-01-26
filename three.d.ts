@@ -1774,7 +1774,7 @@ module THREE{
         negate():Vector;
 
         // dot(v:T):T;
-        dot(v:Vector):Vector;
+        dot(v:Vector):number;
 
         // lengthSq():number;
         lengthSq():number;
@@ -1867,7 +1867,7 @@ module THREE{
         /**
          * Computes dot product of this vector and v.
          */
-        dot(v:Vector2):Vector2;
+        dot(v:Vector2):number;
 
         /**
          * Computes squared length of this vector.
