@@ -620,10 +620,10 @@ module THREE {
         yellowgreen: number;
     };
 
-    export class EventTarget {
+    export class EventDispatcher {
         constructor();
         addEventListener(type: string, listener: (event: any) => void ): void;
-        dispatchEvent(event: any): void;
+        dispatchEvent(event: { type:string; target: any; }): void;
         removeEventListener(type: string, listener: (event: any) => void ): void;
     }
 
@@ -2930,7 +2930,7 @@ module THREE {
      * A loader for loading an image.
      * Unlike other loaders, this one emits events instead of using predefined callbacks. So if you're interested in getting notified when things happen, you need to add listeners to the object.
      */
-    export class ImageLoader extends EventTarget {
+    export class ImageLoader extends EventDispatcher {
         constructor();
         crossOrigin: string;
 
@@ -2960,7 +2960,7 @@ module THREE {
         createModel(json: any, callback: (geometry: Geometry, materials: Material[]) => void , texturePath?: string): void;
     }
 
-    export class LoadingMonitor extends EventTarget {
+    export class LoadingMonitor extends EventDispatcher {
         constructor();
         add(loader: Loader): void;
     }
@@ -3012,7 +3012,7 @@ module THREE {
      * Class for loading a texture.
      * Unlike other loaders, this one emits events instead of using predefined callbacks. So if you're interested in getting notified when things happen, you need to add listeners to the object.
      */
-    export class TextureLoader extends EventTarget {
+    export class TextureLoader extends EventDispatcher {
         constructor();
 
         /**
