@@ -4294,19 +4294,20 @@ module THREE {
 
     // Scenes /////////////////////////////////////////////////////////////////////
 
-    export class AbstractFog {
+    export interface IFog {
+        name:string;
+        color: Color;        
+        clone():IFog;
     }
 
 
     /**
      * This class contains the parameters that define linear fog, i.e., that grows linearly denser with the distance.
      */
-    export class Fog extends AbstractFog {
-
-        /**
-         * Fog color in hexadecimal. Example: 0x000000 will render far away objects black.
-         */
-        hex: number;
+    export class Fog implements IFog {
+        constructor(hex: number, near?: number, far?: number);
+        name:string;
+        color: Color;
 
         /**
          * The minimum distance to start applying fog. Objects that are less than 'near' units from the active camera won't be affected by fog.
@@ -4319,15 +4320,13 @@ module THREE {
          */
         far: number;
 
-        constructor(hex: number, near?: number, far?: number);
-
         clone(): Fog;
     }
 
     /**
      * This class contains the parameters that define linear fog, i.e., that grows exponentially denser with the distance.
      */
-    export class FogExp2 extends AbstractFog {
+    export class FogExp2 implements IFog {
         constructor(hex: number, density?: number);
         name: string;
         color: Color;
@@ -4349,7 +4348,7 @@ module THREE {
         /**
          * A fog instance defining the type of fog that affects everything rendered in the scene. Default is null.
          */
-        fog: AbstractFog;
+        fog: IFog;
 
         /**
          * If not null, it will force everything in the scene to be rendered with that material. Default is null.
