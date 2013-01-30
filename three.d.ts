@@ -3133,8 +3133,6 @@ module THREE {
     var MaterialLibrary: Material[];
     var MaterialIdCount: number;
 
-    // **Hack** type safety trick
-    // 
     // the constructor of LineBasicMaterial take a parameter as key/value dictionary. 
     // three.d.ts provides type safety for those parameters. 
     // For example, the following code causes compile time type error:
@@ -4624,29 +4622,34 @@ module THREE {
 
     /**
      * An extensible curve object which contains methods for interpolation
+     * class Curve<T extends Vector>
      */
     export class Curve {
         constructor();
 
         /**
          * Returns a vector for point t of the curve where t is between 0 and 1
+         * getPoint(t: number): T;
          */
-        getPoint(t: number): Vector2;
+        getPoint(t: number): Vector;
 
         /**
          * Returns a vector for point at relative position in curve according to arc length
+         * getPointAt(u: number): T;
          */
-        getPointAt(u: number): Vector2;
+        getPointAt(u: number): Vector;
 
         /**
          * Get sequence of points using getPoint( t )
+         * getPoints(divisions?: number): T[];
          */
-        getPoints(divisions?: number): Vector2[];
+        getPoints(divisions?: number): Vector[];
 
         /**
          * Get sequence of equi-spaced points using getPointAt( u )
+         * getSpacedPoints(divisions?: number): T[];
          */
-        getSpacedPoints(divisions?: number): Vector2[];
+        getSpacedPoints(divisions?: number): Vector[];
 
         /**
          * Get total curve arc length
@@ -4670,17 +4673,22 @@ module THREE {
          */
         getUtoTmapping(u: number, distance: number): number;
 
-        getNormalVector(t: number): Vector2;
+        /**
+         * getNormalVector(t: number): T;
+         */
+        getNormalVector(t: number): Vector;
 
         /**
          * Returns a unit vector tangent at t. If the subclassed curve do not implement its tangent derivation, 2 points a small delta apart will be used to find its gradient which seems to give a reasonable approximation
+         * getTangent(t: number): T;
          */
-        getTangent(t: number): Vector2;
+        getTangent(t: number): Vector;
 
         /**
          * Returns tangent at equidistance point u on the curve
+         * getTangentAt(u: number): T;
          */
-        getTangentAt(u: number): Vector2;
+        getTangentAt(u: number): Vector;
 
         static Utils: {
             tangentQuadraticBezier(t: number, p0: number, p1: number, p2: number): number;
@@ -4692,18 +4700,82 @@ module THREE {
         static create(constructorFunc: Function, getPointFunc: Function): Function;
     }
 
+    /**
+     * class LineCurve extends Curve<Vector2>
+     */
     export class LineCurve extends Curve {
         constructor(v1: Vector2, v2: Vector2);
+        getPoint(t: number): Vector2;
+        getPointAt(u: number): Vector2;
+        getPoints(divisions?: number): Vector2[];
+        getSpacedPoints(divisions?: number): Vector2[];
+        getLength(): number;
+        getLengths(divisions?: number): number[];
+        needsUpdate: bool;
+        updateArcLengths(): void;
+        getUtoTmapping(u: number, distance: number): number;
+        getNormalVector(t: number): Vector2;
+        getTangent(t: number): Vector2;
+        getTangentAt(u: number): Vector2;        
     }
+
+    /**
+     * class QuadraticBezierCurve extends Curve<Vector2>
+     */
     export class QuadraticBezierCurve extends Curve {
         constructor(v0: Vector2, v1: Vector2, v2: Vector2);
+        getPoint(t: number): Vector2;
+        getPointAt(u: number): Vector2;
+        getPoints(divisions?: number): Vector2[];
+        getSpacedPoints(divisions?: number): Vector2[];
+        getLength(): number;
+        getLengths(divisions?: number): number[];
+        needsUpdate: bool;
+        updateArcLengths(): void;
+        getUtoTmapping(u: number, distance: number): number;
+        getNormalVector(t: number): Vector2;
+        getTangent(t: number): Vector2;
+        getTangentAt(u: number): Vector2;          
     }
+    /**
+     * class CubicBezierCurve extends Curve<Vector2>
+     */
     export class CubicBezierCurve extends Curve {
         constructor(v0: number, v1: number, v2: number, v3: number);
+        getPoint(t: number): Vector2;
+        getPointAt(u: number): Vector2;
+        getPoints(divisions?: number): Vector2[];
+        getSpacedPoints(divisions?: number): Vector2[];
+        getLength(): number;
+        getLengths(divisions?: number): number[];
+        needsUpdate: bool;
+        updateArcLengths(): void;
+        getUtoTmapping(u: number, distance: number): number;
+        getNormalVector(t: number): Vector2;
+        getTangent(t: number): Vector2;
+        getTangentAt(u: number): Vector2;          
     }
+    /**
+     * class SplineCurve extends Curve<Vector2>
+     */
     export class SplineCurve extends Curve {
         constructor(points?: Vector2[]);
+        getPoint(t: number): Vector2;
+        getPointAt(u: number): Vector2;
+        getPoints(divisions?: number): Vector2[];
+        getSpacedPoints(divisions?: number): Vector2[];
+        getLength(): number;
+        getLengths(divisions?: number): number[];
+        needsUpdate: bool;
+        updateArcLengths(): void;
+        getUtoTmapping(u: number, distance: number): number;
+        getNormalVector(t: number): Vector2;
+        getTangent(t: number): Vector2;
+        getTangentAt(u: number): Vector2;          
     }
+    /**
+     * class EllipseCurve extends Curve<Vector2>
+     */
     export class EllipseCurve extends Curve {
         constructor(aX: number, aY: number, xRadius: number, yRadius: number, aStartAngle: number, aEndAngle: number, aClockwise: bool);
         aX: number;
@@ -4713,16 +4785,44 @@ module THREE {
         aStartAngle: number;
         aEndAngle: number;
         aClockwise: bool;
+
+        getPoint(t: number): Vector2;
+        getPointAt(u: number): Vector2;
+        getPoints(divisions?: number): Vector2[];
+        getSpacedPoints(divisions?: number): Vector2[];
+        getLength(): number;
+        getLengths(divisions?: number): number[];
+        needsUpdate: bool;
+        updateArcLengths(): void;
+        getUtoTmapping(u: number, distance: number): number;
+        getNormalVector(t: number): Vector2;
+        getTangent(t: number): Vector2;
+        getTangentAt(u: number): Vector2;          
     }
+    /**
+     * class ArcCurve extends EllipseCurve
+     */
     export class ArcCurve extends EllipseCurve {
         constructor(aX: number, aY: number, aRadius: number, aStartAngle: number, aEndAngle: number, aClockwise: bool);
+        getPoint(t: number): Vector2;
+        getPointAt(u: number): Vector2;
+        getPoints(divisions?: number): Vector2[];
+        getSpacedPoints(divisions?: number): Vector2[];
+        getLength(): number;
+        getLengths(divisions?: number): number[];
+        needsUpdate: bool;
+        updateArcLengths(): void;
+        getUtoTmapping(u: number, distance: number): number;
+        getNormalVector(t: number): Vector2;
+        getTangent(t: number): Vector2;
+        getTangentAt(u: number): Vector2;  
     }
 
-
-    // **HACK** Non-existent class in three.js
-    // abstruct class
-    export class Curve3D {
-        constructor();
+    /**
+     * class LineCurve3 extends Curve<Vector3>
+     */
+    export class LineCurve3 extends Curve {
+        constructor(v1: Vector3, v2: Vector3);
         getPoint(t: number): Vector3;
         getPointAt(u: number): Vector3;
         getPoints(divisions?: number): Vector3[];
@@ -4736,22 +4836,83 @@ module THREE {
         getTangent(t: number): Vector3;
         getTangentAt(u: number): Vector3;
     }
-    export class LineCurve3 extends Curve3D {
-        constructor(v1: Vector3, v2: Vector3);
-    }
-    export class QuadraticBezierCurve3 extends Curve3D {
+
+    /**
+     * class QuadraticBezierCurve3 extends Curve<Vector3>
+     */
+    export class QuadraticBezierCurve3 extends Curve {
         constructor(v0: Vector3, v1: Vector3, v2: Vector3);
+        getPoint(t: number): Vector3;
+        getPointAt(u: number): Vector3;
+        getPoints(divisions?: number): Vector3[];
+        getSpacedPoints(divisions?: number): Vector3[];
+        getLength(): number;
+        getLengths(divisions?: number): number[];
+        needsUpdate: bool;
+        updateArcLengths(): void;
+        getUtoTmapping(u: number, distance: number): number;
+        getNormalVector(t: number): Vector3;
+        getTangent(t: number): Vector3;
+        getTangentAt(u: number): Vector3;
     }
-    export class CubicBezierCurve3 extends Curve3D {
+
+    /**
+     * class CubicBezierCurve3 extends Curve<Vector3>
+     */
+    export class CubicBezierCurve3 extends Curve {
         constructor(v0: Vector3, v1: Vector3, v2: Vector3, v3: Vector3);
+        getPoint(t: number): Vector3;
+        getPointAt(u: number): Vector3;
+        getPoints(divisions?: number): Vector3[];
+        getSpacedPoints(divisions?: number): Vector3[];
+        getLength(): number;
+        getLengths(divisions?: number): number[];
+        needsUpdate: bool;
+        updateArcLengths(): void;
+        getUtoTmapping(u: number, distance: number): number;
+        getNormalVector(t: number): Vector3;
+        getTangent(t: number): Vector3;
+        getTangentAt(u: number): Vector3;
     }
-    export class SplineCurve3 extends Curve3D {
+
+    /**
+     * class SplineCurve3 extends Curve<Vector3>
+     */
+    export class SplineCurve3 extends Curve {
         constructor(points?: Vector3[]);
         points: Vector3[];
+        getPoint(t: number): Vector3;
+        getPointAt(u: number): Vector3;
+        getPoints(divisions?: number): Vector3[];
+        getSpacedPoints(divisions?: number): Vector3[];
+        getLength(): number;
+        getLengths(divisions?: number): number[];
+        needsUpdate: bool;
+        updateArcLengths(): void;
+        getUtoTmapping(u: number, distance: number): number;
+        getNormalVector(t: number): Vector3;
+        getTangent(t: number): Vector3;
+        getTangentAt(u: number): Vector3;
     }
-    export class ClosedSplineCurve3 extends Curve3D {
+
+    /**
+     * class ClosedSplineCurve3 extends Curve<Vector3>
+     */
+    export class ClosedSplineCurve3 extends Curve {
         constructor(points?: Vector3[]);
         points: Vector3[];
+        getPoint(t: number): Vector3;
+        getPointAt(u: number): Vector3;
+        getPoints(divisions?: number): Vector3[];
+        getSpacedPoints(divisions?: number): Vector3[];
+        getLength(): number;
+        getLengths(divisions?: number): number[];
+        needsUpdate: bool;
+        updateArcLengths(): void;
+        getUtoTmapping(u: number, distance: number): number;
+        getNormalVector(t: number): Vector3;
+        getTangent(t: number): Vector3;
+        getTangentAt(u: number): Vector3;
     }
 
     export interface BoundingBox {
