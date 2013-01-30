@@ -4481,16 +4481,6 @@ module THREE {
         attach(child: Object3D, scene: Scene, parent: Object3D): void;
     };
 
-    export var ShaderUtils: {
-        lib: {
-            [name: string]: {
-                uniforms: Uniforms;
-                fragmentShader: string;
-                vertexShader: string;
-            };
-        };
-    };
-
     // Extras / Animation /////////////////////////////////////////////////////////////////////
 
     export interface KeyFrame {
