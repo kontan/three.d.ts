@@ -2074,7 +2074,7 @@ module THREE {
         /**
          * Adds v to this vector.
          */
-        add(a: Vector3): Vector3;
+        add(a: Object): Vector3;
 
         addScalar(s: number): Vector3;
 
