@@ -26,7 +26,7 @@
 
 
 // If you are using three.d.ts with other complete definitions of webgl, remove the following declaration.
-interface WebGLRenderingContext {};
+interface WebGLRenderingContext {}
 
 module THREE {
     export var REVISION: string;

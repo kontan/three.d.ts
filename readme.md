@@ -11,7 +11,7 @@ This porject is currently based on three.js **r55**. (You can also get [three.d.
 
 ### API Reference
 
-HTML API reference is available. (Experimental, based r54)
+HTML API reference is available. (Experimental, based r55)
 
 http://kontan.github.com/dtsdoc/three.d.ts.html
 
