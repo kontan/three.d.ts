@@ -1,4 +1,4 @@
-/**
+/*
  * three.d.ts (https://github.com/kontan/three.d.ts)
  *
  * based on three.js (http://mrdoob.github.com/three.js/) r55 
@@ -24,6 +24,21 @@
  * THE SOFTWARE.
  */
 
+ /**
+  * <style>
+  *     h1.title{ text-align: center; }
+  *     li.see{ margin-left: 3em; }
+  * </style>
+  * <h1 class="title">three.d.ts r55 API Specification</h1>
+  * <p>This documentation is the API specification for three.d.ts.</p>
+  * <p>See also:</p>
+  * <ul>
+  *     <li class="see"><a target="_blank" href="http://mrdoob.github.com/three.js/">three.js</a></li>
+  *     <li class="see"><a target="_blank" href="https://github.com/kontan/three.d.ts/">three.d.ts</a></li>
+  * </ul>
+  */
+
+// @docpath https://kontan.github.com/three.d.ts/three.d.ts.html
 
 // If you are using three.d.ts with other complete definitions of webgl, remove the following declaration.
 interface WebGLRenderingContext {}
