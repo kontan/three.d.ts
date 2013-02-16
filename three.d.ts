@@ -26,7 +26,7 @@
 
  /**
   * <style>
-  *     h1.title{ text-align: center; }
+  *     h1.title{ text-align: center; font-size: x-large; }
   *     li.see{ margin-left: 3em; }
   * </style>
   * <h1 class="title">three.d.ts r55 API Specification</h1>
@@ -40,7 +40,6 @@
 
 // @docpath https://kontan.github.com/three.d.ts/three.d.ts.html
 
-// If you are using three.d.ts with other complete definitions of webgl, remove the following declaration.
 interface WebGLRenderingContext {}
 
 module THREE {
@@ -48,6 +47,10 @@ module THREE {
 
     // GL STATE CONSTANTS
 
+    /**
+     * {@link THREE.CullFaceNone}, {@link THREE.CullFaceBack}, {@link THREE.CullFaceFront}, {@link THREE.CullFaceFrontBack}
+     * @see {@link THREE.WebGLRenderer.setFaceCulling}
+     */
     export enum CullFace { }
     export var CullFaceNone: CullFace;
     export var CullFaceBack: CullFace;
