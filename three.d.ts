@@ -365,10 +365,10 @@ module THREE {
         getDelta(): number;
     }
 
-    export interface HSV {
+    export interface HSL {
         h: number;
         s: number;
-        v: number;
+        l: number;
     }
 
     /**
@@ -414,14 +414,14 @@ module THREE {
         setRGB(r: number, g: number, b: number): Color;
 
         /**
-         * Sets this color from HSV values.
+         * Sets this color from HSL values.
          * Based on MochiKit implementation by Bob Ippolito.
          *
          * @param h Hue channel value between 0 and 1.
          * @param s Saturation value channel between 0 and 1.
-         * @param v Value channel value between 0 and 1.
+         * @param l Value channel value between 0 and 1.
          */
-        setHSV(h: number, s: number, v: number): Color;
+        setHSL(h: number, s: number, l: number): Color;
 
         /**
          * Sets this color from a CSS context style string.
@@ -467,13 +467,16 @@ module THREE {
          */
         getHexString(): string;
 
+        getHSL(): HSL;
+
         /** 
          * Returns the value of this color in CSS context style.
          * Example: rgb(r, g, b)
          */
         getStyle(): string;
 
-        getHSV(hsv?: HSV): HSV;
+        offsetHSL(h:number, s:number, l:number): Color;
+
         add(color: Color): Color;
         addColors(color1: Color, color2: Color): Color;
         addScalar(s: number): Color;
@@ -875,6 +878,22 @@ module THREE {
         clone(): Frustum;
     }
 
+    export class Line3{
+        constructor(start?:Vector3, end?:Vector3);
+        set(start?:Vector3, end?:Vector3):Line3;
+        copy(line:Line3):Line3;
+        center(optionalTarget?:Vector3):Vector3;
+        delta(optionalTarget?:Vector3):Vector3;
+        distanceSq():number;
+        distance():number;
+        at(t:number, optionalTarget:Vector3):Vector3;
+        closestPointToPointParameter(point:Vector3, clampToLine?:bool):number;
+        closestPointToPoint(point:Vector3, clampToLine?:bool, optionalTarget?:Vector3):Vector3;
+        applyMatrix4(matrix:Matrix4):Line3;
+        equals(line:Line3):bool;
+        clone():Line3;
+    }
+
     export class Plane {
         constructor(normal?: Vector3, constant?: number);
         normal: Vector3;
@@ -892,7 +911,7 @@ module THREE {
         orthoPoint(point: Vector3, optionalTarget?: Vector3): Vector3;
         isIntersectionLine(startPoint: Vector3, endPoint: Vector3): bool;
         coplanarPoint(optionalTarget?: bool): Vector3;
-        transform(matrix: Matrix3, optionalNormalMatrix?: Matrix3): Plane;
+        applyMatrix4(matrix: Matrix3, optionalNormalMatrix?: Matrix3): Plane;
         translate(offset: Vector3): Plane;
         equals(plane: Plane): bool;
         clone(): Plane;
@@ -911,7 +930,7 @@ module THREE {
         intersectsSphere(sphere: Sphere): bool;
         clampPoint(point: Vector3, optionalTarget?: Vector3): Sphere;
         getBoundingBox(optionalTarget: Box3): Box3;
-        transform(matrix: Matrix): Sphere;
+        applyMatrix4(matrix: Matrix): Sphere;
         translate(offset: Vector3): Sphere;
         equals(sphere: Sphere): bool;
         clone(): Sphere;
@@ -1069,6 +1088,10 @@ module THREE {
          */
         mapLinear(x: number, a1: number, a2: number, b1: number, b2: number): number;
 
+        smoothstep(x:number, min:number, max:number):number;
+
+        smootherstep(x:number, min:number, max:number):number; 
+
         /**
          * Random float from 0 to 1 with 16 bits of randomness.
          * Standard Math.random() creates repetitive patterns when applied over larger space.
@@ -1165,6 +1188,8 @@ module THREE {
          * Transposes this matrix in place.
          */
         transpose(): Matrix3;
+
+        getNormalMatrix(m:Matrix4): Matrix3;
 
         /**
          * Transposes this matrix into the supplied array r, and returns itself.
@@ -1289,33 +1314,9 @@ module THREE {
         flattenToArrayOffset(flat: number[], offset: number): number[];
 
         /**
-         * Returns position component from this matrix.
-         * Note: this method returns a reference to the internal class vector, make a copy or clone it if you don't use it right away.
-         */
-        getPosition(): Vector3;
-
-        /**
          * Sets the position component for this matrix from vector v.
          */
         setPosition(v: Vector3): Vector3;
-
-        /**
-         * Returns x column component from this matrix.
-         * Note: this method returns a reference to the internal class vector, make a copy or clone it if you don't use it right away.
-         */
-        getColumnX(): Vector3;
-
-        /**
-         * Returns y column component from this matrix.
-         * Note: this method returns a reference to the internal class vector, make a copy or clone it if you don't use it right away.
-         */
-        getColumnY(): Vector3;
-
-        /**
-         * Returns z column component from this matrix.
-         * Note: this method returns a reference to the internal class vector, make a copy or clone it if you don't use it right away.
-         */
-        getColumnZ(): Vector3;
 
         /**
          * Sets this matrix to the inverse of matrix m.
@@ -1451,7 +1452,7 @@ module THREE {
         isIntersectionPlane(plane: Plane): bool;
         distanceToPlane(plane: Plane): number;
         intersectPlane(plane: Plane, optionalTarget?: Vector3): Vector3;
-        transform(matrix4: Matrix4): Ray;
+        applyMatrix4(matrix4: Matrix4): Ray;
         equals(ray: Ray): bool;
         clone(): Ray;
     }
@@ -2031,6 +2032,8 @@ module THREE {
          */
         equals(v: Vector2): bool;
 
+        toArray(): number[];
+
         /**
          * Clones this vector.
          */
@@ -2128,7 +2131,7 @@ module THREE {
         applyEuler(v: Vector3, eulerOrder: string): Vector3;
 
         applyAxisAngle(axis: Vector3, angle: number): Vector3;
-        projectPoint(m: Matrix4): Vector3;
+        transformDirection(m:Matrix4):Vector3;
         divide(v: Vector3): Vector3;
 
         /**
@@ -2190,6 +2193,12 @@ module THREE {
          */
         crossVectors(a: Vector3, b: Vector3): Vector3;
 
+        projectOnVector(v:Vector3): Vector3;
+
+        projectOnPlane(planeNormal:Vector3): Vector3;
+
+        reflect(vector:Vector3):Vector3;
+
         angleTo(v: Vector3): number;
 
         /**
@@ -2220,6 +2229,8 @@ module THREE {
          * Checks for strict equality of this vector and v.
          */
         equals(v: Vector3): bool;
+
+        toArray(): number[];
 
         /**
          * Clones this vector.
@@ -2340,6 +2351,8 @@ module THREE {
          */
         equals(v: Vector4): bool;
 
+        toArray(): number[];        
+
         /**
          * Clones this vector.
          */
@@ -2405,7 +2418,7 @@ module THREE {
         distanceToPoint(point: Vector3): Vector3;
         intersect(box: Box3): Box3;
         union(box: Box3): Box3;
-        transform(matrix: Matrix4): Box3;
+        applyMatrix4(matrix: Matrix4): Box3;
         translate(offset: Vector3): Box3;
         equals(box: Box3): bool;
         clone(): Box3;
@@ -4419,17 +4432,6 @@ module THREE {
     }
 
     // Extras /////////////////////////////////////////////////////////////////////
-    export var ColorUtils: {
-        /**
-         * Taking a color as input, converts it to HSV, and applies the h, s, v parameters in place, i.e. no new color is returned but the original object is modified.
-         * 
-         * @param color source color to be adjusted
-         * @param h hue change amount
-         * @param s saturation change amount
-         * @param v value change amount
-         */
-        adjustHSV(color: Color, h: number, s: number, v: number): void;
-    };
 
     export interface TypefaceData {
         familyName: string;
