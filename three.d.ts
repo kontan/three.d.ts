@@ -1,7 +1,7 @@
 /*
  * three.d.ts (https://github.com/kontan/three.d.ts)
  *
- * based on three.js (http://mrdoob.github.com/three.js/) r55 
+ * based on three.js (http://mrdoob.github.com/three.js/) r56
  * 
  * Copyright (c) 2012- Kon (http://phyzkit.net/)
  * 
@@ -29,7 +29,7 @@
   *     h1.title{ text-align: center; font-size: x-large; }
   *     li.see{ margin-left: 3em; }
   * </style>
-  * <h1 class="title">three.d.ts r55 API Specification</h1>
+  * <h1 class="title">three.d.ts r56 API Specification</h1>
   * <p>This documentation is the API specification for three.d.ts.</p>
   * <p>See also:</p>
   * <ul>
