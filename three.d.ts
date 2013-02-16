@@ -1055,11 +1055,7 @@ module THREE {
     var GeometryIdCount: number;
     var GeometryLibrary: Geometry[];
 
-    /**
-     *
-     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/math/Math.js">src/math/Math.js</a>
-     */
-    export var Math: {
+    interface Math {
         /**
          * Clamps the x to be between a and b.
          *
@@ -1120,9 +1116,13 @@ module THREE {
     };
 
     /**
-     * A 3x3 matrix.
      *
-     * ( interface Matrix<T> )
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/math/Math.js">src/math/Math.js</a>
+     */
+    export var Math: Math;
+
+    /**
+     * ( interface Matrix&lt;T&gt; )
      */
     export interface Matrix {
         /**
@@ -1166,7 +1166,7 @@ module THREE {
     }
 
     /**
-     * ( class Matrix3 implements Matrix<Matrix3> )
+     * ( class Matrix3 implements Matrix&lt;Matrix3&gt; )
      */
     export class Matrix3 implements Matrix {
         constructor(n11?: number, n12?: number, n13?: number, n21?: number, n22?: number, n23?: number, n31?: number, n32?: number, n33?: number);
@@ -1825,11 +1825,11 @@ module THREE {
 
 
     /**
-     * ( interface Vector<T> )
+     * ( interface Vector&lt;T&gt; )
      *
      * Abstruct interface of Vector2, Vector3 and Vector4.
      * Currently the members of Vector is NOT type safe because it accepts different typed vectors.
-     * Those definitions will be changed when TypeScript innovocates Generics to be type safe.
+     * Those definitions will be changed when TypeScript innovates Generics to be type safe.
      *
      * @example
      * var v:THREE.Vector = new THREE.Vector3();
@@ -4631,7 +4631,7 @@ module THREE {
 
     /**
      * An extensible curve object which contains methods for interpolation
-     * class Curve<T extends Vector>
+     * class Curve&lt;T extends Vector&gt;
      */
     export class Curve {
         constructor();
