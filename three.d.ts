@@ -4536,7 +4536,7 @@ module THREE {
         getPrevKeyWith(type: string, h: number, key: number): KeyFrame;
     }
 
-    export class AnimationInterpolation { }
+    export enum AnimationInterpolation { }
 
     export var AnimationHandler: {
         update(deltaTimeMS: number): void;
