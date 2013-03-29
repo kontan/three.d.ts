@@ -1088,7 +1088,7 @@ module THREE {
          * Each UV layer is an array of UV matching order and number of vertices in faces.
          * To signal an update in this array, Geometry.uvsNeedUpdate needs to be set to true.
          */
-        faceVertexUvs: Vector2[][];
+        faceVertexUvs: Vector2[][][];
 
         /**
          * Array of morph targets. Each morph target is a Javascript object:
