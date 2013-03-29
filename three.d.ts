@@ -1081,7 +1081,7 @@ module THREE {
          * Each UV layer is an array of UV matching order and number of faces.
          * To signal an update in this array, Geometry.uvsNeedUpdate needs to be set to true.
          */
-        faceUvs: Vector2[];
+        faceUvs: Vector2[][];
 
         /**
          * Array of face UV layers.
