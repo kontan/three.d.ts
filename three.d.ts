@@ -2032,8 +2032,7 @@ module THREE {
 
     export class Raycaster {
         constructor(origin?: Vector3, direction?: Vector3, near?: number, far?: number);
-        origin: Vector3;
-        direction: Vector3;
+        ray: Ray;
         near: number;
         far: number;
         precision: number;
